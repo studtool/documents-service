@@ -29,20 +29,20 @@ func NewServer() *Server {
 
 	mx := mux.NewRouter()
 	mx.Handle(`/api/documents`, handlers.MethodHandler{
-		http.MethodPost:   nil, //TODO
-		http.MethodGet:    nil,
-		http.MethodDelete: nil,
+		http.MethodPost:   http.HandlerFunc(srv.addDocument),
+		http.MethodGet:    http.HandlerFunc(srv.getDocuments),
+		http.MethodDelete: http.HandlerFunc(srv.deleteDocuments),
 	})
 	mx.Handle(`/api/documents/{document_id}`, handlers.MethodHandler{
-		http.MethodDelete: nil,
+		http.MethodDelete: http.HandlerFunc(srv.deleteDocument),
 	})
 	mx.Handle(`/api/documents/{document_id}/info`, handlers.MethodHandler{
-		http.MethodGet:   nil, //TODO
-		http.MethodPatch: nil,
+		http.MethodGet:   http.HandlerFunc(srv.getDocumentInfo),
+		http.MethodPatch: http.HandlerFunc(srv.updateDocumentInfo),
 	})
 	mx.Handle(`/api/documents/{document_id}/content`, handlers.MethodHandler{
-		http.MethodGet:   nil, //TODO
-		http.MethodPatch: nil,
+		http.MethodGet:   http.HandlerFunc(srv.getDocumentContent),
+		http.MethodPatch: http.HandlerFunc(srv.updateDocumentContent),
 	})
 
 	srv.server.SetLogger(beans.Logger())
