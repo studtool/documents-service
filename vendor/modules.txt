@@ -1,0 +1,10 @@
+# github.com/konsorten/go-windows-terminal-sequences v1.0.2
+github.com/konsorten/go-windows-terminal-sequences
+# github.com/sirupsen/logrus v1.4.1
+github.com/sirupsen/logrus
+# github.com/studtool/common v0.0.0-20190429195109-599ea62b8c20
+github.com/studtool/common/logs
+github.com/studtool/common/config
+github.com/studtool/common/consts
+# golang.org/x/sys v0.0.0-20190429190828-d89cdac9e872
+golang.org/x/sys/unix
