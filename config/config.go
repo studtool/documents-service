@@ -19,4 +19,10 @@ var (
 
 	CorsAllowed         = config.NewFlagDefault("STUDTOOL_DOCUMENTS_SERVICE_SHOULD_ALLOW_CORS", false)
 	RequestsLogsEnabled = config.NewFlagDefault("STUDTOOL_DOCUMENTS_SERVICE_SHOULD_LOG_REQUESTS", true)
+
+	RepositoriesEnabled = config.NewFlagDefault("STUDTOOL_USERS_SERVICE_REPOSITORIES_ENABLED", false)
+
+	StorageHost = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_HOST", "127.0.0.1")
+	StoragePort = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_PORT", "27017")
+	StorageDB   = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_NAME", "users")
 )
