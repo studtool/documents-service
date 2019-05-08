@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/studtool/documents-service/repositories"
 	"net/http"
 
 	"github.com/gorilla/handlers"
@@ -15,9 +16,14 @@ import (
 
 type Server struct {
 	server *rest.Server
+
+	documentsRepository     repositories.DocumentsRepository
+	documentsInfoRepository repositories.DocumentsInfoRepository
 }
 
-func NewServer() *Server {
+func NewServer(dRepo repositories.DocumentsRepository,
+	diRepo repositories.DocumentsInfoRepository) *Server {
+
 	srv := &Server{
 		server: rest.NewServer(
 			rest.ServerConfig{
@@ -25,6 +31,8 @@ func NewServer() *Server {
 				Port: config.ServerPort.Value(),
 			},
 		),
+		documentsRepository:     dRepo,
+		documentsInfoRepository: diRepo,
 	}
 
 	mx := mux.NewRouter()
