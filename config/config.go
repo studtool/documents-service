@@ -22,7 +22,10 @@ var (
 
 	RepositoriesEnabled = config.NewFlagDefault("STUDTOOL_USERS_SERVICE_REPOSITORIES_ENABLED", false)
 
-	StorageHost = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_HOST", "127.0.0.1")
-	StoragePort = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_PORT", "27017")
-	StorageDB   = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_NAME", "users")
+	StorageHost     = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_HOST", "127.0.0.1")
+	StoragePort     = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_PORT", "5432")
+	StorageDB       = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_NAME", "auth")
+	StorageUser     = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_USER", "user")
+	StoragePassword = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_PASSWORD", "password")
+	StorageSSL      = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_SSL_MODE", "disable")
 )

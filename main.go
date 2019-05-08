@@ -13,7 +13,7 @@ import (
 	"github.com/studtool/documents-service/config"
 	"github.com/studtool/documents-service/repositories"
 	"github.com/studtool/documents-service/repositories/fs"
-	"github.com/studtool/documents-service/repositories/mongo"
+	"github.com/studtool/documents-service/repositories/postgres"
 )
 
 func main() {
@@ -25,8 +25,8 @@ func main() {
 			dig.As(new(repositories.DocumentsRepository)),
 		))
 
-		utils.AssertOk(c.Provide(mongo.NewConnection))
-		utils.AssertOk(c.Invoke(func(conn *mongo.Connection) {
+		utils.AssertOk(c.Provide(postgres.NewConnection))
+		utils.AssertOk(c.Invoke(func(conn *postgres.Connection) {
 			if err := conn.Open(); err != nil {
 				beans.Logger().Fatal(err.Error())
 			} else {
@@ -34,7 +34,7 @@ func main() {
 			}
 		}))
 		defer func() {
-			utils.AssertOk(c.Invoke(func(conn *mongo.Connection) {
+			utils.AssertOk(c.Invoke(func(conn *postgres.Connection) {
 				if err := conn.Close(); err != nil {
 					beans.Logger().Fatal(err)
 				} else {
@@ -44,7 +44,7 @@ func main() {
 		}()
 
 		utils.AssertOk(c.Provide(
-			mongo.NewDocumentsInfoRepository,
+			postgres.NewDocumentsInfoRepository,
 			dig.As(new(repositories.DocumentsInfoRepository)),
 		))
 	} else {
