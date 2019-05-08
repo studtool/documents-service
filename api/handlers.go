@@ -1,6 +1,8 @@
 package api
 
 import (
+	"github.com/google/uuid"
+	"math/rand"
 	"net/http"
 
 	"github.com/studtool/documents-service/models"
@@ -27,7 +29,29 @@ func (srv *Server) addDocument(w http.ResponseWriter, r *http.Request) {
 }
 
 func (srv *Server) getDocuments(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	genId := func() string {
+		v, _ := uuid.NewRandom()
+		return v.String()
+	}
+
+	documents := make([]models.DocumentInfo, 0)
+	for i := 0; i < 50; i++ {
+		id := genId()
+
+		m := models.DocumentInfo{
+			Id:      id,
+			Title:   "Title" + id,
+			OwnerId: genId(),
+			Subject: "The subject",
+			Meta: models.DocumentMeta{
+				Size: rand.Int63(),
+			},
+		}
+
+		documents = append(documents, m)
+	}
+
+	srv.server.WriteBodyJSON(w, http.StatusOK, models.DocumentsInfo(documents))
 }
 
 func (srv *Server) deleteDocuments(w http.ResponseWriter, r *http.Request) {
