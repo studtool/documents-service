@@ -49,6 +49,11 @@ func main() {
 		))
 	} else {
 		utils.AssertOk(c.Provide(
+			func() repositories.DocumentsRepository {
+				return nil
+			},
+		))
+		utils.AssertOk(c.Provide(
 			func() repositories.DocumentsInfoRepository {
 				return nil
 			},
