@@ -27,7 +27,7 @@ type DocumentsInfoRepository struct {
 	notFoundErr *errs.Error
 }
 
-func NewUsersRepository(conn *Connection) *DocumentsInfoRepository {
+func NewDocumentsInfoRepository(conn *Connection) *DocumentsInfoRepository {
 	db := conn.client.Database(config.StorageDB.Value())
 	return &DocumentsInfoRepository{
 		connection:  conn,
