@@ -1,6 +1,12 @@
 package postgres
 
 import (
+	"database/sql"
+	"github.com/studtool/documents-service/beans"
+	"strings"
+
+	"github.com/google/uuid"
+
 	"github.com/studtool/common/errs"
 
 	"github.com/studtool/documents-service/models"
@@ -8,23 +14,69 @@ import (
 )
 
 type DocumentsInfoRepository struct {
-	conn        *Connection
-	notFoundErr *errs.Error
+	conn *Connection
+
+	documentNotFound       *errs.Error
+	documentTitleDuplicate *errs.Error
 }
 
 func NewDocumentsInfoRepository(conn *Connection) *DocumentsInfoRepository {
 	return &DocumentsInfoRepository{
-		conn:        conn,
-		notFoundErr: errs.NewNotFoundError("profile not found"),
+		conn: conn,
+
+		documentNotFound:       errs.NewNotFoundError("document not found"),
+		documentTitleDuplicate: errs.NewConflictError("document title duplicate"),
 	}
 }
 
 func (r *DocumentsInfoRepository) AddDocumentInfo(info *models.DocumentInfoFull) *errs.Error {
-	panic("implement me")
+	const query = `
+		INSERT INTO document(id,title,owner_id,subject) VALUES($1,$2,$3,$4);
+	`
+
+	id, err := uuid.NewRandom()
+	if err != nil {
+		return errs.New(err)
+	}
+	info.Id = id.String()
+
+	_, err = r.conn.db.Exec(query,
+		&info.Id, &info.Title, &info.OwnerId, &info.Subject)
+	if err != nil {
+		if strings.Contains(err.Error(), "documents_title_owner_id_subject_unique") {
+			return r.documentTitleDuplicate
+		} else {
+			return errs.New(err)
+		}
+	}
+
+	return nil
 }
 
 func (r *DocumentsInfoRepository) GetDocumentInfo(documentId string) (*models.DocumentInfo, *errs.Error) {
-	panic("implement me")
+	const query = `
+		SELECT d.title, d.owner_id, d.subject
+		FROM document d WHERE d.id = $1;
+	`
+
+	rows, err := r.conn.db.Query(query, &documentId)
+	if err != nil {
+		return nil, errs.New(err)
+	}
+	defer r.closeRowsWithCheck(rows)
+
+	if !rows.Next() {
+		return nil, r.documentNotFound
+	}
+
+	info := &models.DocumentInfo{
+		Id: documentId,
+	}
+	if err := rows.Scan(&info.Title, &info.OwnerId, &info.Subject); err != nil {
+		return nil, errs.New(err)
+	}
+
+	return info, nil
 }
 
 func (r *DocumentsInfoRepository) GetDocumentInfoFull(documentId string) (*models.DocumentInfoFull, *errs.Error) {
@@ -61,4 +113,10 @@ func (r *DocumentsInfoRepository) DeleteDocumentMember(documentId string, member
 
 func (r *DocumentsInfoRepository) AddDocumentUpdateToHistory(documentId string, info *models.UpdateInfo) *errs.Error {
 	panic("implement me")
+}
+
+func (r *DocumentsInfoRepository) closeRowsWithCheck(rows *sql.Rows) {
+	if err := rows.Close(); err != nil {
+		beans.Logger().Error(err)
+	}
 }
