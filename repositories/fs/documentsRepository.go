@@ -8,6 +8,7 @@ import (
 	"github.com/studtool/common/errs"
 
 	"github.com/studtool/documents-service/beans"
+	"github.com/studtool/documents-service/config"
 )
 
 const (
@@ -15,12 +16,12 @@ const (
 )
 
 type DocumentsRepository struct {
-	rootDir string
+	docsDir string
 }
 
-func NewDocumentsRepository(rootDir string) *DocumentsRepository {
+func NewDocumentsRepository() *DocumentsRepository {
 	return &DocumentsRepository{
-		rootDir: rootDir,
+		docsDir: config.DocsDir.Value(),
 	}
 }
 
@@ -75,7 +76,7 @@ func (r *DocumentsRepository) DeleteDocument(documentId string) *errs.Error {
 }
 
 func (r *DocumentsRepository) makeFilePath(documentId string) string {
-	return fmt.Sprintf("%s%v%s", r.rootDir, os.PathSeparator, documentId)
+	return fmt.Sprintf("%s%v%s", r.docsDir, os.PathSeparator, documentId)
 }
 
 func (r *DocumentsRepository) closeFileWithCheck(f *os.File) {

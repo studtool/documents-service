@@ -22,6 +22,8 @@ var (
 
 	RepositoriesEnabled = config.NewFlagDefault("STUDTOOL_USERS_SERVICE_REPOSITORIES_ENABLED", false)
 
+	DocsDir = config.NewStringDefault("STUDTOOL_DOCUMENTS_DIRECTORY_PATH", "./documents")
+
 	StorageHost     = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_HOST", "127.0.0.1")
 	StoragePort     = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_PORT", "5432")
 	StorageDB       = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_NAME", "auth")
