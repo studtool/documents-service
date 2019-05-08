@@ -12,7 +12,7 @@ type Page struct {
 }
 
 type DocumentsInfoRepository interface {
-	SaveDocumentInfo(info *models.DocumentInfoFull) *errs.Error
+	AddDocumentInfo(info *models.DocumentInfoFull) *errs.Error
 
 	GetDocumentInfo(documentId string) (*models.DocumentInfo, *errs.Error)
 	GetDocumentInfoFull(documentId string) (*models.DocumentInfoFull, *errs.Error)

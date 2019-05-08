@@ -13,7 +13,7 @@ func (srv *Server) addDocument(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	if err := srv.documentsInfoRepository.SaveDocumentInfo(documentInfo); err != nil {
+	if err := srv.documentsInfoRepository.AddDocumentInfo(documentInfo); err != nil {
 		srv.server.WriteErrJSON(w, err)
 		return
 	}

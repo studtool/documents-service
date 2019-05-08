@@ -19,7 +19,7 @@ func NewDocumentsInfoRepository(conn *Connection) *DocumentsInfoRepository {
 	}
 }
 
-func (r *DocumentsInfoRepository) SaveDocumentInfo(info *models.DocumentInfoFull) *errs.Error {
+func (r *DocumentsInfoRepository) AddDocumentInfo(info *models.DocumentInfoFull) *errs.Error {
 	panic("implement me")
 }
 
