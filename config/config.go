@@ -26,7 +26,7 @@ var (
 
 	StorageHost     = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_HOST", "127.0.0.1")
 	StoragePort     = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_PORT", "5432")
-	StorageDB       = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_NAME", "auth")
+	StorageDB       = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_NAME", "documents")
 	StorageUser     = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_USER", "user")
 	StoragePassword = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_PASSWORD", "password")
 	StorageSSL      = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_SSL_MODE", "disable")
