@@ -2,13 +2,13 @@ package postgres
 
 import (
 	"database/sql"
-	"github.com/studtool/documents-service/beans"
 	"strings"
 
 	"github.com/google/uuid"
 
 	"github.com/studtool/common/errs"
 
+	"github.com/studtool/documents-service/beans"
 	"github.com/studtool/documents-service/models"
 	"github.com/studtool/documents-service/repositories"
 )
