@@ -20,7 +20,7 @@ var (
 	CorsAllowed         = config.NewFlagDefault("STUDTOOL_DOCUMENTS_SERVICE_SHOULD_ALLOW_CORS", false)
 	RequestsLogsEnabled = config.NewFlagDefault("STUDTOOL_DOCUMENTS_SERVICE_SHOULD_LOG_REQUESTS", true)
 
-	RepositoriesEnabled = config.NewFlagDefault("STUDTOOL_USERS_SERVICE_REPOSITORIES_ENABLED", false)
+	RepositoriesEnabled = config.NewFlagDefault("STUDTOOL_DOCUMENTS_SERVICE_REPOSITORIES_ENABLED", false)
 
 	DocsDir = config.NewStringDefault("STUDTOOL_DOCUMENTS_DIRECTORY_PATH", "./documents")
 
