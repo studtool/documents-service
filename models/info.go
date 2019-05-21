@@ -8,17 +8,15 @@ import (
 
 //easyjson:json
 type DocumentInfo struct {
-	Id      string       `json:"id"`
-	Title   string       `json:"title"`
-	OwnerId string       `json:"ownerId"`
-	Subject string       `json:"subject"`
-	Meta    DocumentMeta `json:"meta"`
+	ID      types.ID `json:"-"`
+	Title   string   `json:"title"`
+	OwnerId types.ID `json:"ownerId"`
+	Subject string   `json:"subject"`
 }
 
 //easyjson:json
 type DocumentInfoFull struct {
 	DocumentInfo
-
 	MembersInfo   []MemberInfo `json:"membersInfo"`
 	UpdateHistory []UpdateInfo `json:"updateHistory"`
 }
@@ -27,24 +25,21 @@ type DocumentInfoFull struct {
 type DocumentsInfo []DocumentInfo
 
 //easyjson:json
-type DocumentMeta struct {
-	Size int64 `json:"size"`
-}
-
-//easyjson:json
 type UpdateInfo struct {
-	UserId    string         `json:"userId"`
+	UserID    types.ID       `json:"userId"`
 	Timestamp types.DateTime `json:"timestamp"`
 }
 
+type Privilege string
+
 const (
-	ReadPrivilege  = "read"
-	WritePrivilege = "write"
-	SharePrivilege = "share"
+	PrivilegeRead  = "read"
+	PrivilegeWrite = "write"
+	PrivilegeShare = "share"
 )
 
 //easyjson:json
 type MemberInfo struct {
-	UserId    string `json:"userId"`
-	Privilege string `json:"privilege"`
+	UserId    types.ID  `json:"userId"`
+	Privilege Privilege `json:"privilege"`
 }

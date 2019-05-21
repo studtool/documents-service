@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 
 	"github.com/studtool/common/errs"
+	"github.com/studtool/common/types"
 
 	"github.com/studtool/documents-service/beans"
 	"github.com/studtool/documents-service/models"
@@ -33,15 +34,16 @@ func (r *DocumentsInfoRepository) AddDocumentInfo(info *models.DocumentInfoFull)
 	const query = `
 		INSERT INTO document(id,title,owner_id,subject) VALUES($1,$2,$3,$4);
 	`
+	var err error
 
 	id, err := uuid.NewRandom()
 	if err != nil {
 		return errs.New(err)
 	}
-	info.Id = id.String()
+	info.ID = types.ID(id.String())
 
 	_, err = r.conn.db.Exec(query,
-		&info.Id, &info.Title, &info.OwnerId, &info.Subject)
+		&info.ID, &info.Title, &info.OwnerId, &info.Subject)
 	if err != nil {
 		if strings.Contains(err.Error(), "documents_title_owner_id_subject_unique") {
 			return r.documentTitleDuplicate
@@ -70,7 +72,7 @@ func (r *DocumentsInfoRepository) GetDocumentInfo(documentId string) (*models.Do
 	}
 
 	info := &models.DocumentInfo{
-		Id: documentId,
+		ID: types.ID(documentId),
 	}
 	if err := rows.Scan(&info.Title, &info.OwnerId, &info.Subject); err != nil {
 		return nil, errs.New(err)
@@ -90,10 +92,6 @@ func (r *DocumentsInfoRepository) GetDocumentsInfo(ownerId string,
 }
 
 func (r *DocumentsInfoRepository) DeleteDocumentsInfo(ownerId string, subject *string) *errs.Error {
-	panic("implement me")
-}
-
-func (r *DocumentsInfoRepository) UpdateDocumentMeta(documentId string, meta *models.DocumentMeta) *errs.Error {
 	panic("implement me")
 }
 

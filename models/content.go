@@ -2,7 +2,10 @@ package models
 
 //go:generate msgp
 
-type ID string
+import (
+	"github.com/studtool/common/types"
+)
+
 type LongInt int64
 type Content byte
 
@@ -12,8 +15,8 @@ const (
 )
 
 type DocumentBlock struct {
-	DocumentID ID      `msg:"-"`
-	Position   LongInt `msg:"position"`
-	Type       Content `msg:"type"`
-	Data       []byte  `msg:"data"`
+	DocumentID types.ID `msg:"-"`
+	Position   LongInt  `msg:"position"`
+	Type       Content  `msg:"type"`
+	Data       []byte   `msg:"data"`
 }

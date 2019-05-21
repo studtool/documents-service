@@ -7,6 +7,7 @@ import (
 	easyjson "github.com/mailru/easyjson"
 	jlexer "github.com/mailru/easyjson/jlexer"
 	jwriter "github.com/mailru/easyjson/jwriter"
+	types "github.com/studtool/common/types"
 )
 
 // suppress unused package warning
@@ -37,7 +38,7 @@ func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels(in *jlexer.Le
 		}
 		switch key {
 		case "userId":
-			out.UserId = string(in.String())
+			out.UserID = types.ID(in.String())
 		case "timestamp":
 			if data := in.Raw(); in.Ok() {
 				in.AddError((out.Timestamp).UnmarshalJSON(data))
@@ -64,7 +65,7 @@ func easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels(out *jwriter.
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.UserId))
+		out.String(string(in.UserID))
 	}
 	{
 		const prefix string = ",\"timestamp\":"
@@ -122,9 +123,9 @@ func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels1(in *jlexer.L
 		}
 		switch key {
 		case "userId":
-			out.UserId = string(in.String())
+			out.UserId = types.ID(in.String())
 		case "privilege":
-			out.Privilege = string(in.String())
+			out.Privilege = Privilege(in.String())
 		default:
 			in.SkipRecursive()
 		}
@@ -251,78 +252,7 @@ func (v *DocumentsInfo) UnmarshalJSON(data []byte) error {
 func (v *DocumentsInfo) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels2(l, v)
 }
-func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels3(in *jlexer.Lexer, out *DocumentMeta) {
-	isTopLevel := in.IsStart()
-	if in.IsNull() {
-		if isTopLevel {
-			in.Consumed()
-		}
-		in.Skip()
-		return
-	}
-	in.Delim('{')
-	for !in.IsDelim('}') {
-		key := in.UnsafeString()
-		in.WantColon()
-		if in.IsNull() {
-			in.Skip()
-			in.WantComma()
-			continue
-		}
-		switch key {
-		case "size":
-			out.Size = int64(in.Int64())
-		default:
-			in.SkipRecursive()
-		}
-		in.WantComma()
-	}
-	in.Delim('}')
-	if isTopLevel {
-		in.Consumed()
-	}
-}
-func easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels3(out *jwriter.Writer, in DocumentMeta) {
-	out.RawByte('{')
-	first := true
-	_ = first
-	{
-		const prefix string = ",\"size\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.Int64(int64(in.Size))
-	}
-	out.RawByte('}')
-}
-
-// MarshalJSON supports json.Marshaler interface
-func (v DocumentMeta) MarshalJSON() ([]byte, error) {
-	w := jwriter.Writer{}
-	easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels3(&w, v)
-	return w.Buffer.BuildBytes(), w.Error
-}
-
-// MarshalEasyJSON supports easyjson.Marshaler interface
-func (v DocumentMeta) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels3(w, v)
-}
-
-// UnmarshalJSON supports json.Unmarshaler interface
-func (v *DocumentMeta) UnmarshalJSON(data []byte) error {
-	r := jlexer.Lexer{Data: data}
-	easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels3(&r, v)
-	return r.Error()
-}
-
-// UnmarshalEasyJSON supports easyjson.Unmarshaler interface
-func (v *DocumentMeta) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels3(l, v)
-}
-func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels4(in *jlexer.Lexer, out *DocumentInfoFull) {
+func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels3(in *jlexer.Lexer, out *DocumentInfoFull) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -387,16 +317,12 @@ func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels4(in *jlexer.L
 				}
 				in.Delim(']')
 			}
-		case "id":
-			out.Id = string(in.String())
 		case "title":
 			out.Title = string(in.String())
 		case "ownerId":
-			out.OwnerId = string(in.String())
+			out.OwnerId = types.ID(in.String())
 		case "subject":
 			out.Subject = string(in.String())
-		case "meta":
-			(out.Meta).UnmarshalEasyJSON(in)
 		default:
 			in.SkipRecursive()
 		}
@@ -407,7 +333,7 @@ func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels4(in *jlexer.L
 		in.Consumed()
 	}
 }
-func easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels4(out *jwriter.Writer, in DocumentInfoFull) {
+func easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels3(out *jwriter.Writer, in DocumentInfoFull) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -454,16 +380,6 @@ func easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels4(out *jwriter
 		}
 	}
 	{
-		const prefix string = ",\"id\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.String(string(in.Id))
-	}
-	{
 		const prefix string = ",\"title\":"
 		if first {
 			first = false
@@ -493,43 +409,33 @@ func easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels4(out *jwriter
 		}
 		out.String(string(in.Subject))
 	}
-	{
-		const prefix string = ",\"meta\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		(in.Meta).MarshalEasyJSON(out)
-	}
 	out.RawByte('}')
 }
 
 // MarshalJSON supports json.Marshaler interface
 func (v DocumentInfoFull) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
-	easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels4(&w, v)
+	easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels3(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v DocumentInfoFull) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels4(w, v)
+	easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels3(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *DocumentInfoFull) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
-	easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels4(&r, v)
+	easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels3(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *DocumentInfoFull) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels4(l, v)
+	easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels3(l, v)
 }
-func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels5(in *jlexer.Lexer, out *DocumentInfo) {
+func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels4(in *jlexer.Lexer, out *DocumentInfo) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -548,16 +454,12 @@ func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels5(in *jlexer.L
 			continue
 		}
 		switch key {
-		case "id":
-			out.Id = string(in.String())
 		case "title":
 			out.Title = string(in.String())
 		case "ownerId":
-			out.OwnerId = string(in.String())
+			out.OwnerId = types.ID(in.String())
 		case "subject":
 			out.Subject = string(in.String())
-		case "meta":
-			(out.Meta).UnmarshalEasyJSON(in)
 		default:
 			in.SkipRecursive()
 		}
@@ -568,20 +470,10 @@ func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels5(in *jlexer.L
 		in.Consumed()
 	}
 }
-func easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels5(out *jwriter.Writer, in DocumentInfo) {
+func easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels4(out *jwriter.Writer, in DocumentInfo) {
 	out.RawByte('{')
 	first := true
 	_ = first
-	{
-		const prefix string = ",\"id\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		out.String(string(in.Id))
-	}
 	{
 		const prefix string = ",\"title\":"
 		if first {
@@ -612,39 +504,29 @@ func easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels5(out *jwriter
 		}
 		out.String(string(in.Subject))
 	}
-	{
-		const prefix string = ",\"meta\":"
-		if first {
-			first = false
-			out.RawString(prefix[1:])
-		} else {
-			out.RawString(prefix)
-		}
-		(in.Meta).MarshalEasyJSON(out)
-	}
 	out.RawByte('}')
 }
 
 // MarshalJSON supports json.Marshaler interface
 func (v DocumentInfo) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
-	easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels5(&w, v)
+	easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels4(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
 func (v DocumentInfo) MarshalEasyJSON(w *jwriter.Writer) {
-	easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels5(w, v)
+	easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels4(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
 func (v *DocumentInfo) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
-	easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels5(&r, v)
+	easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels4(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
 func (v *DocumentInfo) UnmarshalEasyJSON(l *jlexer.Lexer) {
-	easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels5(l, v)
+	easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels4(l, v)
 }

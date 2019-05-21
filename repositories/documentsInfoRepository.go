@@ -20,8 +20,6 @@ type DocumentsInfoRepository interface {
 	GetDocumentsInfo(ownerId string, subject *string, page Page) ([]models.DocumentInfo, *errs.Error)
 	DeleteDocumentsInfo(ownerId string, subject *string) *errs.Error
 
-	UpdateDocumentMeta(documentId string, meta *models.DocumentMeta) *errs.Error
-
 	AddDocumentMember(documentId string, member *models.MemberInfo) *errs.Error
 	UpdateDocumentMemberPrivilege(documentId string, member *models.MemberInfo) *errs.Error
 	DeleteDocumentMember(documentId string, memberId string) *errs.Error
