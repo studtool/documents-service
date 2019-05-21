@@ -66,12 +66,9 @@ func main() {
 
 	utils.AssertOk(c.Provide(api.NewServer))
 	utils.AssertOk(c.Invoke(func(srv *api.Server) {
-		go func() {
-			if err := srv.Run(); err != nil {
-				beans.Logger().Fatal(err)
-				ch <- os.Interrupt
-			}
-		}()
+		if err := srv.Run(); err != nil {
+			beans.Logger().Fatal(err)
+		}
 	}))
 	defer func() {
 		utils.AssertOk(c.Invoke(func(srv *api.Server) {

@@ -5,24 +5,25 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"go.uber.org/dig"
 
 	"github.com/studtool/common/consts"
+	"github.com/studtool/common/logs"
 	"github.com/studtool/common/rest"
 
 	"github.com/studtool/documents-service/config"
-	"github.com/studtool/documents-service/repositories"
 )
 
 type Server struct {
 	server *rest.Server
-
-	documentsRepository     repositories.DocumentsRepository
-	documentsInfoRepository repositories.DocumentsInfoRepository
+	logger logs.Logger
 }
 
-func NewServer(dRepo repositories.DocumentsRepository,
-	diRepo repositories.DocumentsInfoRepository) *Server {
+type ServerParams struct {
+	dig.In
+}
 
+func NewServer(params ServerParams) *Server {
 	srv := &Server{
 		server: rest.NewServer(
 			rest.ServerConfig{
@@ -30,27 +31,26 @@ func NewServer(dRepo repositories.DocumentsRepository,
 				Port: config.ServerPort.Value(),
 			},
 		),
-		documentsRepository:     dRepo,
-		documentsInfoRepository: diRepo,
 	}
 
 	mx := mux.NewRouter()
-	mx.Handle(`/api/documents`, handlers.MethodHandler{
+	mx.Handle(`/api/protected/documents`, handlers.MethodHandler{
 		http.MethodPost:   http.HandlerFunc(srv.addDocument),
 		http.MethodGet:    http.HandlerFunc(srv.getDocuments),
 		http.MethodDelete: http.HandlerFunc(srv.deleteDocuments),
 	})
-	mx.Handle(`/api/documents/{document_id}`, handlers.MethodHandler{
+	mx.Handle(`/api/protected/documents/{document_id}`, handlers.MethodHandler{
 		http.MethodDelete: http.HandlerFunc(srv.deleteDocument),
 	})
-	mx.Handle(`/api/documents/{document_id}/info`, handlers.MethodHandler{
+	mx.Handle(`/api/protected/documents/{document_id}/info`, handlers.MethodHandler{
 		http.MethodGet:   http.HandlerFunc(srv.getDocumentInfo),
 		http.MethodPatch: http.HandlerFunc(srv.updateDocumentInfo),
 	})
-	mx.Handle(`/api/documents/{document_id}/content`, handlers.MethodHandler{
+	mx.Handle(`/api/protected/documents/{document_id}/content`, handlers.MethodHandler{
 		http.MethodGet:   http.HandlerFunc(srv.getDocumentContent),
 		http.MethodPatch: http.HandlerFunc(srv.updateDocumentContent),
 	})
+	mx.Handle(`/metrics`, srv.server.MetricsHandler())
 
 	h := srv.server.WithRecover(mx)
 	if config.RequestsLogsEnabled.Value() {
@@ -78,9 +78,14 @@ func NewServer(dRepo repositories.DocumentsRepository,
 }
 
 func (srv *Server) Run() error {
-	return srv.server.Run()
+	err := srv.server.Run()
+	if err == nil {
+		srv.logger.Info("started")
+	}
+	return err
 }
 
 func (srv *Server) Shutdown() error {
+	srv.logger.Info("shutdown")
 	return srv.server.Shutdown()
 }

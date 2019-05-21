@@ -2,28 +2,10 @@ package api
 
 import (
 	"net/http"
-
-	"github.com/studtool/documents-service/models"
 )
 
 func (srv *Server) addDocument(w http.ResponseWriter, r *http.Request) {
-	documentInfo := &models.DocumentInfoFull{}
-	if err := srv.server.ParseBodyJSON(&documentInfo.DocumentInfo, r); err != nil {
-		srv.server.WriteErrJSON(w, err)
-		return
-	}
-
-	if err := srv.documentsInfoRepository.AddDocumentInfo(documentInfo); err != nil {
-		srv.server.WriteErrJSON(w, err)
-		return
-	}
-
-	if err := srv.documentsRepository.AddDocument(documentInfo.Id, []byte{}); err != nil {
-		srv.server.WriteErrJSON(w, err)
-		return
-	}
-
-	srv.server.WriteOk(w)
+	//TODO
 }
 
 func (srv *Server) getDocuments(w http.ResponseWriter, r *http.Request) {

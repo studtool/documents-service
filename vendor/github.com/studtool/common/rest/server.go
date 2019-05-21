@@ -44,7 +44,12 @@ func (srv *Server) SetHandler(h http.Handler) {
 
 func (srv *Server) Run() error {
 	srv.logger.Infof("started on %s", srv.server.Addr)
-	return srv.server.ListenAndServe()
+	go func() {
+		if err := srv.server.ListenAndServe(); err != nil {
+			srv.logger.Fatal(err)
+		}
+	}()
+	return nil
 }
 
 func (srv *Server) Shutdown() error {
