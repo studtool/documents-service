@@ -8,7 +8,6 @@ import (
 	"github.com/studtool/common/errs"
 
 	"github.com/studtool/documents-service/beans"
-	"github.com/studtool/documents-service/config"
 )
 
 const (
@@ -20,9 +19,7 @@ type DocumentsRepository struct {
 }
 
 func NewDocumentsRepository() *DocumentsRepository {
-	return &DocumentsRepository{
-		docsDir: config.DocsDir.Value(),
-	}
+	return &DocumentsRepository{}
 }
 
 func (r *DocumentsRepository) AddDocument(documentId string, data []byte) *errs.Error {

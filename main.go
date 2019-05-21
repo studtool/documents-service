@@ -19,7 +19,7 @@ import (
 func main() {
 	c := dig.New()
 
-	if config.RepositoriesEnabled.Value() {
+	if config.RepositoriesEnabled {
 		utils.AssertOk(c.Provide(
 			fs.NewDocumentsRepository,
 			dig.As(new(repositories.DocumentsRepository)),

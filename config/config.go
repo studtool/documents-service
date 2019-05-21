@@ -19,9 +19,8 @@ var (
 	CorsAllowed         = cconfig.NewFlagDefault("STUDTOOL_DOCUMENTS_SERVICE_SHOULD_ALLOW_CORS", false)
 	RequestsLogsEnabled = cconfig.NewFlagDefault("STUDTOOL_DOCUMENTS_SERVICE_SHOULD_LOG_REQUESTS", true)
 
-	RepositoriesEnabled = cconfig.NewFlagDefault("STUDTOOL_DOCUMENTS_SERVICE_REPOSITORIES_ENABLED", false)
-
-	DocsDir = cconfig.NewStringDefault("STUDTOOL_DOCUMENTS_DIRECTORY_PATH", "./documents")
+	// Modified by the compiler
+	RepositoriesEnabled = true
 
 	StorageHost     = cconfig.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_HOST", "127.0.0.1")
 	StoragePort     = cconfig.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_PORT", "3306")
