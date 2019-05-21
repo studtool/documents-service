@@ -1,7 +1,8 @@
 FROM golang:1.12-alpine3.9 as base
 WORKDIR /tmp/documents-service
+RUN apk add make
 COPY . .
-RUN go build -mod vendor -o /tmp/service .
+RUN BIN_PATH=/tmp/service make build
 
 FROM alpine:3.9
 WORKDIR /tmp
