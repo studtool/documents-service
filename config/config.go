@@ -24,7 +24,7 @@ var (
 	DocsDir = cconfig.NewStringDefault("STUDTOOL_DOCUMENTS_DIRECTORY_PATH", "./documents")
 
 	StorageHost     = cconfig.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_HOST", "127.0.0.1")
-	StoragePort     = cconfig.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_PORT", "5432")
+	StoragePort     = cconfig.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_PORT", "3306")
 	StorageDB       = cconfig.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_NAME", "documents")
 	StorageUser     = cconfig.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_USER", "user")
 	StoragePassword = cconfig.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_PASSWORD", "password")
