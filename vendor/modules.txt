@@ -1,5 +1,7 @@
 # github.com/beorn7/perks v1.0.0
 github.com/beorn7/perks/quantile
+# github.com/go-sql-driver/mysql v1.4.1
+github.com/go-sql-driver/mysql
 # github.com/golang/protobuf v1.3.1
 github.com/golang/protobuf/proto
 # github.com/google/uuid v1.1.1
@@ -10,10 +12,6 @@ github.com/gorilla/handlers
 github.com/gorilla/mux
 # github.com/konsorten/go-windows-terminal-sequences v1.0.2
 github.com/konsorten/go-windows-terminal-sequences
-# github.com/lib/pq v1.1.1
-github.com/lib/pq
-github.com/lib/pq/oid
-github.com/lib/pq/scram
 # github.com/mailru/easyjson v0.0.0-20190403194419-1ea4449da983
 github.com/mailru/easyjson
 github.com/mailru/easyjson/jlexer
@@ -54,3 +52,5 @@ go.uber.org/dig/internal/digreflect
 go.uber.org/dig/internal/dot
 # golang.org/x/sys v0.0.0-20190520201301-c432e742b0af
 golang.org/x/sys/unix
+# google.golang.org/appengine v1.6.0
+google.golang.org/appengine/cloudsql

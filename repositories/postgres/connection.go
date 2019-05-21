@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 
-	_ "github.com/lib/pq"
+	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/studtool/documents-service/config"
 )
@@ -17,16 +17,16 @@ type Connection struct {
 func NewConnection() *Connection {
 	return &Connection{
 		connStr: fmt.Sprintf(
-			"postgres://%s:%s@%s:%s/%s?sslmode=%s",
+			"%s:%s@(%s:%s)/%s",
 			config.StorageUser.Value(), config.StoragePassword.Value(),
 			config.StorageHost.Value(), config.StoragePort.Value(),
-			config.StorageDB.Value(), config.StorageSSL.Value(),
+			config.StorageDB.Value(),
 		),
 	}
 }
 
 func (conn *Connection) Open() (err error) {
-	conn.db, err = sql.Open("postgres", conn.connStr)
+	conn.db, err = sql.Open("mysql", conn.connStr)
 	return err
 }
 

@@ -63,7 +63,7 @@ func (r *DocumentsInfoRepository) GetDocumentInfo(documentId string) (*models.Do
 	if err != nil {
 		return nil, errs.New(err)
 	}
-	defer r.closeRowsWithCheck(rows)
+	defer r.closeRows(rows)
 
 	if !rows.Next() {
 		return nil, r.documentNotFound
@@ -115,7 +115,7 @@ func (r *DocumentsInfoRepository) AddDocumentUpdateToHistory(documentId string, 
 	panic("implement me")
 }
 
-func (r *DocumentsInfoRepository) closeRowsWithCheck(rows *sql.Rows) {
+func (r *DocumentsInfoRepository) closeRows(rows *sql.Rows) {
 	if err := rows.Close(); err != nil {
 		beans.Logger().Error(err)
 	}

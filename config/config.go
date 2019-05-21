@@ -29,5 +29,4 @@ var (
 	StorageDB       = cconfig.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_NAME", "documents")
 	StorageUser     = cconfig.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_USER", "user")
 	StoragePassword = cconfig.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_PASSWORD", "password")
-	StorageSSL      = cconfig.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_SSL_MODE", "disable")
 )
