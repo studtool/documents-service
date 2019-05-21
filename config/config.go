@@ -2,20 +2,19 @@ package config
 
 import (
 	"github.com/studtool/common/config"
-
-	"github.com/studtool/documents-service/beans"
+	"github.com/studtool/common/logs"
 )
 
 var (
 	_ = func() *cconfig.FlagVar {
 		f := cconfig.NewFlagDefault("STUDTOOL_DOCUMENTS_SERVICE_SHOULD_LOG_ENV_VARS", false)
 		if f.Value() {
-			cconfig.SetLogger(beans.Logger())
+			cconfig.SetLogger(logs.NewRawLogger())
 		}
 		return f
 	}()
 
-	ServerPort = cconfig.NewStringDefault("STUDTOOL_DOCUMENTS_SERVICE_PORT", "80")
+	ServerPort = cconfig.NewIntDefault("STUDTOOL_DOCUMENTS_SERVICE_PORT", 80)
 
 	CorsAllowed         = cconfig.NewFlagDefault("STUDTOOL_DOCUMENTS_SERVICE_SHOULD_ALLOW_CORS", false)
 	RequestsLogsEnabled = cconfig.NewFlagDefault("STUDTOOL_DOCUMENTS_SERVICE_SHOULD_LOG_REQUESTS", true)

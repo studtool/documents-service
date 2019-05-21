@@ -12,43 +12,42 @@ import (
 
 type ServerConfig struct {
 	Host string
-	Port string
+	Port int
 }
 
 type Server struct {
 	server *http.Server
-	logger *logs.Logger
+	logger logs.Logger
 }
 
 func NewServer(c ServerConfig) *Server {
 	return &Server{
 		server: &http.Server{
-			Addr: fmt.Sprintf("%s:%s", c.Host, c.Port),
+			Addr: fmt.Sprintf("%s:%d", c.Host, c.Port),
 		},
+		logger: logs.NewStructLogger(
+			logs.StructLoggerParams{
+				Component: "common",
+				Structure: "rest.Server",
+			},
+		),
 	}
 }
 
-func (srv *Server) SetHandler(h http.Handler) {
-	mx := http.NewServeMux()
-
-	mx.Handle("/metrics", promhttp.Handler())
-	mx.Handle("/", h)
-
-	srv.server.Handler = mx
+func (srv *Server) MetricsHandler() http.Handler {
+	return promhttp.Handler()
 }
 
-func (srv *Server) SetLogger(log *logs.Logger) {
-	srv.logger = log
+func (srv *Server) SetHandler(h http.Handler) {
+	srv.server.Handler = h
 }
 
 func (srv *Server) Run() error {
-	srv.logger.Info(fmt.Sprintf("started [%s]", srv.server.Addr))
-
+	srv.logger.Infof("started on %s", srv.server.Addr)
 	return srv.server.ListenAndServe()
 }
 
 func (srv *Server) Shutdown() error {
-	srv.logger.Info("shutdown")
-
+	srv.logger.Infof("stopped")
 	return srv.server.Shutdown(context.TODO())
 }

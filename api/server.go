@@ -1,7 +1,6 @@
 package api
 
 import (
-	"github.com/studtool/documents-service/repositories"
 	"net/http"
 
 	"github.com/gorilla/handlers"
@@ -10,8 +9,8 @@ import (
 	"github.com/studtool/common/consts"
 	"github.com/studtool/common/rest"
 
-	"github.com/studtool/documents-service/beans"
 	"github.com/studtool/documents-service/config"
+	"github.com/studtool/documents-service/repositories"
 )
 
 type Server struct {
@@ -52,8 +51,6 @@ func NewServer(dRepo repositories.DocumentsRepository,
 		http.MethodGet:   http.HandlerFunc(srv.getDocumentContent),
 		http.MethodPatch: http.HandlerFunc(srv.updateDocumentContent),
 	})
-
-	srv.server.SetLogger(beans.Logger())
 
 	h := srv.server.WithRecover(mx)
 	if config.RequestsLogsEnabled.Value() {
