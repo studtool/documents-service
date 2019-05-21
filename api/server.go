@@ -23,12 +23,18 @@ type ServerParams struct {
 	dig.In
 }
 
-func NewServer(params ServerParams) *Server {
+func NewServer(_ ServerParams) *Server {
 	srv := &Server{
 		server: rest.NewServer(
 			rest.ServerConfig{
 				Host: consts.EmptyString,
 				Port: config.ServerPort.Value(),
+			},
+		),
+		logger: logs.NewStructLogger(
+			logs.StructLoggerParams{
+				Component: "documents-service",
+				Structure: "api.Server",
 			},
 		),
 	}

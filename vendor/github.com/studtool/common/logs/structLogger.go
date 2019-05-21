@@ -26,8 +26,8 @@ func NewStructLogger(params StructLoggerParams) Logger {
 		fields: logrus.Fields{
 			"pid":       utils.GetPid(),
 			"host":      utils.GetHost(),
-			"Component": params.Component,
-			"Structure": params.Structure,
+			"component": params.Component,
+			"struct":    params.Structure,
 		},
 	}
 }

@@ -36,7 +36,7 @@ github.com/prometheus/procfs
 github.com/prometheus/procfs/internal/fs
 # github.com/sirupsen/logrus v1.4.2
 github.com/sirupsen/logrus
-# github.com/studtool/common v0.0.0-20190521192107-0817c1b1db4d
+# github.com/studtool/common v0.0.0-20190521193219-1df7e2a00b6b
 github.com/studtool/common/utils
 github.com/studtool/common/consts
 github.com/studtool/common/logs
