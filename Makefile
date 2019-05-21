@@ -1,5 +1,9 @@
 BIN_PATH ?= ./bin/service
-GENERATED_FILE_PATTERNS = *_easyjson.go *_gen.go *_get_test.go
+
+REPOSITORIES_ENABLED ?= true
+QUEUES_ENABLED ?= true
+
+LD_FLAGS := "-X config.repositoriesEnabled=$(REPOSITORIES_ENABLED) -X config.queuesEnabled=$(QUEUES_ENABLED)"
 
 all: dep fmt gen build
 
@@ -13,7 +17,7 @@ dep:
 	go get -u && go mod tidy && go mod vendor && go mod verify
 
 build: mkdir
-	go build -mod vendor -o $(BIN_PATH) .
+	go build -mod vendor -ldflags $(LD_FLAGS) -o $(BIN_PATH) .
 
 image:
 	./image.sh build
