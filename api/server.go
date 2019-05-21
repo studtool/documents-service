@@ -41,20 +41,20 @@ func NewServer(_ ServerParams) *Server {
 
 	mx := mux.NewRouter()
 	mx.Handle(`/api/protected/documents`, handlers.MethodHandler{
-		http.MethodPost:   http.HandlerFunc(srv.addDocument),
-		http.MethodGet:    http.HandlerFunc(srv.getDocuments),
-		http.MethodDelete: http.HandlerFunc(srv.deleteDocuments),
+		http.MethodPost:   srv.server.WithAuth(http.HandlerFunc(srv.addDocument)),
+		http.MethodGet:    srv.server.WithAuth(http.HandlerFunc(srv.getDocuments)),
+		http.MethodDelete: srv.server.WithAuth(http.HandlerFunc(srv.deleteDocuments)),
 	})
 	mx.Handle(`/api/protected/documents/{document_id}`, handlers.MethodHandler{
-		http.MethodDelete: http.HandlerFunc(srv.deleteDocument),
+		http.MethodDelete: srv.server.WithAuth(http.HandlerFunc(srv.deleteDocument)),
 	})
 	mx.Handle(`/api/protected/documents/{document_id}/info`, handlers.MethodHandler{
-		http.MethodGet:   http.HandlerFunc(srv.getDocumentInfo),
-		http.MethodPatch: http.HandlerFunc(srv.updateDocumentInfo),
+		http.MethodGet:   srv.server.WithAuth(http.HandlerFunc(srv.getDocumentInfo)),
+		http.MethodPatch: srv.server.WithAuth(http.HandlerFunc(srv.updateDocumentInfo)),
 	})
 	mx.Handle(`/api/protected/documents/{document_id}/content`, handlers.MethodHandler{
-		http.MethodGet:   http.HandlerFunc(srv.getDocumentContent),
-		http.MethodPatch: http.HandlerFunc(srv.updateDocumentContent),
+		http.MethodGet:   srv.server.WithAuth(http.HandlerFunc(srv.getDocumentContent)),
+		http.MethodPatch: srv.server.WithAuth(http.HandlerFunc(srv.updateDocumentContent)),
 	})
 	mx.Handle(`/metrics`, srv.server.MetricsHandler())
 
