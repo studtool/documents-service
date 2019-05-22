@@ -123,7 +123,7 @@ func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels1(in *jlexer.L
 		}
 		switch key {
 		case "userId":
-			out.UserId = types.ID(in.String())
+			out.UserID = types.ID(in.String())
 		case "privilege":
 			out.Privilege = Privilege(in.String())
 		default:
@@ -148,7 +148,7 @@ func easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels1(out *jwriter
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.UserId))
+		out.String(string(in.UserID))
 	}
 	{
 		const prefix string = ",\"privilege\":"
@@ -320,7 +320,7 @@ func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels3(in *jlexer.L
 		case "title":
 			out.Title = string(in.String())
 		case "ownerId":
-			out.OwnerId = types.ID(in.String())
+			out.OwnerID = types.ID(in.String())
 		case "subject":
 			out.Subject = string(in.String())
 		default:
@@ -397,7 +397,7 @@ func easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels3(out *jwriter
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.OwnerId))
+		out.String(string(in.OwnerID))
 	}
 	{
 		const prefix string = ",\"subject\":"
@@ -457,7 +457,7 @@ func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels4(in *jlexer.L
 		case "title":
 			out.Title = string(in.String())
 		case "ownerId":
-			out.OwnerId = types.ID(in.String())
+			out.OwnerID = types.ID(in.String())
 		case "subject":
 			out.Subject = string(in.String())
 		default:
@@ -492,7 +492,7 @@ func easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels4(out *jwriter
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.OwnerId))
+		out.String(string(in.OwnerID))
 	}
 	{
 		const prefix string = ",\"subject\":"

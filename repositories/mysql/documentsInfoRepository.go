@@ -1,9 +1,7 @@
-package postgres
+package mysql
 
 import (
 	"database/sql"
-	"strings"
-
 	"github.com/google/uuid"
 
 	"github.com/studtool/common/errs"
@@ -23,16 +21,14 @@ type DocumentsInfoRepository struct {
 
 func NewDocumentsInfoRepository(conn *Connection) *DocumentsInfoRepository {
 	return &DocumentsInfoRepository{
-		conn: conn,
-
-		documentNotFound:       errs.NewNotFoundError("document not found"),
-		documentTitleDuplicate: errs.NewConflictError("document title duplicate"),
+		conn:             conn,
+		documentNotFound: errs.NewNotFoundError("document not found"),
 	}
 }
 
 func (r *DocumentsInfoRepository) AddDocumentInfo(info *models.DocumentInfoFull) *errs.Error {
 	const query = `
-		INSERT INTO document(id,title,owner_id,subject) VALUES($1,$2,$3,$4);
+		INSERT INTO document(id, title, owner_id, subject) VALUES(?,?,?,?);
 	`
 	var err error
 
@@ -43,25 +39,21 @@ func (r *DocumentsInfoRepository) AddDocumentInfo(info *models.DocumentInfoFull)
 	info.ID = types.ID(id.String())
 
 	_, err = r.conn.db.Exec(query,
-		&info.ID, &info.Title, &info.OwnerId, &info.Subject)
+		&info.ID, &info.Title, &info.OwnerID, &info.Subject)
 	if err != nil {
-		if strings.Contains(err.Error(), "documents_title_owner_id_subject_unique") {
-			return r.documentTitleDuplicate
-		} else {
-			return errs.New(err)
-		}
+		return errs.New(err)
 	}
 
 	return nil
 }
 
-func (r *DocumentsInfoRepository) GetDocumentInfo(documentId string) (*models.DocumentInfo, *errs.Error) {
+func (r *DocumentsInfoRepository) GetDocumentInfo(documentID string) (*models.DocumentInfo, *errs.Error) {
 	const query = `
 		SELECT d.title, d.owner_id, d.subject
 		FROM document d WHERE d.id = $1;
 	`
 
-	rows, err := r.conn.db.Query(query, &documentId)
+	rows, err := r.conn.db.Query(query, &documentID)
 	if err != nil {
 		return nil, errs.New(err)
 	}
@@ -72,22 +64,26 @@ func (r *DocumentsInfoRepository) GetDocumentInfo(documentId string) (*models.Do
 	}
 
 	info := &models.DocumentInfo{
-		ID: types.ID(documentId),
+		ID: types.ID(documentID),
 	}
-	if err := rows.Scan(&info.Title, &info.OwnerId, &info.Subject); err != nil {
+	if err := rows.Scan(&info.Title, &info.OwnerID, &info.Subject); err != nil {
 		return nil, errs.New(err)
 	}
 
 	return info, nil
 }
 
-func (r *DocumentsInfoRepository) GetDocumentInfoFull(documentId string) (*models.DocumentInfoFull, *errs.Error) {
+func (r *DocumentsInfoRepository) GetDocumentInfoFull(
+	documentID string,
+) (*models.DocumentInfoFull, *errs.Error) {
 	panic("implement me")
 }
 
-func (r *DocumentsInfoRepository) GetDocumentsInfo(ownerId string,
-	subject *string, page repositories.Page) ([]models.DocumentInfo, *errs.Error) {
-
+func (r *DocumentsInfoRepository) GetDocumentsInfo(
+	ownerID string,
+	subject *string,
+	page repositories.Page,
+) (models.DocumentsInfo, *errs.Error) {
 	panic("implement me")
 }
 

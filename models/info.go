@@ -10,7 +10,7 @@ import (
 type DocumentInfo struct {
 	ID      types.ID `json:"-"`
 	Title   string   `json:"title"`
-	OwnerId types.ID `json:"ownerId"`
+	OwnerID types.ID `json:"ownerId"`
 	Subject string   `json:"subject"`
 }
 
@@ -40,6 +40,6 @@ const (
 
 //easyjson:json
 type MemberInfo struct {
-	UserId    types.ID  `json:"userId"`
+	UserID    types.ID  `json:"userId"`
 	Privilege Privilege `json:"privilege"`
 }
