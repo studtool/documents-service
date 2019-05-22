@@ -13,10 +13,8 @@ import (
 )
 
 type DocumentsInfoRepository struct {
-	conn *Connection
-
-	documentNotFound       *errs.Error
-	documentTitleDuplicate *errs.Error
+	conn             *Connection
+	documentNotFound *errs.Error
 }
 
 func NewDocumentsInfoRepository(conn *Connection) *DocumentsInfoRepository {
