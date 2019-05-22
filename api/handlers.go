@@ -21,7 +21,7 @@ func (srv *Server) addDocument(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	srv.server.WriteOk(w)
+	srv.server.WriteOkJSON(w, &documentInfo.DocumentInfo)
 }
 
 func (srv *Server) getDocuments(w http.ResponseWriter, r *http.Request) {

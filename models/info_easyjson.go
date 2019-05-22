@@ -317,6 +317,8 @@ func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels3(in *jlexer.L
 				}
 				in.Delim(']')
 			}
+		case "id":
+			out.ID = types.ID(in.String())
 		case "title":
 			out.Title = string(in.String())
 		case "ownerId":
@@ -378,6 +380,16 @@ func easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels3(out *jwriter
 			}
 			out.RawByte(']')
 		}
+	}
+	{
+		const prefix string = ",\"id\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(in.ID))
 	}
 	{
 		const prefix string = ",\"title\":"
@@ -454,6 +466,8 @@ func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels4(in *jlexer.L
 			continue
 		}
 		switch key {
+		case "id":
+			out.ID = types.ID(in.String())
 		case "title":
 			out.Title = string(in.String())
 		case "ownerId":
@@ -474,6 +488,16 @@ func easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels4(out *jwriter
 	out.RawByte('{')
 	first := true
 	_ = first
+	{
+		const prefix string = ",\"id\":"
+		if first {
+			first = false
+			out.RawString(prefix[1:])
+		} else {
+			out.RawString(prefix)
+		}
+		out.String(string(in.ID))
+	}
 	{
 		const prefix string = ",\"title\":"
 		if first {

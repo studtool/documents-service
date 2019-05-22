@@ -8,7 +8,7 @@ import (
 
 //easyjson:json
 type DocumentInfo struct {
-	ID      types.ID `json:"-"`
+	ID      types.ID `json:"id"`
 	Title   string   `json:"title"`
 	OwnerID types.ID `json:"ownerId"`
 	Subject string   `json:"subject"`
