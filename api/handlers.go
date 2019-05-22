@@ -2,10 +2,26 @@ package api
 
 import (
 	"net/http"
+
+	"github.com/studtool/common/types"
+
+	"github.com/studtool/documents-service/models"
 )
 
 func (srv *Server) addDocument(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	documentInfo := &models.DocumentInfoFull{}
+	if err := srv.server.ParseBodyJSON(&documentInfo.DocumentInfo, r); err != nil {
+		srv.server.WriteErrJSON(w, err)
+		return
+	}
+
+	documentInfo.OwnerID = types.ID(srv.server.ParseUserID(r))
+	if err := srv.documentsInfoRepository.AddDocumentInfo(documentInfo); err != nil {
+		srv.server.WriteErrJSON(w, err)
+		return
+	}
+
+	srv.server.WriteOk(w)
 }
 
 func (srv *Server) getDocuments(w http.ResponseWriter, r *http.Request) {
