@@ -103,7 +103,7 @@ func (v *UpdateInfo) UnmarshalJSON(data []byte) error {
 func (v *UpdateInfo) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels(l, v)
 }
-func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels1(in *jlexer.Lexer, out *MemberInfo) {
+func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels1(in *jlexer.Lexer, out *Permission) {
 	isTopLevel := in.IsStart()
 	if in.IsNull() {
 		if isTopLevel {
@@ -124,8 +124,8 @@ func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels1(in *jlexer.L
 		switch key {
 		case "userId":
 			out.UserID = types.ID(in.String())
-		case "privilege":
-			out.Privilege = Privilege(in.String())
+		case "scope":
+			out.Scope = Scope(in.String())
 		default:
 			in.SkipRecursive()
 		}
@@ -136,7 +136,7 @@ func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels1(in *jlexer.L
 		in.Consumed()
 	}
 }
-func easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels1(out *jwriter.Writer, in MemberInfo) {
+func easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels1(out *jwriter.Writer, in Permission) {
 	out.RawByte('{')
 	first := true
 	_ = first
@@ -151,39 +151,39 @@ func easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels1(out *jwriter
 		out.String(string(in.UserID))
 	}
 	{
-		const prefix string = ",\"privilege\":"
+		const prefix string = ",\"scope\":"
 		if first {
 			first = false
 			out.RawString(prefix[1:])
 		} else {
 			out.RawString(prefix)
 		}
-		out.String(string(in.Privilege))
+		out.String(string(in.Scope))
 	}
 	out.RawByte('}')
 }
 
 // MarshalJSON supports json.Marshaler interface
-func (v MemberInfo) MarshalJSON() ([]byte, error) {
+func (v Permission) MarshalJSON() ([]byte, error) {
 	w := jwriter.Writer{}
 	easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels1(&w, v)
 	return w.Buffer.BuildBytes(), w.Error
 }
 
 // MarshalEasyJSON supports easyjson.Marshaler interface
-func (v MemberInfo) MarshalEasyJSON(w *jwriter.Writer) {
+func (v Permission) MarshalEasyJSON(w *jwriter.Writer) {
 	easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels1(w, v)
 }
 
 // UnmarshalJSON supports json.Unmarshaler interface
-func (v *MemberInfo) UnmarshalJSON(data []byte) error {
+func (v *Permission) UnmarshalJSON(data []byte) error {
 	r := jlexer.Lexer{Data: data}
 	easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels1(&r, v)
 	return r.Error()
 }
 
 // UnmarshalEasyJSON supports easyjson.Unmarshaler interface
-func (v *MemberInfo) UnmarshalEasyJSON(l *jlexer.Lexer) {
+func (v *Permission) UnmarshalEasyJSON(l *jlexer.Lexer) {
 	easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels1(l, v)
 }
 func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels2(in *jlexer.Lexer, out *DocumentsInfo) {
@@ -274,22 +274,22 @@ func easyjsonDdc53814DecodeGithubComStudtoolDocumentsServiceModels3(in *jlexer.L
 		case "membersInfo":
 			if in.IsNull() {
 				in.Skip()
-				out.MembersInfo = nil
+				out.MembersPermissions = nil
 			} else {
 				in.Delim('[')
-				if out.MembersInfo == nil {
+				if out.MembersPermissions == nil {
 					if !in.IsDelim(']') {
-						out.MembersInfo = make([]MemberInfo, 0, 2)
+						out.MembersPermissions = make([]Permission, 0, 2)
 					} else {
-						out.MembersInfo = []MemberInfo{}
+						out.MembersPermissions = []Permission{}
 					}
 				} else {
-					out.MembersInfo = (out.MembersInfo)[:0]
+					out.MembersPermissions = (out.MembersPermissions)[:0]
 				}
 				for !in.IsDelim(']') {
-					var v4 MemberInfo
+					var v4 Permission
 					(v4).UnmarshalEasyJSON(in)
-					out.MembersInfo = append(out.MembersInfo, v4)
+					out.MembersPermissions = append(out.MembersPermissions, v4)
 					in.WantComma()
 				}
 				in.Delim(']')
@@ -347,11 +347,11 @@ func easyjsonDdc53814EncodeGithubComStudtoolDocumentsServiceModels3(out *jwriter
 		} else {
 			out.RawString(prefix)
 		}
-		if in.MembersInfo == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
+		if in.MembersPermissions == nil && (out.Flags&jwriter.NilSliceAsEmpty) == 0 {
 			out.RawString("null")
 		} else {
 			out.RawByte('[')
-			for v6, v7 := range in.MembersInfo {
+			for v6, v7 := range in.MembersPermissions {
 				if v6 > 0 {
 					out.RawByte(',')
 				}

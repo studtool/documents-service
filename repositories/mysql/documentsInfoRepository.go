@@ -131,12 +131,12 @@ func (r *DocumentsInfoRepository) DeleteDocumentsInfo(ownerId string, subject *s
 	panic("implement me")
 }
 
-func (r *DocumentsInfoRepository) AddDocumentMember(documentId string, member *models.MemberInfo) *errs.Error {
+func (r *DocumentsInfoRepository) AddDocumentMember(documentId string, member *models.Permission) *errs.Error {
 	panic("implement me")
 }
 
 func (r *DocumentsInfoRepository) UpdateDocumentMemberPrivilege(documentId string,
-	member *models.MemberInfo) *errs.Error {
+	member *models.Permission) *errs.Error {
 
 	panic("implement me")
 }

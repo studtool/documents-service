@@ -17,8 +17,8 @@ type DocumentInfo struct {
 //easyjson:json
 type DocumentInfoFull struct {
 	DocumentInfo
-	MembersInfo   []MemberInfo `json:"membersInfo"`
-	UpdateHistory []UpdateInfo `json:"updateHistory"`
+	MembersPermissions []Permission `json:"membersInfo"`
+	UpdateHistory      []UpdateInfo `json:"updateHistory"`
 }
 
 //easyjson:json
@@ -30,16 +30,15 @@ type UpdateInfo struct {
 	Timestamp types.DateTime `json:"timestamp"`
 }
 
-type Privilege string
+type Scope string
 
 const (
-	PrivilegeRead  = "read"
-	PrivilegeWrite = "write"
-	PrivilegeShare = "share"
+	ScopeRead  = "read"
+	ScopeWrite = "write"
 )
 
 //easyjson:json
-type MemberInfo struct {
-	UserID    types.ID  `json:"userId"`
-	Privilege Privilege `json:"privilege"`
+type Permission struct {
+	UserID types.ID `json:"userId"`
+	Scope  Scope    `json:"scope"`
 }
