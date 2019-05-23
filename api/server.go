@@ -16,14 +16,18 @@ import (
 )
 
 type Server struct {
-	server                  *rest.Server
-	logger                  logs.Logger
+	server *rest.Server
+	logger logs.Logger
+
 	documentsInfoRepository repositories.DocumentsInfoRepository
+	permissionsRepository   repositories.PermissionsRepository
 }
 
 type ServerParams struct {
 	dig.In
+
 	DocumentsInfoRepository repositories.DocumentsInfoRepository
+	PermissionsRepository   repositories.PermissionsRepository
 }
 
 func NewServer(params ServerParams) *Server {
@@ -41,6 +45,7 @@ func NewServer(params ServerParams) *Server {
 			},
 		),
 		documentsInfoRepository: params.DocumentsInfoRepository,
+		permissionsRepository:   params.PermissionsRepository,
 	}
 
 	mx := mux.NewRouter()

@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 
+	"github.com/studtool/documents-service/beans"
+
 	_ "github.com/go-sql-driver/mysql"
 
 	"github.com/studtool/documents-service/config"
@@ -32,4 +34,10 @@ func (conn *Connection) Open() (err error) {
 
 func (conn *Connection) Close() (err error) {
 	return conn.db.Close()
+}
+
+func (conn *Connection) closeRows(rows *sql.Rows) {
+	if err := rows.Close(); err != nil {
+		beans.Logger().Error(err)
+	}
 }

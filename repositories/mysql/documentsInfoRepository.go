@@ -1,13 +1,11 @@
 package mysql
 
 import (
-	"database/sql"
 	"github.com/google/uuid"
 
 	"github.com/studtool/common/errs"
 	"github.com/studtool/common/types"
 
-	"github.com/studtool/documents-service/beans"
 	"github.com/studtool/documents-service/models"
 	"github.com/studtool/documents-service/repositories"
 )
@@ -55,11 +53,11 @@ func (r *DocumentsInfoRepository) GetDocumentInfo(documentID string) (*models.Do
 		FROM document d WHERE d.id = ?;
 	`
 
-	rows, err := r.conn.db.Query(query, &documentID)
+	rows, err := r.conn.db.Query(query, documentID)
 	if err != nil {
 		return nil, errs.New(err)
 	}
-	defer r.closeRows(rows)
+	defer r.conn.closeRows(rows)
 
 	if !rows.Next() {
 		return nil, r.documentNotFound
@@ -82,19 +80,20 @@ func (r *DocumentsInfoRepository) GetDocumentInfoFull(
 }
 
 func (r *DocumentsInfoRepository) GetDocumentsInfo(
-	ownerID string,
+	userID string,
 	subject *string,
 	page repositories.Page,
 ) (models.DocumentsInfo, *errs.Error) {
 	const query = `
 		SELECT
-			d.id,
-			d.title,
-			d.owner_id,
-			d.subject
+			d.id, d.title,
+			d.owner_id, d.subject
 		FROM document d
+		JOIN permission p ON
+			d.id = p.document_id
 		WHERE
-			d.owner_id = ? AND
+			p.user_id = ? AND
+			p.scope & ? <> 0 AND
 			d.subject = ?
 		LIMIT ? OFFSET ?;
 	`
@@ -102,12 +101,12 @@ func (r *DocumentsInfoRepository) GetDocumentsInfo(
 	page.Index *= page.Size
 
 	rows, err := r.conn.db.Query(query,
-		&ownerID, subject, &page.Size, &page.Index,
+		userID, subject, scopeReadFlag, page.Size, page.Index,
 	)
 	if err != nil {
 		return nil, errs.New(err)
 	}
-	defer r.closeRows(rows)
+	defer r.conn.closeRows(rows)
 
 	documents := make([]models.DocumentInfo, 0)
 	for rows.Next() {
@@ -147,10 +146,4 @@ func (r *DocumentsInfoRepository) DeleteDocumentMember(documentId string, member
 
 func (r *DocumentsInfoRepository) AddDocumentUpdateToHistory(documentId string, info *models.UpdateInfo) *errs.Error {
 	panic("implement me")
-}
-
-func (r *DocumentsInfoRepository) closeRows(rows *sql.Rows) {
-	if err := rows.Close(); err != nil {
-		beans.Logger().Error(err)
-	}
 }

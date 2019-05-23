@@ -22,6 +22,17 @@ func (srv *Server) addDocument(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	permission := &models.Permission{
+		UserID: documentInfo.OwnerID,
+		Scope:  models.ScopeWrite,
+	}
+	err := srv.permissionsRepository.
+		AddPermission(documentInfo.ID, permission)
+	if err != nil {
+		srv.server.WriteErrJSON(w, err)
+		return
+	}
+
 	srv.server.WriteOkJSON(w, &documentInfo.DocumentInfo)
 }
 
