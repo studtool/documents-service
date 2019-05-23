@@ -17,7 +17,7 @@ type DocumentsInfoRepository interface {
 	GetDocumentInfo(documentID string) (*models.DocumentInfo, *errs.Error)
 	GetDocumentInfoFull(documentID string) (*models.DocumentInfoFull, *errs.Error)
 
-	GetDocumentsInfo(ownerID string, subject *string, page Page) (models.DocumentsInfo, *errs.Error)
+	GetDocumentsInfo(userID string, ownerID string, subject *string, page Page) (models.DocumentsInfo, *errs.Error)
 	DeleteDocumentsInfo(ownerID string, subject *string) *errs.Error
 
 	AddDocumentMember(documentID string, member *models.Permission) *errs.Error

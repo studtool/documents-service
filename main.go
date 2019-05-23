@@ -47,6 +47,10 @@ func main() {
 			mysql.NewDocumentsInfoRepository,
 			dig.As(new(repositories.DocumentsInfoRepository)),
 		))
+		utils.AssertOk(c.Provide(
+			mysql.NewPermissionsRepository,
+			dig.As(new(repositories.PermissionsRepository)),
+		))
 	} else {
 		utils.AssertOk(c.Provide(
 			func() repositories.DocumentsRepository {
@@ -55,6 +59,11 @@ func main() {
 		))
 		utils.AssertOk(c.Provide(
 			func() repositories.DocumentsInfoRepository {
+				return nil
+			},
+		))
+		utils.AssertOk(c.Provide(
+			func() repositories.PermissionsRepository {
 				return nil
 			},
 		))

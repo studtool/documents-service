@@ -1,7 +1,6 @@
 package api
 
 import (
-	"github.com/studtool/common/errs"
 	"net/http"
 
 	"github.com/studtool/common/types"
@@ -22,18 +21,26 @@ func (srv *Server) addDocument(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	srv.server.WriteOkJSON(w, &documentInfo.DocumentInfo)
-}
-
-func (srv *Server) getDocuments(w http.ResponseWriter, r *http.Request) {
-	ownerID, err := srv.parseOwnerID(r)
+	permission := &models.Permission{
+		UserID: documentInfo.OwnerID,
+		Scope:  models.ScopeWrite,
+	}
+	err := srv.permissionsRepository.
+		AddPermission(documentInfo.ID, permission)
 	if err != nil {
 		srv.server.WriteErrJSON(w, err)
 		return
 	}
 
-	if ownerID != srv.server.ParseUserID(r) {
-		srv.server.WriteErrJSON(w, errs.NewNotAuthorizedError("not authorized")) //TODO
+	srv.server.WriteOkJSON(w, &documentInfo.DocumentInfo)
+}
+
+func (srv *Server) getDocuments(w http.ResponseWriter, r *http.Request) {
+	userID := srv.server.ParseUserID(r)
+
+	ownerID, err := srv.parseOwnerID(r)
+	if err != nil {
+		srv.server.WriteErrJSON(w, err)
 		return
 	}
 
@@ -45,9 +52,8 @@ func (srv *Server) getDocuments(w http.ResponseWriter, r *http.Request) {
 
 	page := srv.parsePage(r)
 
-	documents, err := srv.documentsInfoRepository.GetDocumentsInfo(
-		ownerID, subject, page,
-	)
+	documents, err := srv.documentsInfoRepository.
+		GetDocumentsInfo(userID, ownerID, subject, page)
 	if err != nil {
 		srv.server.WriteErrJSON(w, err)
 		return
