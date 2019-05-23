@@ -31,7 +31,7 @@ github.com/prometheus/client_model/go
 github.com/prometheus/common/expfmt
 github.com/prometheus/common/model
 github.com/prometheus/common/internal/bitbucket.org/ww/goautoneg
-# github.com/prometheus/procfs v0.0.0-20190522114515-bc1a522cf7b1
+# github.com/prometheus/procfs v0.0.0-20190523193104-a7aeb8df3389
 github.com/prometheus/procfs
 github.com/prometheus/procfs/internal/fs
 # github.com/sirupsen/logrus v1.4.2
@@ -39,18 +39,18 @@ github.com/sirupsen/logrus
 # github.com/studtool/common v0.0.0-20190521201339-4c3cbfe24add
 github.com/studtool/common/utils
 github.com/studtool/common/consts
+github.com/studtool/common/errs
 github.com/studtool/common/logs
 github.com/studtool/common/rest
-github.com/studtool/common/config
 github.com/studtool/common/types
-github.com/studtool/common/errs
+github.com/studtool/common/config
 # github.com/tinylib/msgp v1.1.0
 github.com/tinylib/msgp/msgp
 # go.uber.org/dig v1.7.1-0.20190327003609-4cc9f8898fe3
 go.uber.org/dig
 go.uber.org/dig/internal/digreflect
 go.uber.org/dig/internal/dot
-# golang.org/x/sys v0.0.0-20190522044717-8097e1b27ff5
+# golang.org/x/sys v0.0.0-20190523142557-0e01d883c5c5
 golang.org/x/sys/unix
 # google.golang.org/appengine v1.6.0
 google.golang.org/appengine/cloudsql
