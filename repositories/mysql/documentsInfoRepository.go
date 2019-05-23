@@ -13,14 +13,18 @@ import (
 )
 
 type DocumentsInfoRepository struct {
-	conn             *Connection
-	documentNotFound *errs.Error
+	conn *Connection
+
+	documentNotFound  *errs.Error
+	documentsNotFound *errs.Error
 }
 
 func NewDocumentsInfoRepository(conn *Connection) *DocumentsInfoRepository {
 	return &DocumentsInfoRepository{
-		conn:             conn,
-		documentNotFound: errs.NewNotFoundError("document not found"),
+		conn: conn,
+
+		documentNotFound:  errs.NewNotFoundError("document not found"),
+		documentsNotFound: errs.NewNotFoundError("documents not found"),
 	}
 }
 
@@ -48,7 +52,7 @@ func (r *DocumentsInfoRepository) AddDocumentInfo(info *models.DocumentInfoFull)
 func (r *DocumentsInfoRepository) GetDocumentInfo(documentID string) (*models.DocumentInfo, *errs.Error) {
 	const query = `
 		SELECT d.title, d.owner_id, d.subject
-		FROM document d WHERE d.id = $1;
+		FROM document d WHERE d.id = ?;
 	`
 
 	rows, err := r.conn.db.Query(query, &documentID)
@@ -82,7 +86,45 @@ func (r *DocumentsInfoRepository) GetDocumentsInfo(
 	subject *string,
 	page repositories.Page,
 ) (models.DocumentsInfo, *errs.Error) {
-	panic("implement me")
+	const query = `
+		SELECT
+			d.id,
+			d.title,
+			d.owner_id,
+			d.subject
+		FROM document d
+		WHERE
+			d.owner_id = ? AND
+			d.subject = ?
+		LIMIT ? OFFSET ?;
+	`
+
+	page.Index *= page.Size
+
+	rows, err := r.conn.db.Query(query,
+		&ownerID, subject, &page.Size, &page.Index,
+	)
+	if err != nil {
+		return nil, errs.New(err)
+	}
+	defer r.closeRows(rows)
+
+	documents := make([]models.DocumentInfo, 0)
+	for rows.Next() {
+		document := models.DocumentInfo{}
+		if err := rows.Scan(
+			&document.ID, &document.Title,
+			&document.Subject, &document.OwnerID,
+		); err != nil {
+			return nil, errs.New(err)
+		}
+		documents = append(documents, document)
+	}
+	if len(documents) == 0 {
+		return nil, r.documentsNotFound
+	}
+
+	return models.DocumentsInfo(documents), nil
 }
 
 func (r *DocumentsInfoRepository) DeleteDocumentsInfo(ownerId string, subject *string) *errs.Error {

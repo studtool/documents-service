@@ -1,6 +1,7 @@
 package api
 
 import (
+	"github.com/studtool/common/errs"
 	"net/http"
 
 	"github.com/studtool/common/types"
@@ -25,7 +26,34 @@ func (srv *Server) addDocument(w http.ResponseWriter, r *http.Request) {
 }
 
 func (srv *Server) getDocuments(w http.ResponseWriter, r *http.Request) {
-	//TODO
+	ownerID, err := srv.parseOwnerID(r)
+	if err != nil {
+		srv.server.WriteErrJSON(w, err)
+		return
+	}
+
+	if ownerID != srv.server.ParseUserID(r) {
+		srv.server.WriteErrJSON(w, errs.NewNotAuthorizedError("not authorized")) //TODO
+		return
+	}
+
+	subject, err := srv.parseSubject(r)
+	if err != nil {
+		srv.server.WriteErrJSON(w, err)
+		return
+	}
+
+	page := srv.parsePage(r)
+
+	documents, err := srv.documentsInfoRepository.GetDocumentsInfo(
+		ownerID, subject, page,
+	)
+	if err != nil {
+		srv.server.WriteErrJSON(w, err)
+		return
+	}
+
+	srv.server.WriteOkJSON(w, &documents)
 }
 
 func (srv *Server) deleteDocuments(w http.ResponseWriter, r *http.Request) {
