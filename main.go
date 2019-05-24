@@ -12,7 +12,6 @@ import (
 	"github.com/studtool/documents-service/beans"
 	"github.com/studtool/documents-service/config"
 	"github.com/studtool/documents-service/repositories"
-	"github.com/studtool/documents-service/repositories/fs"
 	"github.com/studtool/documents-service/repositories/mysql"
 )
 
@@ -20,11 +19,6 @@ func main() {
 	c := dig.New()
 
 	if config.RepositoriesEnabled {
-		utils.AssertOk(c.Provide(
-			fs.NewDocumentsRepository,
-			dig.As(new(repositories.ContentRepository)),
-		))
-
 		utils.AssertOk(c.Provide(mysql.NewConnection))
 		utils.AssertOk(c.Invoke(func(conn *mysql.Connection) {
 			if err := conn.Open(); err != nil {
