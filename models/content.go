@@ -20,3 +20,5 @@ type DocumentBlock struct {
 	Type       Content  `msg:"type"`
 	Data       []byte   `msg:"data"`
 }
+
+type DocumentBlocks []DocumentBlock

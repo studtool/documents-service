@@ -22,7 +22,7 @@ func main() {
 	if config.RepositoriesEnabled {
 		utils.AssertOk(c.Provide(
 			fs.NewDocumentsRepository,
-			dig.As(new(repositories.DocumentsRepository)),
+			dig.As(new(repositories.ContentRepository)),
 		))
 
 		utils.AssertOk(c.Provide(mysql.NewConnection))
@@ -53,7 +53,7 @@ func main() {
 		))
 	} else {
 		utils.AssertOk(c.Provide(
-			func() repositories.DocumentsRepository {
+			func() repositories.ContentRepository {
 				return nil
 			},
 		))
