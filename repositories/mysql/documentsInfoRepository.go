@@ -80,9 +80,7 @@ func (r *DocumentsInfoRepository) GetDocumentInfoFull(
 }
 
 func (r *DocumentsInfoRepository) GetDocumentsInfo(
-	userID string,
-	subject *string,
-	page repositories.Page,
+	userID string, ownerID string, subject *string, page repositories.Page,
 ) (models.DocumentsInfo, *errs.Error) {
 	const query = `
 		SELECT
@@ -93,6 +91,7 @@ func (r *DocumentsInfoRepository) GetDocumentsInfo(
 			d.id = p.document_id
 		WHERE
 			p.user_id = ? AND
+			d.owner_id = ? AND
 			p.scope & ? <> 0 AND
 			d.subject = ?
 		LIMIT ? OFFSET ?;
@@ -101,7 +100,8 @@ func (r *DocumentsInfoRepository) GetDocumentsInfo(
 	page.Index *= page.Size
 
 	rows, err := r.conn.db.Query(query,
-		userID, subject, scopeReadFlag, page.Size, page.Index,
+		userID, ownerID, scopeReadFlag,
+		*subject, page.Size, page.Index,
 	)
 	if err != nil {
 		return nil, errs.New(err)
