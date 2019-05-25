@@ -12,8 +12,10 @@ import (
 	"github.com/studtool/documents-service/api"
 	"github.com/studtool/documents-service/config"
 	"github.com/studtool/documents-service/logic"
+	"github.com/studtool/documents-service/logic/fake"
 	"github.com/studtool/documents-service/logic/impl"
 	"github.com/studtool/documents-service/repositories"
+	"github.com/studtool/documents-service/repositories/fake"
 	"github.com/studtool/documents-service/repositories/mysql"
 )
 
@@ -45,16 +47,13 @@ func main() {
 			dig.As(new(repositories.DocumentsInfoRepository)),
 		))
 	} else {
-		//TODO provide mocks
 		utils.AssertOk(c.Provide(
-			func() repositories.UsersRepository {
-				return nil
-			},
+			rfake.NewUsersRepository,
+			dig.As(new(repositories.UsersRepository)),
 		))
 		utils.AssertOk(c.Provide(
-			func() repositories.DocumentsInfoRepository {
-				return nil
-			},
+			rfake.NewDocumentsInfoRepository,
+			dig.As(new(repositories.DocumentsInfoRepository)),
 		))
 	}
 
@@ -68,16 +67,13 @@ func main() {
 			dig.As(new(logic.DocumentsInfoService)),
 		))
 	} else {
-		//TODO provide mocks
 		utils.AssertOk(c.Provide(
-			func() logic.UsersService {
-				return nil
-			},
+			sfake.NewUsersService,
+			dig.As(new(logic.UsersService)),
 		))
 		utils.AssertOk(c.Provide(
-			func() logic.DocumentsInfoService {
-				return nil
-			},
+			sfake.NewDocumentsInfoService,
+			dig.As(new(logic.DocumentsInfoService)),
 		))
 	}
 

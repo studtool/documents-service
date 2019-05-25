@@ -4,7 +4,9 @@ package errs
 
 import (
 	"fmt"
+
 	"github.com/mailru/easyjson"
+
 	"github.com/studtool/common/rft"
 )
 

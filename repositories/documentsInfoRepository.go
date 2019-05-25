@@ -16,7 +16,7 @@ type DocumentsInfoRepository interface {
 	GetDocumentsInfoByOwnerIDAndSubject(info *models.DocumentsInfo, page Page) (models.DocumentsInfo, *errs.Error)
 
 	UpdateDocumentTitleByID(update *models.DocumentTitleUpdate) *errs.Error
-	UpdateDocumentSubjectID(update *models.DocumentSubjectUpdate) *errs.Error
+	UpdateDocumentSubjectByID(update *models.DocumentSubjectUpdate) *errs.Error
 
 	DeleteDocumentByID(documentID types.ID) *errs.Error
 }

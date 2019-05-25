@@ -132,7 +132,7 @@ func (r *DocumentsInfoRepository) UpdateDocumentTitleByID(update *models.Documen
 	panic("implement me")
 }
 
-func (r *DocumentsInfoRepository) UpdateDocumentSubjectID(update *models.DocumentSubjectUpdate) *errs.Error {
+func (r *DocumentsInfoRepository) UpdateDocumentSubjectByID(update *models.DocumentSubjectUpdate) *errs.Error {
 	panic("implement me")
 }
 
