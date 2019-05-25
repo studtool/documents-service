@@ -45,7 +45,7 @@ func (s *UsersService) AddUser(u *models.User) *errs.Error {
 }
 
 func (s *UsersService) CheckUserExists(u *models.User) *errs.Error {
-	return s.usersRepository.CheckExistsUserByID(u.ID)
+	return s.usersRepository.CheckUserExistsByID(u.ID)
 }
 
 func (s *UsersService) DeleteUser(u *models.User) *errs.Error {

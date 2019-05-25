@@ -5,6 +5,7 @@ import (
 
 	"github.com/studtool/common/errs"
 	"github.com/studtool/common/logs"
+	"github.com/studtool/common/types"
 
 	"github.com/studtool/documents-service/models"
 	"github.com/studtool/documents-service/utils"
@@ -47,7 +48,7 @@ func (r *UsersRepository) AddUser(u *models.User) *errs.Error {
 	return nil
 }
 
-func (r *UsersRepository) CheckExistsUserByID(userID string) *errs.Error {
+func (r *UsersRepository) CheckUserExistsByID(userID types.ID) *errs.Error {
 	const query = `
 		SELECT exists(
 		    SELECT * FROM user u

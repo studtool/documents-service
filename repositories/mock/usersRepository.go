@@ -7,6 +7,7 @@ package mock_repositories
 import (
 	gomock "github.com/golang/mock/gomock"
 	errs "github.com/studtool/common/errs"
+	types "github.com/studtool/common/types"
 	models "github.com/studtool/documents-service/models"
 	reflect "reflect"
 )
@@ -48,30 +49,30 @@ func (mr *MockUsersRepositoryMockRecorder) AddUser(u interface{}) *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddUser", reflect.TypeOf((*MockUsersRepository)(nil).AddUser), u)
 }
 
-// CheckExistsUserByID mocks base method
-func (m *MockUsersRepository) CheckExistsUserByID(id string) *errs.Error {
+// CheckUserExistsByID mocks base method
+func (m *MockUsersRepository) CheckUserExistsByID(userID types.ID) *errs.Error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "CheckExistsUserByID", id)
+	ret := m.ctrl.Call(m, "CheckUserExistsByID", userID)
 	ret0, _ := ret[0].(*errs.Error)
 	return ret0
 }
 
-// CheckExistsUserByID indicates an expected call of CheckExistsUserByID
-func (mr *MockUsersRepositoryMockRecorder) CheckExistsUserByID(id interface{}) *gomock.Call {
+// CheckUserExistsByID indicates an expected call of CheckUserExistsByID
+func (mr *MockUsersRepositoryMockRecorder) CheckUserExistsByID(userID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckExistsUserByID", reflect.TypeOf((*MockUsersRepository)(nil).CheckExistsUserByID), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckUserExistsByID", reflect.TypeOf((*MockUsersRepository)(nil).CheckUserExistsByID), userID)
 }
 
 // DeleteUserByID mocks base method
-func (m *MockUsersRepository) DeleteUserByID(id string) *errs.Error {
+func (m *MockUsersRepository) DeleteUserByID(userID types.ID) *errs.Error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "DeleteUserByID", id)
+	ret := m.ctrl.Call(m, "DeleteUserByID", userID)
 	ret0, _ := ret[0].(*errs.Error)
 	return ret0
 }
 
 // DeleteUserByID indicates an expected call of DeleteUserByID
-func (mr *MockUsersRepositoryMockRecorder) DeleteUserByID(id interface{}) *gomock.Call {
+func (mr *MockUsersRepositoryMockRecorder) DeleteUserByID(userID interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteUserByID", reflect.TypeOf((*MockUsersRepository)(nil).DeleteUserByID), id)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "DeleteUserByID", reflect.TypeOf((*MockUsersRepository)(nil).DeleteUserByID), userID)
 }
