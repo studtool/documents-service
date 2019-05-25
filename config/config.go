@@ -8,7 +8,13 @@ import (
 
 var (
 	// Modified by the compiler
+	Component = ""
+
+	// Modified by the compiler
 	repositoriesEnabled = "true"
+
+	//Modified by the compiler
+	servicesEnabled = "true"
 
 	// Modified by the compiler
 	queuesEnabled = "true"
@@ -27,6 +33,7 @@ var (
 	RequestsLogsEnabled = cconfig.NewFlagDefault("STUDTOOL_DOCUMENTS_SERVICE_SHOULD_LOG_REQUESTS", true)
 
 	RepositoriesEnabled = parseBool(repositoriesEnabled)
+	ServicesEnabled     = parseBool(servicesEnabled)
 	QueuesEnabled       = parseBool(queuesEnabled)
 
 	StorageHost     = cconfig.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_HOST", "127.0.0.1")

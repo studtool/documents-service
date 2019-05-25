@@ -6,48 +6,49 @@ import (
 
 	"go.uber.org/dig"
 
+	"github.com/studtool/common/logs"
 	"github.com/studtool/common/utils"
 
 	"github.com/studtool/documents-service/api"
 	"github.com/studtool/documents-service/beans"
 	"github.com/studtool/documents-service/config"
+	"github.com/studtool/documents-service/logic"
+	"github.com/studtool/documents-service/logic/impl"
 	"github.com/studtool/documents-service/repositories"
 	"github.com/studtool/documents-service/repositories/mysql"
 )
 
 func main() {
 	c := dig.New()
+	logger := logs.NewReflectLogger()
 
 	if config.RepositoriesEnabled {
 		utils.AssertOk(c.Provide(mysql.NewConnection))
 		utils.AssertOk(c.Invoke(func(conn *mysql.Connection) {
 			if err := conn.Open(); err != nil {
-				beans.Logger().Fatal(err.Error())
-			} else {
-				beans.Logger().Info("storage: connection open")
+				logger.Fatal(err)
 			}
 		}))
 		defer func() {
 			utils.AssertOk(c.Invoke(func(conn *mysql.Connection) {
 				if err := conn.Close(); err != nil {
-					beans.Logger().Fatal(err)
-				} else {
-					beans.Logger().Info("storage: connection closed")
+					logger.Fatal(err)
 				}
 			}))
 		}()
 
 		utils.AssertOk(c.Provide(
+			mysql.NewUsersRepository,
+			dig.As(new(repositories.UsersRepository)),
+		))
+		utils.AssertOk(c.Provide(
 			mysql.NewDocumentsInfoRepository,
 			dig.As(new(repositories.DocumentsInfoRepository)),
 		))
-		utils.AssertOk(c.Provide(
-			mysql.NewPermissionsRepository,
-			dig.As(new(repositories.PermissionsRepository)),
-		))
 	} else {
+		//TODO provide mocks
 		utils.AssertOk(c.Provide(
-			func() repositories.ContentRepository {
+			func() repositories.UsersRepository {
 				return nil
 			},
 		))
@@ -56,8 +57,26 @@ func main() {
 				return nil
 			},
 		))
+	}
+
+	if config.ServicesEnabled {
 		utils.AssertOk(c.Provide(
-			func() repositories.PermissionsRepository {
+			impl.NewUsersService,
+			dig.As(new(logic.UsersService)),
+		))
+		utils.AssertOk(c.Provide(
+			impl.NewDocumentsInfoService,
+			dig.As(new(logic.DocumentsInfoService)),
+		))
+	} else {
+		//TODO provide mocks
+		utils.AssertOk(c.Provide(
+			func() logic.UsersService {
+				return nil
+			},
+		))
+		utils.AssertOk(c.Provide(
+			func() logic.DocumentsInfoService {
 				return nil
 			},
 		))

@@ -1,6 +1,8 @@
 package api
 
 import (
+	"github.com/go-http-utils/headers"
+	"github.com/studtool/documents-service/logic"
 	"github.com/studtool/documents-service/repositories"
 	"net/http"
 
@@ -17,17 +19,18 @@ import (
 
 type Server struct {
 	server *rest.Server
-	logger logs.Logger
 
-	documentsInfoRepository repositories.DocumentsInfoRepository
-	permissionsRepository   repositories.PermissionsRepository
+	structLogger  logs.Logger
+	reflectLogger logs.ReflectLogger
+
+	documentsInfoService  logic.DocumentsInfoService
+	permissionsRepository repositories.PermissionsRepository
 }
 
 type ServerParams struct {
 	dig.In
 
-	DocumentsInfoRepository repositories.DocumentsInfoRepository
-	PermissionsRepository   repositories.PermissionsRepository
+	DocumentsInfoService logic.DocumentsInfoService
 }
 
 func NewServer(params ServerParams) *Server {
@@ -38,14 +41,15 @@ func NewServer(params ServerParams) *Server {
 				Port: config.ServerPort.Value(),
 			},
 		),
-		logger: logs.NewStructLogger(
+
+		structLogger: logs.NewStructLogger(
 			logs.StructLoggerParams{
-				Component: "documents-service",
+				Component: config.Component,
 				Structure: "api.Server",
 			},
 		),
-		documentsInfoRepository: params.DocumentsInfoRepository,
-		permissionsRepository:   params.PermissionsRepository,
+
+		documentsInfoService: params.DocumentsInfoService,
 	}
 
 	mx := mux.NewRouter()
@@ -80,8 +84,9 @@ func NewServer(params ServerParams) *Server {
 				http.MethodDelete, http.MethodOptions,
 			},
 			Headers: []string{
-				"User-Agent", "Authorization",
-				"Content-Type", "Content-Length",
+				headers.Authorization, headers.UserAgent,
+				headers.ContentType, headers.ContentLength,
+				headers.ContentEncoding, headers.ContentLanguage,
 			},
 			Credentials: false,
 		})
@@ -95,12 +100,12 @@ func NewServer(params ServerParams) *Server {
 func (srv *Server) Run() error {
 	err := srv.server.Run()
 	if err == nil {
-		srv.logger.Info("started")
+		srv.structLogger.Info("started")
 	}
 	return err
 }
 
 func (srv *Server) Shutdown() error {
-	srv.logger.Info("shutdown")
+	srv.structLogger.Info("shutdown")
 	return srv.server.Shutdown()
 }

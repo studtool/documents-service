@@ -2,27 +2,21 @@ package repositories
 
 import (
 	"github.com/studtool/common/errs"
+	"github.com/studtool/common/types"
 
 	"github.com/studtool/documents-service/models"
 )
 
-type Page struct {
-	Index int32
-	Size  int32
-}
-
 type DocumentsInfoRepository interface {
-	AddDocumentInfo(info *models.DocumentInfoFull) *errs.Error
+	AddDocumentInfo(info *models.DocumentInfo) *errs.Error
 
-	GetDocumentInfo(documentID string) (*models.DocumentInfo, *errs.Error)
-	GetDocumentInfoFull(documentID string) (*models.DocumentInfoFull, *errs.Error)
+	GetDocumentInfoByID(info *models.DocumentInfo) *errs.Error
 
-	GetDocumentsInfo(userID string, ownerID string, subject *string, page Page) (models.DocumentsInfo, *errs.Error)
-	DeleteDocumentsInfo(ownerID string, subject *string) *errs.Error
+	GetDocumentsInfoByOwnerID(ownerID types.ID, page Page) (models.DocumentsInfo, *errs.Error)
+	GetDocumentsInfoByOwnerIDAndSubject(info *models.DocumentsInfo, page Page) (models.DocumentsInfo, *errs.Error)
 
-	AddDocumentMember(documentID string, member *models.Permission) *errs.Error
-	UpdateDocumentMemberPrivilege(documentID string, member *models.Permission) *errs.Error
-	DeleteDocumentMember(documentID string, memberId string) *errs.Error
+	UpdateDocumentTitleByID(update *models.DocumentTitleUpdate) *errs.Error
+	UpdateDocumentSubjectID(update *models.DocumentSubjectUpdate) *errs.Error
 
-	AddDocumentUpdateToHistory(documentID string, info *models.UpdateInfo) *errs.Error
+	DeleteDocumentByID(documentID types.ID) *errs.Error
 }

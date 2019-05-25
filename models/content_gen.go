@@ -228,6 +228,214 @@ func (z *DocumentBlock) Msgsize() (s int) {
 }
 
 // DecodeMsg implements msgp.Decodable
+func (z *DocumentBlocks) DecodeMsg(dc *msgp.Reader) (err error) {
+	var zb0002 uint32
+	zb0002, err = dc.ReadArrayHeader()
+	if err != nil {
+		err = msgp.WrapError(err)
+		return
+	}
+	if cap((*z)) >= int(zb0002) {
+		(*z) = (*z)[:zb0002]
+	} else {
+		(*z) = make(DocumentBlocks, zb0002)
+	}
+	for zb0001 := range *z {
+		var field []byte
+		_ = field
+		var zb0003 uint32
+		zb0003, err = dc.ReadMapHeader()
+		if err != nil {
+			err = msgp.WrapError(err, zb0001)
+			return
+		}
+		for zb0003 > 0 {
+			zb0003--
+			field, err = dc.ReadMapKeyPtr()
+			if err != nil {
+				err = msgp.WrapError(err, zb0001)
+				return
+			}
+			switch msgp.UnsafeString(field) {
+			case "position":
+				{
+					var zb0004 int64
+					zb0004, err = dc.ReadInt64()
+					if err != nil {
+						err = msgp.WrapError(err, zb0001, "Position")
+						return
+					}
+					(*z)[zb0001].Position = LongInt(zb0004)
+				}
+			case "type":
+				{
+					var zb0005 byte
+					zb0005, err = dc.ReadByte()
+					if err != nil {
+						err = msgp.WrapError(err, zb0001, "Type")
+						return
+					}
+					(*z)[zb0001].Type = Content(zb0005)
+				}
+			case "data":
+				(*z)[zb0001].Data, err = dc.ReadBytes((*z)[zb0001].Data)
+				if err != nil {
+					err = msgp.WrapError(err, zb0001, "Data")
+					return
+				}
+			default:
+				err = dc.Skip()
+				if err != nil {
+					err = msgp.WrapError(err, zb0001)
+					return
+				}
+			}
+		}
+	}
+	return
+}
+
+// EncodeMsg implements msgp.Encodable
+func (z DocumentBlocks) EncodeMsg(en *msgp.Writer) (err error) {
+	err = en.WriteArrayHeader(uint32(len(z)))
+	if err != nil {
+		err = msgp.WrapError(err)
+		return
+	}
+	for zb0006 := range z {
+		// map header, size 3
+		// write "position"
+		err = en.Append(0x83, 0xa8, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e)
+		if err != nil {
+			return
+		}
+		err = en.WriteInt64(int64(z[zb0006].Position))
+		if err != nil {
+			err = msgp.WrapError(err, zb0006, "Position")
+			return
+		}
+		// write "type"
+		err = en.Append(0xa4, 0x74, 0x79, 0x70, 0x65)
+		if err != nil {
+			return
+		}
+		err = en.WriteByte(byte(z[zb0006].Type))
+		if err != nil {
+			err = msgp.WrapError(err, zb0006, "Type")
+			return
+		}
+		// write "data"
+		err = en.Append(0xa4, 0x64, 0x61, 0x74, 0x61)
+		if err != nil {
+			return
+		}
+		err = en.WriteBytes(z[zb0006].Data)
+		if err != nil {
+			err = msgp.WrapError(err, zb0006, "Data")
+			return
+		}
+	}
+	return
+}
+
+// MarshalMsg implements msgp.Marshaler
+func (z DocumentBlocks) MarshalMsg(b []byte) (o []byte, err error) {
+	o = msgp.Require(b, z.Msgsize())
+	o = msgp.AppendArrayHeader(o, uint32(len(z)))
+	for zb0006 := range z {
+		// map header, size 3
+		// string "position"
+		o = append(o, 0x83, 0xa8, 0x70, 0x6f, 0x73, 0x69, 0x74, 0x69, 0x6f, 0x6e)
+		o = msgp.AppendInt64(o, int64(z[zb0006].Position))
+		// string "type"
+		o = append(o, 0xa4, 0x74, 0x79, 0x70, 0x65)
+		o = msgp.AppendByte(o, byte(z[zb0006].Type))
+		// string "data"
+		o = append(o, 0xa4, 0x64, 0x61, 0x74, 0x61)
+		o = msgp.AppendBytes(o, z[zb0006].Data)
+	}
+	return
+}
+
+// UnmarshalMsg implements msgp.Unmarshaler
+func (z *DocumentBlocks) UnmarshalMsg(bts []byte) (o []byte, err error) {
+	var zb0002 uint32
+	zb0002, bts, err = msgp.ReadArrayHeaderBytes(bts)
+	if err != nil {
+		err = msgp.WrapError(err)
+		return
+	}
+	if cap((*z)) >= int(zb0002) {
+		(*z) = (*z)[:zb0002]
+	} else {
+		(*z) = make(DocumentBlocks, zb0002)
+	}
+	for zb0001 := range *z {
+		var field []byte
+		_ = field
+		var zb0003 uint32
+		zb0003, bts, err = msgp.ReadMapHeaderBytes(bts)
+		if err != nil {
+			err = msgp.WrapError(err, zb0001)
+			return
+		}
+		for zb0003 > 0 {
+			zb0003--
+			field, bts, err = msgp.ReadMapKeyZC(bts)
+			if err != nil {
+				err = msgp.WrapError(err, zb0001)
+				return
+			}
+			switch msgp.UnsafeString(field) {
+			case "position":
+				{
+					var zb0004 int64
+					zb0004, bts, err = msgp.ReadInt64Bytes(bts)
+					if err != nil {
+						err = msgp.WrapError(err, zb0001, "Position")
+						return
+					}
+					(*z)[zb0001].Position = LongInt(zb0004)
+				}
+			case "type":
+				{
+					var zb0005 byte
+					zb0005, bts, err = msgp.ReadByteBytes(bts)
+					if err != nil {
+						err = msgp.WrapError(err, zb0001, "Type")
+						return
+					}
+					(*z)[zb0001].Type = Content(zb0005)
+				}
+			case "data":
+				(*z)[zb0001].Data, bts, err = msgp.ReadBytesBytes(bts, (*z)[zb0001].Data)
+				if err != nil {
+					err = msgp.WrapError(err, zb0001, "Data")
+					return
+				}
+			default:
+				bts, err = msgp.Skip(bts)
+				if err != nil {
+					err = msgp.WrapError(err, zb0001)
+					return
+				}
+			}
+		}
+	}
+	o = bts
+	return
+}
+
+// Msgsize returns an upper bound estimate of the number of bytes occupied by the serialized message
+func (z DocumentBlocks) Msgsize() (s int) {
+	s = msgp.ArrayHeaderSize
+	for zb0006 := range z {
+		s += 1 + 9 + msgp.Int64Size + 5 + msgp.ByteSize + 5 + msgp.BytesPrefixSize + len(z[zb0006].Data)
+	}
+	return
+}
+
+// DecodeMsg implements msgp.Decodable
 func (z *LongInt) DecodeMsg(dc *msgp.Reader) (err error) {
 	{
 		var zb0001 int64
