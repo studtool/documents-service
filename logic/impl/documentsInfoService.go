@@ -3,6 +3,7 @@ package impl
 import (
 	"go.uber.org/dig"
 
+	"github.com/studtool/common/consts"
 	"github.com/studtool/common/errs"
 	"github.com/studtool/common/logs"
 
@@ -48,7 +49,7 @@ func NewDocumentsInfoService(params DocumentsInfoServiceParams) *DocumentsInfoSe
 }
 
 func (s *DocumentsInfoService) AddDocumentInfo(params logic.AddDocumentInfoParams) *errs.Error {
-	docInfo := params.Document
+	docInfo := params.DocumentInfo
 
 	docInfo.OwnerID = params.UserID
 	docInfo.DocumentID = utils.MakeID()
@@ -62,13 +63,32 @@ func (s *DocumentsInfoService) AddDocumentInfo(params logic.AddDocumentInfoParam
 }
 
 func (s *DocumentsInfoService) GetDocumentInfo(params logic.GetDocumentInfoParams) *errs.Error {
-	docInfo := params.Document
+	docInfo := params.DocumentInfo
 
 	if params.UserID != docInfo.OwnerID {
 		return s.readPermissionErr
 	}
 
 	return s.documentsInfoRepository.GetDocumentInfoByID(docInfo)
+}
+
+func (s *DocumentsInfoService) GetDocumentsInfo(params logic.GetDocumentsInfoParams) *errs.Error {
+	docsInfo := params.DocumentsInfo
+
+	if params.UserID != params.OwnerID {
+		return s.readPermissionErr
+	}
+
+	var err *errs.Error
+	if params.Subject == consts.EmptyString {
+		*docsInfo, err = s.documentsInfoRepository.
+			GetDocumentsInfoByOwnerID(params.OwnerID, params.Page)
+	} else {
+		*docsInfo, err = s.documentsInfoRepository.
+			GetDocumentsInfoByOwnerIDAndSubject(params.OwnerID, params.Subject, params.Page)
+	}
+
+	return err
 }
 
 func (s *DocumentsInfoService) UpdateDocumentTitle(params logic.UpdateDocumentTitleParams) *errs.Error {

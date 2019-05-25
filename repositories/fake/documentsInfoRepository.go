@@ -22,11 +22,15 @@ func (r *DocumentsInfoRepository) GetDocumentInfoByID(info *models.DocumentInfo)
 	return errs.NewNotImplementedError(r.GetDocumentInfoByID)
 }
 
-func (r *DocumentsInfoRepository) GetDocumentsInfoByOwnerID(ownerID types.ID, page repositories.Page) (models.DocumentsInfo, *errs.Error) {
+func (r *DocumentsInfoRepository) GetDocumentsInfoByOwnerID(
+	ownerID types.ID, page repositories.Page) (models.DocumentsInfo, *errs.Error) {
+
 	return nil, errs.NewNotImplementedError(r.GetDocumentsInfoByOwnerID)
 }
 
-func (r *DocumentsInfoRepository) GetDocumentsInfoByOwnerIDAndSubject(info *models.DocumentsInfo, page repositories.Page) (models.DocumentsInfo, *errs.Error) {
+func (r *DocumentsInfoRepository) GetDocumentsInfoByOwnerIDAndSubject(
+	ownerID types.ID, subject string, page repositories.Page) (models.DocumentsInfo, *errs.Error) {
+
 	return nil, errs.NewNotImplementedError(r.GetDocumentsInfoByOwnerIDAndSubject)
 }
 

@@ -4,8 +4,10 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/gorilla/mux"
+
 	"github.com/studtool/common/consts"
-	"github.com/studtool/common/errs"
+	"github.com/studtool/common/types"
 
 	"github.com/studtool/documents-service/repositories"
 )
@@ -22,31 +24,34 @@ const (
 	defaultPageSize  = 10
 )
 
-func (srv *Server) parseOwnerID(r *http.Request) (string, *errs.Error) {
-	id := r.URL.Query().Get(ownerIDParamName)
-	if id == consts.EmptyString {
-		return consts.EmptyString, errs.NewBadFormatError("no owner_id") //TODO
-	}
-	return id, nil
+const (
+	documentIDVarName = "document_id"
+)
+
+func (srv *Server) parseHeaderUserID(r *http.Request) types.ID {
+	return types.ID(srv.server.ParseUserID(r))
 }
 
-func (srv *Server) parseSubject(r *http.Request) (*string, *errs.Error) { //TODO no error, empty subject
-	s := new(string)
-	*s = r.URL.Query().Get(subjectParamName)
-	if *s == consts.EmptyString {
-		return nil, errs.NewBadFormatError("no subject") //TODO
-	}
-	return s, nil
+func (srv *Server) parsePathDocumentID(r *http.Request) types.ID {
+	return types.ID(mux.Vars(r)[documentIDVarName])
 }
 
-func (srv *Server) parsePage(r *http.Request) repositories.Page {
+func (srv *Server) parseParamOwnerID(r *http.Request) types.ID {
+	return types.ID(r.URL.Query().Get(ownerIDParamName))
+}
+
+func (srv *Server) parseParamSubject(r *http.Request) string {
+	return r.URL.Query().Get(subjectParamName)
+}
+
+func (srv *Server) parseParamsPage(r *http.Request) repositories.Page {
 	return repositories.Page{
 		Index: srv.parsePageIndex(r),
 		Size:  srv.parsePageSize(r),
 	}
 }
 
-func (srv *Server) parsePageIndex(r *http.Request) int32 {
+func (srv *Server) parsePageIndex(r *http.Request) int32 { //TODO remove logic
 	indexStr := r.URL.Query().Get(pageIndexParamName)
 	if indexStr == consts.EmptyString {
 		return defaultPageIndex
@@ -63,7 +68,7 @@ func (srv *Server) parsePageIndex(r *http.Request) int32 {
 	}
 }
 
-func (srv *Server) parsePageSize(r *http.Request) int32 {
+func (srv *Server) parsePageSize(r *http.Request) int32 { //TODO remove logic
 	indexStr := r.URL.Query().Get(pageSizeParamName)
 	if indexStr == consts.EmptyString {
 		return defaultPageSize

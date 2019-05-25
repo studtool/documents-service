@@ -80,18 +80,18 @@ func (mr *MockDocumentsInfoRepositoryMockRecorder) GetDocumentsInfoByOwnerID(own
 }
 
 // GetDocumentsInfoByOwnerIDAndSubject mocks base method
-func (m *MockDocumentsInfoRepository) GetDocumentsInfoByOwnerIDAndSubject(info *models.DocumentsInfo, page repositories.Page) (models.DocumentsInfo, *errs.Error) {
+func (m *MockDocumentsInfoRepository) GetDocumentsInfoByOwnerIDAndSubject(ownerID types.ID, subject string, page repositories.Page) (models.DocumentsInfo, *errs.Error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetDocumentsInfoByOwnerIDAndSubject", info, page)
+	ret := m.ctrl.Call(m, "GetDocumentsInfoByOwnerIDAndSubject", ownerID, subject, page)
 	ret0, _ := ret[0].(models.DocumentsInfo)
 	ret1, _ := ret[1].(*errs.Error)
 	return ret0, ret1
 }
 
 // GetDocumentsInfoByOwnerIDAndSubject indicates an expected call of GetDocumentsInfoByOwnerIDAndSubject
-func (mr *MockDocumentsInfoRepositoryMockRecorder) GetDocumentsInfoByOwnerIDAndSubject(info, page interface{}) *gomock.Call {
+func (mr *MockDocumentsInfoRepositoryMockRecorder) GetDocumentsInfoByOwnerIDAndSubject(ownerID, subject, page interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDocumentsInfoByOwnerIDAndSubject", reflect.TypeOf((*MockDocumentsInfoRepository)(nil).GetDocumentsInfoByOwnerIDAndSubject), info, page)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDocumentsInfoByOwnerIDAndSubject", reflect.TypeOf((*MockDocumentsInfoRepository)(nil).GetDocumentsInfoByOwnerIDAndSubject), ownerID, subject, page)
 }
 
 // UpdateDocumentTitleByID mocks base method

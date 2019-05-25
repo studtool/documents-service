@@ -82,12 +82,15 @@ func (r *DocumentsInfoRepository) GetDocumentInfoByID(info *models.DocumentInfo)
 	return nil
 }
 
-func (r *DocumentsInfoRepository) GetDocumentsInfoByOwnerID(ownerID types.ID, page repositories.Page) (models.DocumentsInfo, *errs.Error) {
+const (
+	selectDocumentFields = "d.id,d.owner_id,d.title,d.subject"
+)
+
+func (r *DocumentsInfoRepository) GetDocumentsInfoByOwnerID(
+	ownerID types.ID, page repositories.Page) (models.DocumentsInfo, *errs.Error) {
+
 	const query = `
-		SELECT
-			d.id,
-			d.title,
-			d.subject
+		SELECT ` + selectDocumentFields + `
 		FROM document d
 		WHERE
 			d.owner_id = ?
@@ -96,36 +99,42 @@ func (r *DocumentsInfoRepository) GetDocumentsInfoByOwnerID(ownerID types.ID, pa
 
 	page.Index *= page.Size
 
-	rows, err := r.db().QueryContext(r.msCtx(), query,
+	docs, err := r.getDocumentsInfo(query,
 		ownerID, page.Size, page.Index,
 	)
 	if err != nil {
-		return nil, r.wrapErr(err)
-	}
-	defer r.closeRows(rows)
-
-	documents := make(models.DocumentsInfo, 0)
-	for rows.Next() {
-		document := models.DocumentInfo{
-			OwnerID: ownerID,
-		}
-		err := rows.Scan(
-			&document.DocumentID, &document.Title, &document.Subject,
-		)
-		if err != nil {
-			return nil, r.wrapErr(err)
+		if err == r.docsNotFoundErr {
+			r.structLogger.Warningf("documents [owner_id = '%s'] not found", ownerID)
 		}
 	}
-	if len(documents) == 0 {
-		r.logDocsNotFound(ownerID)
-		return nil, r.docsNotFoundErr
-	}
 
-	return documents, nil
+	return docs, err
 }
 
-func (r *DocumentsInfoRepository) GetDocumentsInfoByOwnerIDAndSubject(info *models.DocumentsInfo, page repositories.Page) (models.DocumentsInfo, *errs.Error) {
-	panic("implement me")
+func (r *DocumentsInfoRepository) GetDocumentsInfoByOwnerIDAndSubject(
+	ownerID types.ID, subject string, page repositories.Page) (models.DocumentsInfo, *errs.Error) {
+
+	const query = `
+		SELECT ` + selectDocumentFields + `
+		FROM document d
+		WHERE
+			d.owner_id = ? AND
+			d.subject = ?
+		LIMIT ? OFFSET ?;
+	`
+
+	page.Index *= page.Size
+
+	docs, err := r.getDocumentsInfo(query,
+		ownerID, page.Size, page.Index, subject,
+	)
+	if err != nil {
+		if err == r.docsNotFoundErr {
+			r.structLogger.Warningf("documents [owner_id = '%s';subject = %s] not found", ownerID, subject)
+		}
+	}
+
+	return docs, err
 }
 
 func (r *DocumentsInfoRepository) UpdateDocumentTitleByID(update *models.DocumentTitleUpdate) *errs.Error {
@@ -142,6 +151,33 @@ func (r *DocumentsInfoRepository) DeleteDocumentByID(documentID types.ID) *errs.
 
 func (r *DocumentsInfoRepository) db() *sql.DB {
 	return r.conn.db
+}
+
+func (r *DocumentsInfoRepository) getDocumentsInfo(
+	query string, args ...interface{}) (models.DocumentsInfo, *errs.Error) {
+
+	rows, err := r.db().QueryContext(r.msCtx(), query, args...)
+	if err != nil {
+		return nil, r.wrapErr(err)
+	}
+	defer r.closeRows(rows)
+
+	documents := make(models.DocumentsInfo, 0)
+	for rows.Next() {
+		document := models.DocumentInfo{}
+		err := rows.Scan(
+			&document.DocumentID, &document.OwnerID,
+			&document.Title, &document.Subject,
+		)
+		if err != nil {
+			return nil, r.wrapErr(err)
+		}
+	}
+	if len(documents) == 0 {
+		return nil, r.docsNotFoundErr
+	}
+
+	return documents, nil
 }
 
 func (r *DocumentsInfoRepository) closeRows(rows *sql.Rows) {
@@ -165,10 +201,6 @@ func (r *DocumentsInfoRepository) msCtx() context.Context {
 func (r *DocumentsInfoRepository) ctx(timeout time.Duration) context.Context {
 	ctx, _ := context.WithTimeout(context.TODO(), timeout)
 	return ctx
-}
-
-func (r *DocumentsInfoRepository) logDocsNotFound(ownerID types.ID) {
-	r.structLogger.Warningf("documents [owner_id = %s] not found", ownerID)
 }
 
 func (r *DocumentsInfoRepository) logDocNotFound(documentID types.ID) {

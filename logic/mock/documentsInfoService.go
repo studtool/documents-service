@@ -62,6 +62,20 @@ func (mr *MockDocumentsInfoServiceMockRecorder) GetDocumentInfo(params interface
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDocumentInfo", reflect.TypeOf((*MockDocumentsInfoService)(nil).GetDocumentInfo), params)
 }
 
+// GetDocumentsInfo mocks base method
+func (m *MockDocumentsInfoService) GetDocumentsInfo(params logic.GetDocumentsInfoParams) *errs.Error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetDocumentsInfo", params)
+	ret0, _ := ret[0].(*errs.Error)
+	return ret0
+}
+
+// GetDocumentsInfo indicates an expected call of GetDocumentsInfo
+func (mr *MockDocumentsInfoServiceMockRecorder) GetDocumentsInfo(params interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetDocumentsInfo", reflect.TypeOf((*MockDocumentsInfoService)(nil).GetDocumentsInfo), params)
+}
+
 // UpdateDocumentTitle mocks base method
 func (m *MockDocumentsInfoService) UpdateDocumentTitle(params logic.UpdateDocumentTitleParams) *errs.Error {
 	m.ctrl.T.Helper()
