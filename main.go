@@ -92,6 +92,12 @@ func main() {
 				}
 			}))
 		}()
+
+		utils.AssertOk(c.Invoke(func(c *messages.MqClient) {
+			if err := c.Run(); err != nil {
+				logger.Fatal(err)
+			}
+		}))
 	}
 
 	ch := make(chan os.Signal)
