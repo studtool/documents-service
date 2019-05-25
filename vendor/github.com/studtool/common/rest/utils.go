@@ -65,13 +65,6 @@ func (srv *Server) WriteOkJSON(w http.ResponseWriter, v easyjson.Marshaler) {
 }
 
 func (srv *Server) WriteErrJSON(w http.ResponseWriter, err *errs.Error) {
-	if err.Type == errs.Internal {
-		srv.logger.Error(err.Message)
-
-		w.WriteHeader(http.StatusInternalServerError)
-		return
-	}
-
 	switch err.Type {
 	case errs.BadFormat:
 		srv.writeErrBodyJSON(w, http.StatusBadRequest, err)
@@ -90,6 +83,13 @@ func (srv *Server) WriteErrJSON(w http.ResponseWriter, err *errs.Error) {
 
 	case errs.PermissionDenied:
 		srv.writeErrBodyJSON(w, http.StatusForbidden, err)
+
+	case errs.NotImplemented:
+		srv.logger.Errorf("not implemented: %s", err.Message)
+		w.WriteHeader(http.StatusInternalServerError)
+
+	case errs.Internal:
+		srv.logger.Errorf("internal error: %s", err.Message)
 
 	default:
 		panic(fmt.Sprintf("no status code for error. Type: %d, Message: %s", err.Type, err.Message))

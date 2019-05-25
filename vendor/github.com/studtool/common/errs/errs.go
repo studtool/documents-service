@@ -3,7 +3,9 @@ package errs
 //go:generate easyjson
 
 import (
+	"fmt"
 	"github.com/mailru/easyjson"
+	"github.com/studtool/common/rft"
 )
 
 const (
@@ -14,6 +16,7 @@ const (
 	NotFound         = 4
 	NotAuthorized    = 5
 	PermissionDenied = 6
+	NotImplemented   = 7
 )
 
 //easyjson:json
@@ -64,6 +67,10 @@ func NewNotAuthorizedError(message string) *Error {
 
 func NewPermissionDeniedError(message string) *Error {
 	return NewError(PermissionDenied, message)
+}
+
+func NewNotImplementedError(f interface{}) *Error {
+	return NewError(NotImplemented, fmt.Sprintf("not implemented: %s", rft.FuncName(f)))
 }
 
 func (v *Error) Error() string {

@@ -38,7 +38,7 @@ github.com/prometheus/procfs
 github.com/prometheus/procfs/internal/fs
 # github.com/sirupsen/logrus v1.4.2
 github.com/sirupsen/logrus
-# github.com/studtool/common v0.0.0-20190525192713-faac0029cdaa
+# github.com/studtool/common v0.0.0-20190525200255-b29a6376727f
 github.com/studtool/common/logs
 github.com/studtool/common/utils
 github.com/studtool/common/consts
@@ -46,6 +46,7 @@ github.com/studtool/common/errs
 github.com/studtool/common/rest
 github.com/studtool/common/types
 github.com/studtool/common/config
+github.com/studtool/common/rft
 # github.com/tinylib/msgp v1.1.0
 github.com/tinylib/msgp/msgp
 # go.uber.org/dig v1.7.1-0.20190327003609-4cc9f8898fe3
