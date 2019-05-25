@@ -14,6 +14,7 @@ import (
 	"github.com/studtool/documents-service/logic"
 	"github.com/studtool/documents-service/logic/fake"
 	"github.com/studtool/documents-service/logic/impl"
+	"github.com/studtool/documents-service/messages"
 	"github.com/studtool/documents-service/repositories"
 	"github.com/studtool/documents-service/repositories/fake"
 	"github.com/studtool/documents-service/repositories/mysql"
@@ -75,6 +76,22 @@ func main() {
 			sfake.NewDocumentsInfoService,
 			dig.As(new(logic.DocumentsInfoService)),
 		))
+	}
+
+	if config.QueuesEnabled {
+		utils.AssertOk(c.Provide(messages.NewMqClient))
+		utils.AssertOk(c.Invoke(func(c *messages.MqClient) {
+			if err := c.OpenConnection(); err != nil {
+				logger.Fatal(err)
+			}
+		}))
+		defer func() {
+			utils.AssertOk(c.Invoke(func(c *messages.MqClient) {
+				if err := c.CloseConnection(); err != nil {
+					logger.Fatal(err)
+				}
+			}))
+		}()
 	}
 
 	ch := make(chan os.Signal)
