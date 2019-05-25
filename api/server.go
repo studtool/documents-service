@@ -46,8 +46,8 @@ func NewServer(params ServerParams) *Server {
 		documentsInfoService: params.DocumentsInfoService,
 	}
 
-	srv.structLogger = utils.MakeStructLogger(srv)
-	srv.reflectLogger = utils.MakeReflectLogger(srv)
+	srv.structLogger = srvutils.MakeStructLogger(srv)
+	srv.reflectLogger = srvutils.MakeReflectLogger(srv)
 
 	mx := mux.NewRouter()
 	mx.Handle(`/api/protected/documents`, handlers.MethodHandler{

@@ -28,8 +28,8 @@ func NewUsersService(params UsersServiceParams) *UsersService {
 		usersRepository: params.UsersRepository,
 	}
 
-	s.structLogger = utils.MakeStructLogger(s)
-	s.reflectLogger = utils.MakeReflectLogger(s)
+	s.structLogger = srvutils.MakeStructLogger(s)
+	s.reflectLogger = srvutils.MakeReflectLogger(s)
 
 	s.structLogger.Info("initialized")
 

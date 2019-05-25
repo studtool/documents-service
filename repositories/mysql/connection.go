@@ -31,8 +31,8 @@ func NewConnection() *Connection {
 		),
 	}
 
-	conn.structLogger = utils.MakeStructLogger(conn)
-	conn.reflectLogger = utils.MakeReflectLogger(conn)
+	conn.structLogger = srvutils.MakeStructLogger(conn)
+	conn.reflectLogger = srvutils.MakeReflectLogger(conn)
 
 	conn.structLogger.Info("initialized")
 

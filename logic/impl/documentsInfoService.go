@@ -40,8 +40,8 @@ func NewDocumentsInfoService(params DocumentsInfoServiceParams) *DocumentsInfoSe
 		writePermissionErr: errs.NewPermissionDeniedError("permission to write document denied"),
 	}
 
-	s.structLogger = utils.MakeStructLogger(s)
-	s.reflectLogger = utils.MakeReflectLogger(s)
+	s.structLogger = srvutils.MakeStructLogger(s)
+	s.reflectLogger = srvutils.MakeReflectLogger(s)
 
 	s.structLogger.Info("initialized")
 
@@ -52,7 +52,7 @@ func (s *DocumentsInfoService) AddDocumentInfo(params logic.AddDocumentInfoParam
 	docInfo := params.DocumentInfo
 
 	docInfo.OwnerID = params.UserID
-	docInfo.DocumentID = utils.MakeID()
+	docInfo.DocumentID = srvutils.MakeID()
 
 	err := s.usersRepository.CheckUserExistsByID(params.UserID)
 	if err != nil {

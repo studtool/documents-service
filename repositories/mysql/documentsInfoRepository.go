@@ -32,8 +32,8 @@ func NewDocumentsInfoRepository(conn *Connection) *DocumentsInfoRepository {
 		docsNotFoundErr: errs.NewNotFoundError("documents not found"),
 	}
 
-	r.structLogger = utils.MakeStructLogger(r)
-	r.reflectLogger = utils.MakeReflectLogger(r)
+	r.structLogger = srvutils.MakeStructLogger(r)
+	r.reflectLogger = srvutils.MakeReflectLogger(r)
 
 	r.structLogger.Info("initialized")
 
