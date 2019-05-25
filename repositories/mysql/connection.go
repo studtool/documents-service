@@ -4,20 +4,25 @@ import (
 	"database/sql"
 	"fmt"
 
-	"github.com/studtool/documents-service/beans"
-
 	_ "github.com/go-sql-driver/mysql"
 
+	"github.com/studtool/common/logs"
+
 	"github.com/studtool/documents-service/config"
+	"github.com/studtool/documents-service/utils"
 )
 
 type Connection struct {
+	db *sql.DB
+
+	structLogger  logs.Logger
+	reflectLogger logs.Logger
+
 	connStr string
-	db      *sql.DB
 }
 
 func NewConnection() *Connection {
-	return &Connection{
+	conn := &Connection{
 		connStr: fmt.Sprintf(
 			"%s:%s@(%s:%s)/%s",
 			config.StorageUser.Value(), config.StoragePassword.Value(),
@@ -25,6 +30,13 @@ func NewConnection() *Connection {
 			config.StorageDB.Value(),
 		),
 	}
+
+	conn.structLogger = utils.MakeStructLogger(conn)
+	conn.reflectLogger = utils.MakeReflectLogger(conn)
+
+	conn.structLogger.Info("initialization")
+
+	return conn
 }
 
 func (conn *Connection) Open() (err error) {
@@ -34,10 +46,4 @@ func (conn *Connection) Open() (err error) {
 
 func (conn *Connection) Close() (err error) {
 	return conn.db.Close()
-}
-
-func (conn *Connection) closeRows(rows *sql.Rows) {
-	if err := rows.Close(); err != nil {
-		beans.Logger().Error(err)
-	}
 }

@@ -2,6 +2,7 @@ package api
 
 import (
 	"github.com/go-http-utils/headers"
+	"github.com/studtool/common/utils"
 	"github.com/studtool/documents-service/logic"
 	"github.com/studtool/documents-service/repositories"
 	"net/http"
@@ -21,7 +22,7 @@ type Server struct {
 	server *rest.Server
 
 	structLogger  logs.Logger
-	reflectLogger logs.ReflectLogger
+	reflectLogger logs.Logger
 
 	documentsInfoService  logic.DocumentsInfoService
 	permissionsRepository repositories.PermissionsRepository
@@ -34,6 +35,15 @@ type ServerParams struct {
 }
 
 func NewServer(params ServerParams) *Server {
+	structLogger := logs.NewStructLogger(
+		logs.StructLoggerParams{
+			Component: config.Component,
+			Structure: utils.StructName(new(Server)),
+		},
+	)
+
+	structLogger.Info("initialization")
+
 	srv := &Server{
 		server: rest.NewServer(
 			rest.ServerConfig{
@@ -42,12 +52,8 @@ func NewServer(params ServerParams) *Server {
 			},
 		),
 
-		structLogger: logs.NewStructLogger(
-			logs.StructLoggerParams{
-				Component: config.Component,
-				Structure: "api.Server",
-			},
-		),
+		structLogger:  structLogger,
+		reflectLogger: logs.NewReflectLogger(),
 
 		documentsInfoService: params.DocumentsInfoService,
 	}
