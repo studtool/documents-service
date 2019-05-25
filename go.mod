@@ -11,7 +11,7 @@ require (
 	github.com/gorilla/mux v1.7.2
 	github.com/mailru/easyjson v0.0.0-20190403194419-1ea4449da983
 	github.com/philhofer/fwd v1.0.0 // indirect
-	github.com/studtool/common v0.0.0-20190525184226-98087b011eb1
+	github.com/studtool/common v0.0.0-20190525192713-faac0029cdaa
 	github.com/tinylib/msgp v1.1.0
 	go.uber.org/dig v1.7.1-0.20190327003609-4cc9f8898fe3
 	google.golang.org/appengine v1.6.0 // indirect

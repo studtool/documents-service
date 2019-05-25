@@ -17,6 +17,9 @@ type DocumentsInfoService struct {
 
 	usersRepository         repositories.UsersRepository
 	documentsInfoRepository repositories.DocumentsInfoRepository
+
+	readPermissionErr  *errs.Error
+	writePermissionErr *errs.Error
 }
 
 type DocumentsInfoServiceParams struct {
@@ -30,6 +33,10 @@ func NewDocumentsInfoService(params DocumentsInfoServiceParams) *DocumentsInfoSe
 	s := &DocumentsInfoService{
 		usersRepository:         params.UsersRepository,
 		documentsInfoRepository: params.DocumentsInfoRepository,
+
+		// TODO these errors should be 404, but for dev they are 403
+		readPermissionErr:  errs.NewPermissionDeniedError("permission to read document denied"),
+		writePermissionErr: errs.NewPermissionDeniedError("permission to write document denied"),
 	}
 
 	s.structLogger = utils.MakeStructLogger(s)
@@ -41,11 +48,27 @@ func NewDocumentsInfoService(params DocumentsInfoServiceParams) *DocumentsInfoSe
 }
 
 func (s *DocumentsInfoService) AddDocumentInfo(params logic.AddDocumentInfoParams) *errs.Error {
-	panic("implement me")
+	docInfo := params.Document
+
+	docInfo.OwnerID = params.UserID
+	docInfo.DocumentID = utils.MakeID()
+
+	err := s.documentsInfoRepository.AddDocumentInfo(docInfo)
+	if err == nil {
+		s.structLogger.Infof("document [id = %s] added", docInfo.DocumentID)
+	}
+
+	return nil
 }
 
 func (s *DocumentsInfoService) GetDocumentInfo(params logic.GetDocumentInfoParams) *errs.Error {
-	panic("implement me")
+	docInfo := params.Document
+
+	if params.UserID != docInfo.OwnerID {
+		return s.readPermissionErr
+	}
+
+	return s.documentsInfoRepository.GetDocumentInfoByID(docInfo)
 }
 
 func (s *DocumentsInfoService) UpdateDocumentTitle(params logic.UpdateDocumentTitleParams) *errs.Error {
