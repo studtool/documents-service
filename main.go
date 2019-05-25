@@ -10,7 +10,6 @@ import (
 	"github.com/studtool/common/utils"
 
 	"github.com/studtool/documents-service/api"
-	"github.com/studtool/documents-service/beans"
 	"github.com/studtool/documents-service/config"
 	"github.com/studtool/documents-service/logic"
 	"github.com/studtool/documents-service/logic/impl"
@@ -89,13 +88,13 @@ func main() {
 	utils.AssertOk(c.Provide(api.NewServer))
 	utils.AssertOk(c.Invoke(func(srv *api.Server) {
 		if err := srv.Run(); err != nil {
-			beans.Logger().Fatal(err)
+			logger.Fatal(err)
 		}
 	}))
 	defer func() {
 		utils.AssertOk(c.Invoke(func(srv *api.Server) {
 			if err := srv.Shutdown(); err != nil {
-				beans.Logger().Fatal(err)
+				logger.Fatal(err)
 			}
 		}))
 	}()
