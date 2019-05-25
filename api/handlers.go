@@ -1,11 +1,11 @@
 package api
 
 import (
-	"github.com/studtool/documents-service/logic"
 	"net/http"
 
 	"github.com/studtool/common/types"
 
+	"github.com/studtool/documents-service/logic"
 	"github.com/studtool/documents-service/models"
 )
 
