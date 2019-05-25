@@ -13,11 +13,11 @@ import (
 )
 
 type DocumentsInfoService struct {
-	structLogger  logs.Logger
-	reflectLogger logs.Logger
-
 	usersRepository         repositories.UsersRepository
 	documentsInfoRepository repositories.DocumentsInfoRepository
+
+	structLogger  logs.Logger
+	reflectLogger logs.Logger
 
 	readPermissionErr  *errs.Error
 	writePermissionErr *errs.Error
