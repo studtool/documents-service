@@ -3,13 +3,15 @@ package mysql
 import (
 	"context"
 	"database/sql"
+	"time"
+
 	"github.com/studtool/common/errs"
 	"github.com/studtool/common/logs"
 	"github.com/studtool/common/types"
-	"github.com/studtool/documents-service/config"
+
 	"github.com/studtool/documents-service/models"
 	"github.com/studtool/documents-service/repositories"
-	"time"
+	"github.com/studtool/documents-service/utils"
 )
 
 type DocumentsInfoRepository struct {
@@ -23,21 +25,19 @@ type DocumentsInfoRepository struct {
 }
 
 func NewDocumentsInfoRepository(conn *Connection) *DocumentsInfoRepository {
-	structLogger := logs.NewStructLogger(
-		logs.StructLoggerParams{
-			Component: config.Component,
-			Structure: "mysql.DocumentsRepository",
-		},
-	)
-
-	structLogger.Info("initialization")
-
-	return &DocumentsInfoRepository{
+	r := &DocumentsInfoRepository{
 		conn: conn,
 
 		docNotFoundErr:  errs.NewNotFoundError("document not found"),
 		docsNotFoundErr: errs.NewNotFoundError("documents not found"),
 	}
+
+	r.structLogger = utils.MakeStructLogger(r)
+	r.reflectLogger = utils.MakeReflectLogger(r)
+
+	r.structLogger.Info("initialized")
+
+	return r
 }
 
 func (r *DocumentsInfoRepository) AddDocumentInfo(info *models.DocumentInfo) *errs.Error {

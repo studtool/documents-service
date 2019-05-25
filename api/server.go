@@ -1,12 +1,9 @@
 package api
 
 import (
-	"github.com/go-http-utils/headers"
-	"github.com/studtool/common/utils"
-	"github.com/studtool/documents-service/logic"
-	"github.com/studtool/documents-service/repositories"
 	"net/http"
 
+	"github.com/go-http-utils/headers"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"go.uber.org/dig"
@@ -16,6 +13,9 @@ import (
 	"github.com/studtool/common/rest"
 
 	"github.com/studtool/documents-service/config"
+	"github.com/studtool/documents-service/logic"
+	"github.com/studtool/documents-service/repositories"
+	"github.com/studtool/documents-service/utils"
 )
 
 type Server struct {
@@ -35,15 +35,6 @@ type ServerParams struct {
 }
 
 func NewServer(params ServerParams) *Server {
-	structLogger := logs.NewStructLogger(
-		logs.StructLoggerParams{
-			Component: config.Component,
-			Structure: utils.StructName(new(Server)),
-		},
-	)
-
-	structLogger.Info("initialization")
-
 	srv := &Server{
 		server: rest.NewServer(
 			rest.ServerConfig{
@@ -52,11 +43,11 @@ func NewServer(params ServerParams) *Server {
 			},
 		),
 
-		structLogger:  structLogger,
-		reflectLogger: logs.NewReflectLogger(),
-
 		documentsInfoService: params.DocumentsInfoService,
 	}
+
+	srv.structLogger = utils.MakeStructLogger(srv)
+	srv.reflectLogger = utils.MakeReflectLogger(srv)
 
 	mx := mux.NewRouter()
 	mx.Handle(`/api/protected/documents`, handlers.MethodHandler{
@@ -100,13 +91,15 @@ func NewServer(params ServerParams) *Server {
 
 	srv.server.SetHandler(h)
 
+	srv.structLogger.Info("initialized")
+
 	return srv
 }
 
 func (srv *Server) Run() error {
 	err := srv.server.Run()
 	if err == nil {
-		srv.structLogger.Info("started")
+		srv.structLogger.Info("start")
 	}
 	return err
 }

@@ -1,14 +1,15 @@
 package config
 
 import (
+	"strconv"
+
 	"github.com/studtool/common/config"
 	"github.com/studtool/common/logs"
-	"strconv"
 )
 
 var (
-	// Modified by the compiler
-	Component = ""
+	// TODO compile-time injection
+	Component = "documents-service"
 
 	// Modified by the compiler
 	repositoriesEnabled = "true"

@@ -1,10 +1,9 @@
 BIN_PATH ?= ./bin/service
 
-SERVICE_NAME := documents-service
 REPOSITORIES_ENABLED ?= true
 QUEUES_ENABLED ?= true
 
-LD_FLAGS := "-X config.Component=${SERVICE_NAME} -X config.repositoriesEnabled=$(REPOSITORIES_ENABLED) -X config.queuesEnabled=$(QUEUES_ENABLED)"
+LD_FLAGS := "-X config.repositoriesEnabled=$(REPOSITORIES_ENABLED) -X config.queuesEnabled=$(QUEUES_ENABLED)"
 
 all: dep fmt gen build
 

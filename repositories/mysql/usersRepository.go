@@ -6,8 +6,8 @@ import (
 	"github.com/studtool/common/errs"
 	"github.com/studtool/common/logs"
 
-	"github.com/studtool/documents-service/config"
 	"github.com/studtool/documents-service/models"
+	"github.com/studtool/documents-service/utils"
 )
 
 type UsersRepository struct {
@@ -20,23 +20,18 @@ type UsersRepository struct {
 }
 
 func NewUsersRepository(conn *Connection) *UsersRepository {
-	structLogger := logs.NewStructLogger(
-		logs.StructLoggerParams{
-			Component: config.Component,
-			Structure: "mysql.UsersRepository",
-		},
-	)
-
-	structLogger.Info("initialization")
-
-	return &UsersRepository{
+	r := &UsersRepository{
 		conn: conn,
-
-		structLogger:  structLogger,
-		reflectLogger: logs.NewReflectLogger(),
 
 		userNotFoundErr: errs.NewNotFoundError("user not found"),
 	}
+
+	r.structLogger = utils.MakeStructLogger(r)
+	r.reflectLogger = utils.MakeReflectLogger(r)
+
+	r.structLogger.Info("initialized")
+
+	return r
 }
 
 func (r *UsersRepository) AddUser(u *models.User) *errs.Error {

@@ -34,16 +34,23 @@ func NewConnection() *Connection {
 	conn.structLogger = utils.MakeStructLogger(conn)
 	conn.reflectLogger = utils.MakeReflectLogger(conn)
 
-	conn.structLogger.Info("initialization")
+	conn.structLogger.Info("initialized")
 
 	return conn
 }
 
 func (conn *Connection) Open() (err error) {
 	conn.db, err = sql.Open("mysql", conn.connStr)
-	return err
+	if err == nil {
+		conn.structLogger.Info("opened")
+	}
+	return
 }
 
 func (conn *Connection) Close() (err error) {
-	return conn.db.Close()
+	err = conn.db.Close()
+	if err == nil {
+		conn.structLogger.Info("closed")
+	}
+	return
 }
