@@ -69,7 +69,7 @@ func (r *UsersRepository) CheckUserExistsByID(userID types.ID) *errs.Error {
 	return nil
 }
 
-func (r *UsersRepository) DeleteUserByID(userID string) *errs.Error {
+func (r *UsersRepository) DeleteUserByID(userID types.ID) *errs.Error {
 	const query = `
 		DELETE FROM user u
 		WHERE u.id = ?;

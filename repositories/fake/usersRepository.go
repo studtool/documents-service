@@ -21,6 +21,6 @@ func (r *UsersRepository) CheckUserExistsByID(userID types.ID) *errs.Error {
 	return errs.NewNotImplementedError(r.CheckUserExistsByID)
 }
 
-func (r *UsersRepository) DeleteUserByID(userID string) *errs.Error {
+func (r *UsersRepository) DeleteUserByID(userID types.ID) *errs.Error {
 	return errs.NewNotImplementedError(r.DeleteUserByID)
 }
