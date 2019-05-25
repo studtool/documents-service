@@ -85,6 +85,8 @@ func (c *MqClient) OpenConnection() error {
 		return err
 	}
 
+	c.structLogger.Info("connection opened")
+
 	return nil
 }
 
@@ -92,7 +94,13 @@ func (c *MqClient) CloseConnection() error {
 	if err := c.channel.Close(); err != nil {
 		return err
 	}
-	return c.connection.Close()
+	if err := c.connection.Close(); err != nil {
+		return err
+	}
+
+	c.structLogger.Info("connection closed")
+
+	return nil
 }
 
 type messageHandler func(data []byte)
@@ -113,6 +121,8 @@ func (c *MqClient) Run() error {
 	if err != nil {
 		return err
 	}
+
+	c.structLogger.Infof("ready to consume messages")
 
 	return nil
 }
