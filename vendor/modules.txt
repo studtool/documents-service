@@ -4,6 +4,8 @@ github.com/beorn7/perks/quantile
 github.com/go-http-utils/headers
 # github.com/go-sql-driver/mysql v1.4.1
 github.com/go-sql-driver/mysql
+# github.com/golang/mock v1.3.1
+github.com/golang/mock/gomock
 # github.com/golang/protobuf v1.3.1
 github.com/golang/protobuf/proto
 # github.com/google/uuid v1.1.1
