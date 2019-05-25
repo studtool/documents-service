@@ -8,22 +8,22 @@ import (
 
 //easyjson:json
 type DocumentInfo struct {
-	DocumentID types.ID `json:"documentId"`
-	Title      string   `json:"title"`
-	OwnerID    types.ID `json:"ownerId"`
-	Subject    string   `json:"subject"`
+	DocumentID types.ID `msg:"documentId" json:"documentId"`
+	Title      string   `msg:"title"      json:"title"`
+	OwnerID    types.ID `msg:"ownerId"    json:"ownerId"`
+	Subject    string   `msg:"subject"    json:"subject"`
 }
 
 //easyjson:json
 type DocumentTitleUpdate struct {
-	DocumentID types.ID `json:"-"`
-	NewTitle   string   `json:"newTitle"`
+	DocumentID types.ID `msg:"-"        json:"-"`
+	NewTitle   string   `msg:"newTitle" json:"newTitle"`
 }
 
 //easyjson:json
 type DocumentSubjectUpdate struct {
-	DocumentID types.ID `json:"-"`
-	NewSubject string   `json:"newSubject"`
+	DocumentID types.ID `msg:"-"          json:"-"`
+	NewSubject string   `msg:"newSubject" json:"newSubject"`
 }
 
 //easyjson:json
@@ -31,6 +31,6 @@ type DocumentsInfo []DocumentInfo
 
 //easyjson:json
 type UpdateInfo struct {
-	UserID    types.ID       `json:"userId"`
-	Timestamp types.DateTime `json:"timestamp"`
+	UserID    types.ID       `msg:"userId"    json:"userId"`
+	Timestamp types.DateTime `msg:"timestamp" json:"timestamp"`
 }
