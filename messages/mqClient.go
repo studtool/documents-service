@@ -107,7 +107,7 @@ type messageHandler func(data []byte)
 
 func (c *MqClient) Run() error {
 	err := c.runConsumer(
-		queues.ProfilesToCreateQueueName,
+		queues.DocumentUsersToCreateQueueName,
 		c.createDocumentUser,
 	)
 	if err != nil {
@@ -115,7 +115,7 @@ func (c *MqClient) Run() error {
 	}
 
 	err = c.runConsumer(
-		queues.ProfilesToDeleteQueueName,
+		queues.DocumentUsersToDeleteQueueName,
 		c.deleteDocumentUser,
 	)
 	if err != nil {
