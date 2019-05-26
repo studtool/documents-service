@@ -53,7 +53,7 @@ func NewServer(params ServerParams) *Server {
 	mx := mux.NewRouter()
 	mx.Handle(`/api/protected/documents`, handlers.MethodHandler{
 		http.MethodPost:   srv.server.WithAuth(http.HandlerFunc(srv.addDocument)),
-		http.MethodGet:    srv.server.WithAuth(http.HandlerFunc(srv.getDocuments)),
+		http.MethodGet:    srv.server.WithAuth(http.HandlerFunc(srv.getDocumentsInfo)),
 		http.MethodDelete: srv.server.WithAuth(http.HandlerFunc(srv.deleteDocuments)),
 	})
 	mx.Handle(`/api/protected/documents/{document_id}`, handlers.MethodHandler{
