@@ -44,11 +44,12 @@ type RequestParams struct {
 }
 
 const (
+	RequestMessage     = "request handled"
 	WrongMethodMessage = "method with format should not be called"
 )
 
 func (log *RequestLogger) Debug(args ...interface{}) {
-	log.logger.WithFields(log.makeLogFields(args...)).Debug()
+	log.logger.WithFields(log.makeLogFields(args...)).Debug(RequestMessage)
 }
 
 func (log *RequestLogger) Debugf(format string, args ...interface{}) {
@@ -56,7 +57,7 @@ func (log *RequestLogger) Debugf(format string, args ...interface{}) {
 }
 
 func (log *RequestLogger) Info(args ...interface{}) {
-	log.logger.WithFields(log.makeLogFields(args...)).Info(args...)
+	log.logger.WithFields(log.makeLogFields(args...)).Info(RequestMessage)
 }
 
 func (log *RequestLogger) Infof(format string, args ...interface{}) {
@@ -64,7 +65,7 @@ func (log *RequestLogger) Infof(format string, args ...interface{}) {
 }
 
 func (log *RequestLogger) Warning(args ...interface{}) {
-	log.logger.WithFields(log.makeLogFields(args...)).Warn(args...)
+	log.logger.WithFields(log.makeLogFields(args...)).Warning(RequestMessage)
 }
 
 func (log *RequestLogger) Warningf(format string, args ...interface{}) {
@@ -72,7 +73,7 @@ func (log *RequestLogger) Warningf(format string, args ...interface{}) {
 }
 
 func (log *RequestLogger) Error(args ...interface{}) {
-	log.logger.WithFields(log.makeLogFields(args...)).Error(args...)
+	log.logger.WithFields(log.makeLogFields(args...)).Error(RequestMessage)
 }
 
 func (log *RequestLogger) Errorf(format string, args ...interface{}) {
@@ -80,7 +81,7 @@ func (log *RequestLogger) Errorf(format string, args ...interface{}) {
 }
 
 func (log *RequestLogger) Fatal(args ...interface{}) {
-	log.logger.WithFields(log.makeLogFields(args...)).Fatal(args...)
+	log.logger.WithFields(log.makeLogFields(args...)).Fatal(RequestMessage)
 }
 
 func (log *RequestLogger) Fatalf(format string, args ...interface{}) {
@@ -98,14 +99,14 @@ func (log *RequestLogger) makeLogFields(args ...interface{}) logrus.Fields {
 	}
 
 	return logrus.Fields{
-		"host":      log.host,
-		"pid":       log.pid,
-		"component": log.component,
-		"method":    p.Method,
-		"path":      p.Path,
-		"status":    p.Status,
-		"type":      p.Type,
-		"userId":    p.UserID,
-		"time":      p.Time,
+		"host":        log.host,
+		"pid":         log.pid,
+		"component":   log.component,
+		"method":      p.Method,
+		"path":        p.Path,
+		"status":      p.Status,
+		"type":        p.Type,
+		"userId":      p.UserID,
+		"requestTime": p.Time,
 	}
 }

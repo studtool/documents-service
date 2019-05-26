@@ -35,7 +35,6 @@ func NewDocumentsInfoService(params DocumentsInfoServiceParams) *DocumentsInfoSe
 		usersRepository:         params.UsersRepository,
 		documentsInfoRepository: params.DocumentsInfoRepository,
 
-		// TODO these errors should be 404, but for dev they are 403
 		readPermissionErr:  errs.NewPermissionDeniedError("permission to read document denied"),
 		writePermissionErr: errs.NewPermissionDeniedError("permission to write document denied"),
 	}
@@ -57,14 +56,14 @@ func (s *DocumentsInfoService) AddDocumentInfo(params logic.AddDocumentInfoParam
 	err := s.usersRepository.CheckUserExistsByID(params.UserID)
 	if err != nil {
 		if err.Type == errs.NotFound {
-			s.structLogger.Error("user [id = %s] should exist", params.UserID)
+			s.structLogger.Errorf("user [id = '%s'] should exist", params.UserID)
 		}
 		return err
 	}
 
 	err = s.documentsInfoRepository.AddDocumentInfo(docInfo)
 	if err == nil {
-		s.structLogger.Infof("document [id = %s] added", docInfo.DocumentID)
+		s.structLogger.Infof("document [id = '%s'] added", docInfo.DocumentID)
 	}
 
 	return nil

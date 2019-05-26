@@ -11,7 +11,7 @@ func (c *MqClient) createDocumentUser(body []byte) {
 	data := &queues.DocumentUserToCreateData{}
 	if err := c.unmarshalMessageBody(body, data); err != nil {
 		c.structLogger.Errorf(
-			"wrong message received [queue = '%s]",
+			"wrong message received [queue = '%s']",
 			queues.DocumentUsersToCreateQueueName,
 		)
 	} else {
@@ -36,7 +36,6 @@ func (c *MqClient) deleteDocumentUser(body []byte) {
 			ID: types.ID(data.UserID),
 		}
 		if err := c.usersService.DeleteUser(u); err == nil {
-			c.structLogger.Infof("user [id = '%s'] deleted", u.ID)
 			c.structLogger.Errorf("user [id = '%s'] not deleted", u.ID)
 		}
 	}
