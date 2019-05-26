@@ -5,8 +5,12 @@ import (
 	"fmt"
 	"net/http"
 
+	//nolint:golint
+	_ "net/http/pprof"
+
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
+	"github.com/studtool/common/config"
 	"github.com/studtool/common/logs"
 )
 
@@ -17,7 +21,9 @@ type ServerConfig struct {
 
 type Server struct {
 	server *http.Server
-	logger logs.Logger
+
+	structLogger  logs.Logger
+	requestLogger logs.Logger
 }
 
 func NewServer(c ServerConfig) *Server {
@@ -25,10 +31,17 @@ func NewServer(c ServerConfig) *Server {
 		server: &http.Server{
 			Addr: fmt.Sprintf("%s:%d", c.Host, c.Port),
 		},
-		logger: logs.NewStructLogger(
+
+		structLogger: logs.NewStructLogger(
 			logs.StructLoggerParams{
-				Component: "common",
+				Component: config.Component,
 				Structure: "rest.Server",
+			},
+		),
+
+		requestLogger: logs.NewRequestLogger(
+			logs.RequestLoggerParams{
+				Component: config.Component,
 			},
 		),
 	}
@@ -43,16 +56,16 @@ func (srv *Server) SetHandler(h http.Handler) {
 }
 
 func (srv *Server) Run() error {
-	srv.logger.Infof("started on %s", srv.server.Addr)
+	srv.structLogger.Infof("started on %s", srv.server.Addr)
 	go func() {
 		if err := srv.server.ListenAndServe(); err != nil {
-			srv.logger.Fatal(err)
+			srv.structLogger.Fatal(err)
 		}
 	}()
 	return nil
 }
 
 func (srv *Server) Shutdown() error {
-	srv.logger.Infof("stopped")
+	srv.structLogger.Infof("stopped")
 	return srv.server.Shutdown(context.TODO())
 }
