@@ -42,7 +42,7 @@ github.com/prometheus/procfs/internal/fs
 github.com/sirupsen/logrus
 # github.com/streadway/amqp v0.0.0-20190404075320-75d898a42a94
 github.com/streadway/amqp
-# github.com/studtool/common v0.0.0-20190526174510-127541a64f4d
+# github.com/studtool/common v0.0.0-20190526180435-8b6478bd3e4d
 github.com/studtool/common/logs
 github.com/studtool/common/utils
 github.com/studtool/common/consts

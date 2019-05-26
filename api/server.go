@@ -91,7 +91,7 @@ func NewServer(params ServerParams) *Server {
 	}
 
 	srv.server.SetHandler(h)
-	srv.server.SetApiClassifier(srv.makeApiClassifier())
+	srv.server.SetAPIClassifier(srv.makeApiClassifier())
 
 	srv.structLogger.Info("initialized")
 
@@ -111,23 +111,23 @@ func (srv *Server) Shutdown() error {
 	return srv.server.Shutdown()
 }
 
-func (srv *Server) makeApiClassifier() rest.ApiClassifier {
+func (srv *Server) makeApiClassifier() rest.APIClassifier {
 	apiTypeIndex := len("/api/")
 
-	return rest.ApiClassifier(func(path string) string {
+	return rest.APIClassifier(func(path string) string {
 		path = path[apiTypeIndex:]
 
-		if strings.HasPrefix(path, rest.ApiTypePublic) {
-			return rest.ApiTypePublic
+		if strings.HasPrefix(path, rest.APITypePublic) {
+			return rest.APITypePublic
 		}
-		if strings.HasPrefix(path, rest.ApiTypeProtected) {
-			return rest.ApiTypeProtected
+		if strings.HasPrefix(path, rest.APITypeProtected) {
+			return rest.APITypeProtected
 		}
-		if strings.HasPrefix(path, rest.ApiTypePublic) {
-			return rest.ApiTypePrivate
+		if strings.HasPrefix(path, rest.APITypePublic) {
+			return rest.APITypePrivate
 		}
-		if strings.HasPrefix(path, rest.ApiTypeInternal) {
-			return rest.ApiTypeInternal
+		if strings.HasPrefix(path, rest.APITypeInternal) {
+			return rest.APITypeInternal
 		}
 
 		return consts.EmptyString

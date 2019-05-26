@@ -25,7 +25,7 @@ type Server struct {
 	structLogger  logs.Logger
 	requestLogger logs.Logger
 
-	apiClassifier ApiClassifier
+	apiClassifier APIClassifier
 }
 
 func NewServer(c ServerConfig) *Server {
@@ -58,9 +58,9 @@ func (srv *Server) SetHandler(h http.Handler) {
 }
 
 // Optimization to seek public/protected/private/internal faster
-type ApiClassifier func(path string) string
+type APIClassifier func(path string) string
 
-func (srv *Server) SetApiClassifier(c ApiClassifier) {
+func (srv *Server) SetAPIClassifier(c APIClassifier) {
 	srv.apiClassifier = c
 }
 

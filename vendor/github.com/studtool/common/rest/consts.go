@@ -1,8 +1,8 @@
 package rest
 
 const (
-	ApiTypePublic    = "public"
-	ApiTypeProtected = "protected"
-	ApiTypePrivate   = "private"
-	ApiTypeInternal  = "internal"
+	APITypePublic    = "public"
+	APITypeProtected = "protected"
+	APITypePrivate   = "private"
+	APITypeInternal  = "internal"
 )
