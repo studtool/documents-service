@@ -44,7 +44,7 @@ type RequestParams struct {
 }
 
 const (
-	WrongMethod = "method should"
+	WrongMethodMessage = "method with format should not be called"
 )
 
 func (log *RequestLogger) Debug(args ...interface{}) {
@@ -52,39 +52,39 @@ func (log *RequestLogger) Debug(args ...interface{}) {
 }
 
 func (log *RequestLogger) Debugf(format string, args ...interface{}) {
-	panic("not to be called")
+	panic(WrongMethodMessage)
 }
 
 func (log *RequestLogger) Info(args ...interface{}) {
-	log.logger.Info(args...)
+	log.logger.WithFields(log.makeLogFields(args...)).Info(args...)
 }
 
 func (log *RequestLogger) Infof(format string, args ...interface{}) {
-	log.logger.Infof(format, args...)
+	panic(WrongMethodMessage)
 }
 
 func (log *RequestLogger) Warning(args ...interface{}) {
-	log.logger.Warn(args...)
+	log.logger.WithFields(log.makeLogFields(args...)).Warn(args...)
 }
 
 func (log *RequestLogger) Warningf(format string, args ...interface{}) {
-	log.logger.Warningf(format, args...)
+	panic(WrongMethodMessage)
 }
 
 func (log *RequestLogger) Error(args ...interface{}) {
-	log.logger.Error(args...)
+	log.logger.WithFields(log.makeLogFields(args...)).Error(args...)
 }
 
 func (log *RequestLogger) Errorf(format string, args ...interface{}) {
-	log.logger.Errorf(format, args...)
+	panic(WrongMethodMessage)
 }
 
 func (log *RequestLogger) Fatal(args ...interface{}) {
-	log.logger.Fatal(args...)
+	log.logger.WithFields(log.makeLogFields(args...)).Fatal(args...)
 }
 
 func (log *RequestLogger) Fatalf(format string, args ...interface{}) {
-	log.logger.Fatalf(format, args...)
+	panic(WrongMethodMessage)
 }
 
 func (log *RequestLogger) makeLogFields(args ...interface{}) logrus.Fields {
