@@ -126,11 +126,11 @@ func (r *DocumentsInfoRepository) GetDocumentsInfoByOwnerIDAndSubject(
 	page.Index *= page.Size
 
 	docs, err := r.getDocumentsInfo(query,
-		ownerID, page.Size, page.Index, subject,
+		ownerID, subject, page.Size, page.Index,
 	)
 	if err != nil {
 		if err == r.docsNotFoundErr {
-			r.structLogger.Warningf("documents [owner_id = '%s';subject = %s] not found", ownerID, subject)
+			r.structLogger.Warningf("documents [owner_id = '%s'; subject = '%s'] not found", ownerID, subject)
 		}
 	}
 
@@ -156,7 +156,7 @@ func (r *DocumentsInfoRepository) db() *sql.DB {
 func (r *DocumentsInfoRepository) getDocumentsInfo(
 	query string, args ...interface{}) (models.DocumentsInfo, *errs.Error) {
 
-	rows, err := r.db().QueryContext(r.msCtx(), query, args...)
+	rows, err := r.db().Query(query, args...)
 	if err != nil {
 		return nil, r.wrapErr(err)
 	}
@@ -172,6 +172,7 @@ func (r *DocumentsInfoRepository) getDocumentsInfo(
 		if err != nil {
 			return nil, r.wrapErr(err)
 		}
+		documents = append(documents, document)
 	}
 	if len(documents) == 0 {
 		return nil, r.docsNotFoundErr
