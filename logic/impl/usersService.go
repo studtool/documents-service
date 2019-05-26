@@ -39,7 +39,7 @@ func NewUsersService(params UsersServiceParams) *UsersService {
 func (s *UsersService) AddUser(u *models.User) *errs.Error {
 	err := s.usersRepository.AddUser(u)
 	if err == nil {
-		s.structLogger.Info("user [id = %s] added", u.ID)
+		s.structLogger.Infof("user [id = %s] added", u.ID)
 	}
 	return err
 }
@@ -51,7 +51,7 @@ func (s *UsersService) CheckUserExists(u *models.User) *errs.Error {
 func (s *UsersService) DeleteUser(u *models.User) *errs.Error {
 	err := s.usersRepository.DeleteUserByID(u.ID)
 	if err == nil {
-		s.structLogger.Info("user [id = %s] deleted", u.ID)
+		s.structLogger.Infof("user [id = %s] deleted", u.ID)
 	}
 	return s.usersRepository.DeleteUserByID(u.ID)
 }
