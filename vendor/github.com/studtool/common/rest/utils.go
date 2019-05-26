@@ -90,7 +90,7 @@ func (srv *Server) WriteErrJSON(w http.ResponseWriter, err *errs.Error) {
 		w.WriteHeader(http.StatusInternalServerError)
 
 	case errs.Internal:
-		srv.structLogger.Errorf("internal error: %s", err.Message)
+		w.WriteHeader(http.StatusInternalServerError)
 
 	default:
 		panic(fmt.Sprintf("no status code for error. Type: %d, Message: %s", err.Type, err.Message))
@@ -140,9 +140,13 @@ func (w *LoggingResponseWriter) WriteHeader(status int) {
 		w.severity = SeverityNone
 
 	case http.StatusBadRequest:
+		fallthrough
 	case http.StatusNotFound:
+		fallthrough
 	case http.StatusUnprocessableEntity:
+		fallthrough
 	case http.StatusConflict:
+		fallthrough
 	case http.StatusForbidden:
 		w.severity = SeverityLow
 
