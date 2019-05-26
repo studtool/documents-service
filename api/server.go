@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/go-http-utils/headers"
 	"github.com/gorilla/handlers"
@@ -90,6 +91,7 @@ func NewServer(params ServerParams) *Server {
 	}
 
 	srv.server.SetHandler(h)
+	srv.server.SetApiClassifier(srv.makeApiClassifier())
 
 	srv.structLogger.Info("initialized")
 
@@ -107,4 +109,27 @@ func (srv *Server) Run() error {
 func (srv *Server) Shutdown() error {
 	srv.structLogger.Info("shutdown")
 	return srv.server.Shutdown()
+}
+
+func (srv *Server) makeApiClassifier() rest.ApiClassifier {
+	apiTypeIndex := len("/api/")
+
+	return rest.ApiClassifier(func(path string) string {
+		path = path[apiTypeIndex:]
+
+		if strings.HasPrefix(path, rest.ApiTypePublic) {
+			return rest.ApiTypePublic
+		}
+		if strings.HasPrefix(path, rest.ApiTypeProtected) {
+			return rest.ApiTypeProtected
+		}
+		if strings.HasPrefix(path, rest.ApiTypePublic) {
+			return rest.ApiTypePrivate
+		}
+		if strings.HasPrefix(path, rest.ApiTypeInternal) {
+			return rest.ApiTypeInternal
+		}
+
+		return consts.EmptyString
+	})
 }

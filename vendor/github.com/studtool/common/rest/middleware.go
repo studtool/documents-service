@@ -37,12 +37,12 @@ func (srv *Server) WithLogs(h http.Handler) http.Handler {
 				logFunc = srv.requestLogger.Fatal
 			}
 
-			//TODO parse type (public, protected, private, internal)
 			reqParams := logs.RequestParams{
 				Method: r.Method,
 				Path:   r.RequestURI,
 				Status: wr.status,
 				UserID: srv.ParseUserID(r),
+				Type:   srv.apiClassifier(r.RequestURI),
 				Time:   rt,
 			}
 

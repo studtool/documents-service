@@ -24,6 +24,8 @@ type Server struct {
 
 	structLogger  logs.Logger
 	requestLogger logs.Logger
+
+	apiClassifier ApiClassifier
 }
 
 func NewServer(c ServerConfig) *Server {
@@ -53,6 +55,13 @@ func (srv *Server) MetricsHandler() http.Handler {
 
 func (srv *Server) SetHandler(h http.Handler) {
 	srv.server.Handler = h
+}
+
+// Optimization to seek public/protected/private/internal faster
+type ApiClassifier func(path string) string
+
+func (srv *Server) SetApiClassifier(c ApiClassifier) {
+	srv.apiClassifier = c
 }
 
 func (srv *Server) Run() error {
