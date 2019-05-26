@@ -18,9 +18,7 @@ func (c *MqClient) createDocumentUser(body []byte) {
 		u := &models.User{
 			ID: types.ID(data.UserID),
 		}
-		if err := c.usersService.AddUser(u); err != nil {
-			c.structLogger.Errorf("user [id = '%s'] not created", u.ID)
-		}
+		_ = c.usersService.AddUser(u)
 	}
 }
 
@@ -35,8 +33,6 @@ func (c *MqClient) deleteDocumentUser(body []byte) {
 		u := &models.User{
 			ID: types.ID(data.UserID),
 		}
-		if err := c.usersService.DeleteUser(u); err == nil {
-			c.structLogger.Errorf("user [id = '%s'] not deleted", u.ID)
-		}
+		_ = c.usersService.DeleteUser(u)
 	}
 }

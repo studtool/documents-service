@@ -40,6 +40,8 @@ func (s *UsersService) AddUser(u *models.User) *errs.Error {
 	err := s.usersRepository.AddUser(u)
 	if err == nil {
 		s.structLogger.Infof("user [id = '%s'] added", u.ID)
+	} else {
+		s.structLogger.Errorf("user [id = '%s'] not added", u.ID)
 	}
 	return err
 }
@@ -52,6 +54,8 @@ func (s *UsersService) DeleteUser(u *models.User) *errs.Error {
 	err := s.usersRepository.DeleteUserByID(u.ID)
 	if err == nil {
 		s.structLogger.Infof("user [id = '%s'] deleted", u.ID)
+	} else {
+		s.structLogger.Errorf("user [id = '%s'] not deleted", u.ID)
 	}
 	return s.usersRepository.DeleteUserByID(u.ID)
 }
