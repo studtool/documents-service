@@ -38,13 +38,15 @@ func (srv *Server) WithLogs(h http.Handler) http.Handler {
 			}
 
 			//TODO parse type (public, protected, private, internal)
-			logFunc(logs.RequestParams{
+			reqParams := logs.RequestParams{
 				Method: r.Method,
 				Path:   r.RequestURI,
 				Status: wr.status,
 				UserID: srv.ParseUserID(r),
 				Time:   rt,
-			})
+			}
+
+			logFunc(&reqParams)
 		},
 	)
 }
