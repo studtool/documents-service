@@ -1,7 +1,6 @@
 package memory
 
 import (
-	srvutils "github.com/studtool/documents-service/utils"
 	"sync"
 
 	"github.com/studtool/common/errs"
@@ -9,6 +8,7 @@ import (
 	"github.com/studtool/common/types"
 
 	"github.com/studtool/documents-service/models"
+	"github.com/studtool/documents-service/utils"
 )
 
 type DocumentsContentRepository struct {
