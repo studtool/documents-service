@@ -50,7 +50,7 @@ func main() {
 		))
 		utils.AssertOk(c.Provide(
 			memory.NewDocumentsContentRepository, //TODO
-			dig.As(new(repositories.UsersRepository)),
+			dig.As(new(repositories.DocumentsContentRepository)),
 		))
 	} else {
 		utils.AssertOk(c.Provide(
