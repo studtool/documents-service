@@ -47,10 +47,12 @@ func NewDocumentsContentService(params DocumentsContentServiceParams) *Documents
 }
 
 func (s *DocumentsContentService) GetDocumentContent(params *logic.GetDocumentContentParams) *errs.Error {
-	var documentInfo models.DocumentInfo
+	documentInfo := models.DocumentInfo{
+		DocumentID: params.DocumentID,
+	}
 	if err := s.documentsInfoRepository.GetDocumentInfoByID(&documentInfo); err != nil {
 		if err.Type == errs.NotFound {
-			s.structLogger.Warningf("document [id = '%s'] not found", params.DocumentID)
+			s.structLogger.Warningf("document [id = '%s'] not found", documentInfo.DocumentID)
 		}
 		return err
 	}
@@ -58,7 +60,7 @@ func (s *DocumentsContentService) GetDocumentContent(params *logic.GetDocumentCo
 	if params.UserID != documentInfo.OwnerID {
 		s.structLogger.Warningf(
 			"document [id = '%s'] access forbidden [user_id = '%s'; scope = 'read']",
-			params.DocumentID, params.UserID,
+			documentInfo.DocumentID, params.UserID,
 		)
 		return s.documentAccessDeniedErr
 	}
@@ -77,10 +79,12 @@ func (s *DocumentsContentService) GetDocumentContent(params *logic.GetDocumentCo
 }
 
 func (s *DocumentsContentService) UpdateDocumentContent(params *logic.UpdateDocumentContentParams) *errs.Error {
-	var documentInfo models.DocumentInfo
+	documentInfo := models.DocumentInfo{
+		DocumentID: params.DocumentID,
+	}
 	if err := s.documentsInfoRepository.GetDocumentInfoByID(&documentInfo); err != nil {
 		if err.Type == errs.NotFound {
-			s.structLogger.Warningf("document [id = '%s'] not found", params.DocumentID)
+			s.structLogger.Warningf("document [id = '%s'] not found", documentInfo.DocumentID)
 		}
 		return err
 	}
