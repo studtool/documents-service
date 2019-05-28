@@ -1,6 +1,7 @@
 package memory
 
 import (
+	"log"
 	"sync"
 
 	"github.com/studtool/common/errs"
@@ -43,12 +44,18 @@ func (r *DocumentsContentRepository) GetDocumentContent(documentID types.ID, con
 	*content = make(models.DocumentContent, len(rContent))
 	copy(*content, rContent)
 
+	log.Println(*content)
+	log.Println(rContent)
+
 	return nil
 }
 
 func (r *DocumentsContentRepository) UpdateDocumentContent(documentID types.ID, content *models.DocumentContent) *errs.Error {
 	rContent := make(models.DocumentContent, len(*content))
 	copy(rContent, *content)
+
+	log.Println(*content)
+	log.Println(rContent)
 
 	r.rwMutex.Lock()
 	defer r.rwMutex.Unlock()
