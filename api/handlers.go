@@ -61,9 +61,37 @@ func (srv *Server) updateDocumentInfo(w http.ResponseWriter, r *http.Request) {
 }
 
 func (srv *Server) getDocumentContent(w http.ResponseWriter, r *http.Request) {
-	srv.server.WriteNotImplemented(w) //TODO
+	var content models.DocumentContent
+
+	params := logic.GetDocumentContentParams{
+		UserID:          srv.parseHeaderUserID(r),
+		DocumentID:      srv.parsePathDocumentID(r),
+		DocumentContent: &content,
+	}
+	if err := srv.documentsContentService.GetDocumentContent(&params); err != nil {
+		srv.server.WriteErrJSON(w, err)
+		return
+	}
+
+	srv.server.WriteOkRaw(w, content)
 }
 
 func (srv *Server) updateDocumentContent(w http.ResponseWriter, r *http.Request) {
-	srv.server.WriteNotImplemented(w) //TODO
+	content, err := srv.parseBodyDocumentContent(r)
+	if err != nil {
+		srv.server.WriteErrJSON(w, err)
+		return
+	}
+
+	params := logic.UpdateDocumentContentParams{
+		UserID:          srv.parseHeaderUserID(r),
+		DocumentID:      srv.parsePathDocumentID(r),
+		DocumentContent: &content,
+	}
+	if err := srv.documentsContentService.UpdateDocumentContent(&params); err != nil {
+		srv.server.WriteErrJSON(w, err)
+		return
+	}
+
+	srv.server.WriteOk(w)
 }

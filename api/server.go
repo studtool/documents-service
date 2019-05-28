@@ -25,14 +25,17 @@ type Server struct {
 	structLogger  logs.Logger
 	reflectLogger logs.Logger
 
-	documentsInfoService  logic.DocumentsInfoService
+	documentsInfoService    logic.DocumentsInfoService
+	documentsContentService logic.DocumentsContentService
+
 	permissionsRepository repositories.PermissionsRepository
 }
 
 type ServerParams struct {
 	dig.In
 
-	DocumentsInfoService logic.DocumentsInfoService
+	DocumentsInfoService    logic.DocumentsInfoService
+	DocumentsContentService logic.DocumentsContentService
 }
 
 func NewServer(params ServerParams) *Server {
@@ -44,7 +47,8 @@ func NewServer(params ServerParams) *Server {
 			},
 		),
 
-		documentsInfoService: params.DocumentsInfoService,
+		documentsInfoService:    params.DocumentsInfoService,
+		documentsContentService: params.DocumentsContentService,
 	}
 
 	srv.structLogger = srvutils.MakeStructLogger(srv)

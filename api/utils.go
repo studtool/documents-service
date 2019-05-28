@@ -7,8 +7,10 @@ import (
 	"github.com/gorilla/mux"
 
 	"github.com/studtool/common/consts"
+	"github.com/studtool/common/errs"
 	"github.com/studtool/common/types"
 
+	"github.com/studtool/documents-service/models"
 	"github.com/studtool/documents-service/repositories"
 )
 
@@ -49,6 +51,11 @@ func (srv *Server) parseParamsPage(r *http.Request) repositories.Page {
 		Index: srv.parsePageIndex(r),
 		Size:  srv.parsePageSize(r),
 	}
+}
+
+func (srv *Server) parseBodyDocumentContent(r *http.Request) (models.DocumentContent, *errs.Error) {
+	content, err := srv.server.GetRawBody(r)
+	return models.DocumentContent(content), err
 }
 
 func (srv *Server) parsePageIndex(r *http.Request) int32 { //TODO remove logic

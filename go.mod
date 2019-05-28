@@ -11,11 +11,9 @@ require (
 	github.com/gorilla/handlers v1.4.0
 	github.com/gorilla/mux v1.7.2
 	github.com/mailru/easyjson v0.0.0-20190403194419-1ea4449da983
-	github.com/prometheus/procfs v0.0.0-20190528151240-3cb620ac02d0 // indirect
 	github.com/streadway/amqp v0.0.0-20190404075320-75d898a42a94
-	github.com/studtool/common v0.0.0-20190526180435-8b6478bd3e4d
+	github.com/studtool/common v0.0.0-20190528185152-0b9f7126fbda
 	github.com/tinylib/msgp v1.1.0
 	go.uber.org/dig v1.7.1-0.20190327003609-4cc9f8898fe3
-	golang.org/x/sys v0.0.0-20190528012530-adf421d2caf4 // indirect
 	google.golang.org/appengine v1.6.0 // indirect
 )
