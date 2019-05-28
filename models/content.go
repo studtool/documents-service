@@ -22,3 +22,5 @@ type DocumentBlock struct {
 }
 
 type DocumentBlocks []DocumentBlock
+
+type DocumentContent []byte
