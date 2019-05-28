@@ -1,4 +1,4 @@
-package rfake
+package sfake
 
 import (
 	"github.com/studtool/common/errs"

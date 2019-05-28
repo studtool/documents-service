@@ -68,7 +68,7 @@ func main() {
 			dig.As(new(logic.DocumentsInfoService)),
 		))
 		utils.AssertOk(c.Provide(
-			rfake.NewDocumentsContentService, //TODO
+			sfake.NewDocumentsContentService, //TODO
 			dig.As(new(logic.DocumentsContentService)),
 		))
 	} else {
@@ -81,7 +81,7 @@ func main() {
 			dig.As(new(logic.DocumentsInfoService)),
 		))
 		utils.AssertOk(c.Provide(
-			rfake.NewDocumentsContentService,
+			sfake.NewDocumentsContentService,
 			dig.As(new(logic.DocumentsContentService)),
 		))
 	}
