@@ -145,6 +145,28 @@ func (r *DocumentsInfoRepository) UpdateDocumentSubjectByID(update *models.Docum
 	panic("implement me")
 }
 
+func (r *DocumentsInfoRepository) CheckDocumentExistsByIDAndOwnerID(documentID types.ID, ownerID types.ID) *errs.Error {
+	const query = `
+		SELECT EXISTS(
+			SELECT * FROM document d
+			WHERE d.id = ? AND d.owner_id = ?
+		);
+	`
+
+	row := r.db().QueryRowContext(r.sCtx(), query, documentID, ownerID)
+
+	var exists bool
+	if err := row.Scan(&exists); err != nil {
+		if err == sql.ErrNoRows {
+			return r.docNotFoundErr
+		} else {
+			return r.wrapErr(err)
+		}
+	}
+
+	return nil
+}
+
 func (r *DocumentsInfoRepository) DeleteDocumentByID(documentID types.ID) *errs.Error {
 	panic("implement me")
 }

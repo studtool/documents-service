@@ -17,6 +17,7 @@ import (
 	"github.com/studtool/documents-service/messages"
 	"github.com/studtool/documents-service/repositories"
 	"github.com/studtool/documents-service/repositories/fake"
+	"github.com/studtool/documents-service/repositories/memory"
 	"github.com/studtool/documents-service/repositories/mysql"
 )
 
@@ -47,6 +48,10 @@ func main() {
 			mysql.NewDocumentsInfoRepository,
 			dig.As(new(repositories.DocumentsInfoRepository)),
 		))
+		utils.AssertOk(c.Provide(
+			memory.NewDocumentsContentRepository, //TODO
+			dig.As(new(repositories.UsersRepository)),
+		))
 	} else {
 		utils.AssertOk(c.Provide(
 			rfake.NewUsersRepository,
@@ -56,6 +61,7 @@ func main() {
 			rfake.NewDocumentsInfoRepository,
 			dig.As(new(repositories.DocumentsInfoRepository)),
 		))
+		//TODO fake documents content repository
 	}
 
 	if config.ServicesEnabled {
@@ -68,7 +74,7 @@ func main() {
 			dig.As(new(logic.DocumentsInfoService)),
 		))
 		utils.AssertOk(c.Provide(
-			sfake.NewDocumentsContentService, //TODO
+			impl.NewDocumentsContentService,
 			dig.As(new(logic.DocumentsContentService)),
 		))
 	} else {

@@ -18,5 +18,7 @@ type DocumentsInfoRepository interface {
 	UpdateDocumentTitleByID(update *models.DocumentTitleUpdate) *errs.Error
 	UpdateDocumentSubjectByID(update *models.DocumentSubjectUpdate) *errs.Error
 
+	CheckDocumentExistsByIDAndOwnerID(documentID types.ID, ownerID types.ID) *errs.Error
+
 	DeleteDocumentByID(documentID types.ID) *errs.Error
 }

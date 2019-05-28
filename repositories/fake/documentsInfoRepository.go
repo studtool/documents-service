@@ -42,6 +42,10 @@ func (r *DocumentsInfoRepository) UpdateDocumentSubjectByID(update *models.Docum
 	return errs.NewNotImplementedError(r.UpdateDocumentSubjectByID)
 }
 
+func (r *DocumentsInfoRepository) CheckDocumentExistsByIDAndOwnerID(documentID types.ID, ownerID types.ID) *errs.Error {
+	return errs.NewNotImplementedError(r.CheckDocumentExistsByIDAndOwnerID)
+}
+
 func (r *DocumentsInfoRepository) DeleteDocumentByID(documentID types.ID) *errs.Error {
 	return errs.NewNotImplementedError(r.DeleteDocumentByID)
 }
