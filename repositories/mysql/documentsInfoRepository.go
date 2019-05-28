@@ -72,7 +72,6 @@ func (r *DocumentsInfoRepository) GetDocumentInfoByID(info *models.DocumentInfo)
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			r.logDocNotFound(info.DocumentID)
 			return r.docNotFoundErr
 		} else {
 			return r.wrapErr(err)
@@ -98,17 +97,7 @@ func (r *DocumentsInfoRepository) GetDocumentsInfoByOwnerID(
 	`
 
 	page.Index *= page.Size
-
-	docs, err := r.getDocumentsInfo(query,
-		ownerID, page.Size, page.Index,
-	)
-	if err != nil {
-		if err == r.docsNotFoundErr {
-			r.structLogger.Warningf("documents [owner_id = '%s'] not found", ownerID)
-		}
-	}
-
-	return docs, err
+	return r.getDocumentsInfo(query, ownerID, page.Size, page.Index)
 }
 
 func (r *DocumentsInfoRepository) GetDocumentsInfoByOwnerIDAndSubject(
@@ -124,17 +113,7 @@ func (r *DocumentsInfoRepository) GetDocumentsInfoByOwnerIDAndSubject(
 	`
 
 	page.Index *= page.Size
-
-	docs, err := r.getDocumentsInfo(query,
-		ownerID, subject, page.Size, page.Index,
-	)
-	if err != nil {
-		if err == r.docsNotFoundErr {
-			r.structLogger.Warningf("documents [owner_id = '%s'; subject = '%s'] not found", ownerID, subject)
-		}
-	}
-
-	return docs, err
+	return r.getDocumentsInfo(query, ownerID, subject, page.Size, page.Index)
 }
 
 func (r *DocumentsInfoRepository) UpdateDocumentTitleByID(update *models.DocumentTitleUpdate) *errs.Error {
@@ -224,10 +203,6 @@ func (r *DocumentsInfoRepository) msCtx() context.Context {
 func (r *DocumentsInfoRepository) ctx(timeout time.Duration) context.Context {
 	ctx, _ := context.WithTimeout(context.TODO(), timeout)
 	return ctx
-}
-
-func (r *DocumentsInfoRepository) logDocNotFound(documentID types.ID) {
-	r.structLogger.Warningf("document [id = %s] not found", documentID)
 }
 
 func (r *DocumentsInfoRepository) wrapErr(err error) *errs.Error {

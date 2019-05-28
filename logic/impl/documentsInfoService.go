@@ -76,7 +76,14 @@ func (s *DocumentsInfoService) GetDocumentInfo(params logic.GetDocumentInfoParam
 		return s.readPermissionErr
 	}
 
-	return s.documentsInfoRepository.GetDocumentInfoByID(docInfo)
+	err := s.documentsInfoRepository.GetDocumentInfoByID(docInfo)
+	if err != nil {
+		if err.Type == errs.NotFound {
+			s.structLogger.Warningf("document [id = '%s'] not found", params.DocumentInfo.DocumentID)
+		}
+	}
+
+	return err
 }
 
 func (s *DocumentsInfoService) GetDocumentsInfo(params logic.GetDocumentsInfoParams) *errs.Error {
@@ -93,6 +100,11 @@ func (s *DocumentsInfoService) GetDocumentsInfo(params logic.GetDocumentsInfoPar
 	} else {
 		*docsInfo, err = s.documentsInfoRepository.
 			GetDocumentsInfoByOwnerIDAndSubject(params.OwnerID, params.Subject, params.Page)
+	}
+	if err != nil {
+		if err.Type == errs.NotFound {
+			s.structLogger.Warningf("documents [owner_id = '%s'] not found", params.UserID)
+		}
 	}
 
 	return err
