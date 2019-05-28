@@ -20,11 +20,15 @@ gen:
 		-destination=repositories/mock/usersRepository.go
 	mockgen -source=repositories/documentsInfoRepository.go \
 		-destination=repositories/mock/documentsInfoRepository.go
+	mockgen -source=repositories/documentsContentRepository.go \
+		-destination=repositories/mock/documentsContentRepository.go
 
 	mockgen -source=logic/usersService.go \
 		-destination=logic/mock/usersService.go
 	mockgen -source=logic/documentsInfoService.go \
     	-destination=logic/mock/documentsInfoService.go
+	mockgen -source=logic/documentsContentService.go \
+		-destination=logic/mock/documentsContentService.go
 
 
 dep:

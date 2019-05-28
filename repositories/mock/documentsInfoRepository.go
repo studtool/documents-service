@@ -122,6 +122,20 @@ func (mr *MockDocumentsInfoRepositoryMockRecorder) UpdateDocumentSubjectByID(upd
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateDocumentSubjectByID", reflect.TypeOf((*MockDocumentsInfoRepository)(nil).UpdateDocumentSubjectByID), update)
 }
 
+// CheckDocumentExistsByIDAndOwnerID mocks base method
+func (m *MockDocumentsInfoRepository) CheckDocumentExistsByIDAndOwnerID(documentID, ownerID types.ID) *errs.Error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CheckDocumentExistsByIDAndOwnerID", documentID, ownerID)
+	ret0, _ := ret[0].(*errs.Error)
+	return ret0
+}
+
+// CheckDocumentExistsByIDAndOwnerID indicates an expected call of CheckDocumentExistsByIDAndOwnerID
+func (mr *MockDocumentsInfoRepositoryMockRecorder) CheckDocumentExistsByIDAndOwnerID(documentID, ownerID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CheckDocumentExistsByIDAndOwnerID", reflect.TypeOf((*MockDocumentsInfoRepository)(nil).CheckDocumentExistsByIDAndOwnerID), documentID, ownerID)
+}
+
 // DeleteDocumentByID mocks base method
 func (m *MockDocumentsInfoRepository) DeleteDocumentByID(documentID types.ID) *errs.Error {
 	m.ctrl.T.Helper()
