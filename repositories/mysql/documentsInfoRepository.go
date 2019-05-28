@@ -214,7 +214,7 @@ func (r *DocumentsInfoRepository) iCtx() context.Context {
 }
 
 func (r *DocumentsInfoRepository) sCtx() context.Context {
-	return r.ctx(100 * time.Microsecond)
+	return r.ctx(200 * time.Millisecond)
 }
 
 func (r *DocumentsInfoRepository) msCtx() context.Context {
