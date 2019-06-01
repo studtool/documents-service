@@ -24,3 +24,12 @@ func MakeStructLogger(v interface{}) logs.Logger {
 func MakeReflectLogger(_ interface{}) logs.Logger {
 	return logs.NewReflectLogger()
 }
+
+func MakeRequestLogger(_ interface{}) logs.Logger {
+	return logs.NewRequestLogger(
+		logs.RequestLoggerParams{
+			ComponentName:    config.ComponentName,
+			ComponentVersion: config.ComponentVersion,
+		},
+	)
+}

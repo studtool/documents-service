@@ -6,14 +6,38 @@ import (
 	"io/ioutil"
 	"net"
 	"net/http"
+	"net/http/pprof"
 	"strings"
 
 	"github.com/go-http-utils/headers"
+	"github.com/gorilla/mux"
 	"github.com/mailru/easyjson"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	"github.com/studtool/common/consts"
 	"github.com/studtool/common/errs"
+	"github.com/studtool/common/types"
 )
+
+func GetMetricsHandler() http.Handler {
+	return promhttp.Handler()
+}
+
+func GetProfilerHandler() http.Handler {
+	router := mux.NewRouter()
+
+	router.HandleFunc("/", pprof.Index)
+	router.HandleFunc("/cmdline", pprof.Cmdline)
+	router.HandleFunc("/profile", pprof.Profile)
+	router.HandleFunc("/symbol", pprof.Symbol)
+
+	router.Handle("/goroutine", pprof.Handler("goroutine"))
+	router.Handle("/heap", pprof.Handler("heap"))
+	router.Handle("/threadcreate", pprof.Handler("threadcreate"))
+	router.Handle("/block", pprof.Handler("block"))
+
+	return router
+}
 
 func (srv *Server) GetRawBody(r *http.Request) ([]byte, *errs.Error) {
 	b, err := ioutil.ReadAll(r.Body)
@@ -66,12 +90,12 @@ func (srv *Server) ParseHeaderRefreshToken(r *http.Request) string {
 	return r.Header.Get(RefreshTokenHeader)
 }
 
-func (srv *Server) ParseHeaderUserID(r *http.Request) string {
-	return r.Header.Get(UserIDHeader)
+func (srv *Server) ParseHeaderUserID(r *http.Request) types.ID {
+	return types.ID(r.Header.Get(UserIDHeader))
 }
 
-func (srv *Server) SetHeaderUserID(w http.ResponseWriter, userID string) {
-	w.Header().Set(UserIDHeader, userID)
+func (srv *Server) SetHeaderUserID(w http.ResponseWriter, userID types.ID) {
+	w.Header().Set(UserIDHeader, string(userID))
 }
 
 func (srv *Server) WriteOk(w http.ResponseWriter) {

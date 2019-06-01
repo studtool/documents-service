@@ -9,8 +9,8 @@ import (
 
 func (srv *Server) addDocument(w http.ResponseWriter, r *http.Request) {
 	documentInfo := &models.DocumentInfo{}
-	if err := srv.server.ParseBodyJSON(documentInfo, r); err != nil {
-		srv.server.WriteErrJSON(w, err)
+	if err := srv.ParseBodyJSON(documentInfo, r); err != nil {
+		srv.WriteErrJSON(w, err)
 		return
 	}
 
@@ -19,11 +19,11 @@ func (srv *Server) addDocument(w http.ResponseWriter, r *http.Request) {
 		DocumentInfo: documentInfo,
 	}
 	if err := srv.documentsInfoService.AddDocumentInfo(params); err != nil {
-		srv.server.WriteErrJSON(w, err)
+		srv.WriteErrJSON(w, err)
 		return
 	}
 
-	srv.server.WriteOkJSON(w, documentInfo)
+	srv.WriteOkJSON(w, documentInfo)
 }
 
 func (srv *Server) getDocumentsInfo(w http.ResponseWriter, r *http.Request) {
@@ -37,27 +37,27 @@ func (srv *Server) getDocumentsInfo(w http.ResponseWriter, r *http.Request) {
 		DocumentsInfo: &documentsInfo,
 	}
 	if err := srv.documentsInfoService.GetDocumentsInfo(params); err != nil {
-		srv.server.WriteErrJSON(w, err)
+		srv.WriteErrJSON(w, err)
 		return
 	}
 
-	srv.server.WriteOkJSON(w, documentsInfo)
+	srv.WriteOkJSON(w, documentsInfo)
 }
 
 func (srv *Server) getDocumentInfo(w http.ResponseWriter, r *http.Request) {
-	srv.server.WriteNotImplemented(w) //TODO
+	srv.WriteNotImplemented(w) //TODO
 }
 
 func (srv *Server) deleteDocuments(w http.ResponseWriter, r *http.Request) {
-	srv.server.WriteNotImplemented(w) //TODO
+	srv.WriteNotImplemented(w) //TODO
 }
 
 func (srv *Server) deleteDocument(w http.ResponseWriter, r *http.Request) {
-	srv.server.WriteNotImplemented(w) //TODO
+	srv.WriteNotImplemented(w) //TODO
 }
 
 func (srv *Server) updateDocumentInfo(w http.ResponseWriter, r *http.Request) {
-	srv.server.WriteNotImplemented(w) //TODO
+	srv.WriteNotImplemented(w) //TODO
 }
 
 func (srv *Server) getDocumentContent(w http.ResponseWriter, r *http.Request) {
@@ -69,17 +69,17 @@ func (srv *Server) getDocumentContent(w http.ResponseWriter, r *http.Request) {
 		DocumentContent: &content,
 	}
 	if err := srv.documentsContentService.GetDocumentContent(&params); err != nil {
-		srv.server.WriteErrJSON(w, err)
+		srv.WriteErrJSON(w, err)
 		return
 	}
 
-	srv.server.WriteOkRaw(w, content)
+	srv.WriteOkRaw(w, content)
 }
 
 func (srv *Server) updateDocumentContent(w http.ResponseWriter, r *http.Request) {
 	content, err := srv.parseBodyDocumentContent(r)
 	if err != nil {
-		srv.server.WriteErrJSON(w, err)
+		srv.WriteErrJSON(w, err)
 		return
 	}
 
@@ -89,9 +89,9 @@ func (srv *Server) updateDocumentContent(w http.ResponseWriter, r *http.Request)
 		DocumentContent: &content,
 	}
 	if err := srv.documentsContentService.UpdateDocumentContent(&params); err != nil {
-		srv.server.WriteErrJSON(w, err)
+		srv.WriteErrJSON(w, err)
 		return
 	}
 
-	srv.server.WriteOk(w)
+	srv.WriteOk(w)
 }

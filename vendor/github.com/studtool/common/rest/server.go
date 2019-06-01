@@ -2,72 +2,45 @@ package rest
 
 import (
 	"context"
-	"fmt"
 	"net/http"
-
-	//nolint:golint
-	_ "net/http/pprof"
-
-	"github.com/prometheus/client_golang/prometheus/promhttp"
 
 	"github.com/studtool/common/logs"
 )
-
-type ServerConfig struct {
-	Host string
-	Port int
-}
 
 type Server struct {
 	server *http.Server
 
 	structLogger  logs.Logger
+	reflectLogger logs.Logger
 	requestLogger logs.Logger
 
 	apiClassifier APIClassifier
 }
 
 type ServerParams struct {
-	Host string
-	Port int
+	Address string
+	Handler http.Handler
 
-	ComponentName    string
-	ComponentVersion string
+	StructLogger  logs.Logger
+	ReflectLogger logs.Logger
+	RequestLogger logs.Logger
+
+	APIClassifier APIClassifier
 }
 
 func NewServer(params ServerParams) *Server {
 	return &Server{
 		server: &http.Server{
-			Addr: fmt.Sprintf(
-				"%s:%d", params.Host, params.Port,
-			),
+			Addr:    params.Address,
+			Handler: params.Handler,
 		},
 
-		structLogger: logs.NewStructLogger(
-			logs.StructLoggerParams{
-				ComponentName:     params.ComponentName,
-				StructWithPkgName: "rest.Server",
-			},
-		),
+		structLogger:  params.StructLogger,
+		reflectLogger: params.ReflectLogger,
+		requestLogger: params.RequestLogger,
 
-		requestLogger: logs.NewRequestLogger(
-			logs.RequestLoggerParams{
-				Component: params.ComponentName,
-			},
-		),
+		apiClassifier: params.APIClassifier,
 	}
-}
-
-func (srv *Server) MetricsHandler() http.Handler {
-	return promhttp.Handler()
-}
-
-func (srv *Server) SetHandler(h http.Handler) {
-	srv.server.Handler = h
-}
-
-func (srv *Server) SetAPIClassifier(c APIClassifier) {
-	srv.apiClassifier = c
 }
 
 func (srv *Server) Run() error {

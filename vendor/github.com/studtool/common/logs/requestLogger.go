@@ -5,26 +5,32 @@ import (
 
 	"github.com/sirupsen/logrus"
 
+	"github.com/studtool/common/types"
 	"github.com/studtool/common/utils/process"
 )
 
 type RequestLogger struct {
-	host      string
-	pid       int64
-	component string
+	host string
+	pid  int64
+
+	componentName    string
+	componentVersion string
 
 	logger *logrus.Logger
 }
 
 type RequestLoggerParams struct {
-	Component string
+	ComponentName    string
+	ComponentVersion string
 }
 
 func NewRequestLogger(params RequestLoggerParams) Logger {
 	return &RequestLogger{
-		host:      process.GetHost(),
-		pid:       process.GetPid(),
-		component: params.Component,
+		host: process.GetHost(),
+		pid:  process.GetPid(),
+
+		componentName:    params.ComponentName,
+		componentVersion: params.ComponentVersion,
 
 		logger: func() *logrus.Logger {
 			log := logrus.StandardLogger()
@@ -35,14 +41,14 @@ func NewRequestLogger(params RequestLoggerParams) Logger {
 }
 
 type RequestParams struct {
-	Method    string
-	Path      string
-	Status    int
-	Type      string
-	UserID    string
-	IP        string
-	UserAgent string
-	Time      time.Duration
+	Method      string
+	Path        string
+	Status      int
+	Type        string
+	UserID      types.ID
+	IP          string
+	UserAgent   string
+	RequestTime time.Duration
 }
 
 const (
@@ -103,14 +109,15 @@ func (log *RequestLogger) makeLogFields(args ...interface{}) logrus.Fields {
 	return logrus.Fields{
 		"host":        log.host,
 		"pid":         log.pid,
-		"component":   log.component,
+		"component":   log.componentName,
+		"version":     log.componentVersion,
 		"method":      p.Method,
 		"path":        p.Path,
 		"status":      p.Status,
 		"type":        p.Type,
-		"userId":      p.UserID,
+		"userID":      p.UserID,
 		"IP":          p.IP,
-		"user-agent":  p.UserAgent,
-		"requestTime": p.Time,
+		"User-Agent":  p.UserAgent,
+		"requestTime": p.RequestTime,
 	}
 }

@@ -31,7 +31,7 @@ const (
 )
 
 func (srv *Server) parseHeaderUserID(r *http.Request) types.ID {
-	return types.ID(srv.server.ParseHeaderUserID(r))
+	return srv.Server.ParseHeaderUserID(r)
 }
 
 func (srv *Server) parsePathDocumentID(r *http.Request) types.ID {
@@ -54,7 +54,7 @@ func (srv *Server) parseParamsPage(r *http.Request) repositories.Page {
 }
 
 func (srv *Server) parseBodyDocumentContent(r *http.Request) (models.DocumentContent, *errs.Error) {
-	content, err := srv.server.GetRawBody(r)
+	content, err := srv.GetRawBody(r)
 	return models.DocumentContent(content), err
 }
 

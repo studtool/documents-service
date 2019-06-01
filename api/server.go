@@ -1,6 +1,7 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"go.uber.org/dig"
@@ -9,7 +10,6 @@ import (
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 
-	"github.com/studtool/common/consts"
 	"github.com/studtool/common/logs"
 	"github.com/studtool/common/rest"
 
@@ -19,7 +19,7 @@ import (
 )
 
 type Server struct {
-	server *rest.Server
+	rest.Server
 
 	structLogger  logs.Logger
 	reflectLogger logs.Logger
@@ -37,13 +37,6 @@ type ServerParams struct {
 
 func NewServer(params ServerParams) *Server {
 	srv := &Server{
-		server: rest.NewServer(
-			rest.ServerParams{
-				Host: consts.EmptyString,
-				Port: config.ServerPort.Value(),
-			},
-		),
-
 		documentsInfoService:    params.DocumentsInfoService,
 		documentsContentService: params.DocumentsContentService,
 	}
@@ -53,29 +46,30 @@ func NewServer(params ServerParams) *Server {
 
 	mx := mux.NewRouter()
 	mx.Handle(`/api/protected/documents`, handlers.MethodHandler{
-		http.MethodPost:   srv.server.WithAuth(http.HandlerFunc(srv.addDocument)),
-		http.MethodGet:    srv.server.WithAuth(http.HandlerFunc(srv.getDocumentsInfo)),
-		http.MethodDelete: srv.server.WithAuth(http.HandlerFunc(srv.deleteDocuments)),
+		http.MethodPost:   srv.WithAuth(http.HandlerFunc(srv.addDocument)),
+		http.MethodGet:    srv.WithAuth(http.HandlerFunc(srv.getDocumentsInfo)),
+		http.MethodDelete: srv.WithAuth(http.HandlerFunc(srv.deleteDocuments)),
 	})
 	mx.Handle(`/api/protected/documents/{document_id}`, handlers.MethodHandler{
-		http.MethodDelete: srv.server.WithAuth(http.HandlerFunc(srv.deleteDocument)),
+		http.MethodDelete: srv.WithAuth(http.HandlerFunc(srv.deleteDocument)),
 	})
 	mx.Handle(`/api/protected/documents/{document_id}/info`, handlers.MethodHandler{
-		http.MethodGet:   srv.server.WithAuth(http.HandlerFunc(srv.getDocumentInfo)),
-		http.MethodPatch: srv.server.WithAuth(http.HandlerFunc(srv.updateDocumentInfo)),
+		http.MethodGet:   srv.WithAuth(http.HandlerFunc(srv.getDocumentInfo)),
+		http.MethodPatch: srv.WithAuth(http.HandlerFunc(srv.updateDocumentInfo)),
 	})
 	mx.Handle(`/api/protected/documents/{document_id}/content`, handlers.MethodHandler{
-		http.MethodGet:   srv.server.WithAuth(http.HandlerFunc(srv.getDocumentContent)),
-		http.MethodPatch: srv.server.WithAuth(http.HandlerFunc(srv.updateDocumentContent)),
+		http.MethodGet:   srv.WithAuth(http.HandlerFunc(srv.getDocumentContent)),
+		http.MethodPatch: srv.WithAuth(http.HandlerFunc(srv.updateDocumentContent)),
 	})
-	mx.Handle(`/metrics`, srv.server.MetricsHandler())
+	mx.Handle(`/pprof`, rest.GetProfilerHandler())
+	mx.Handle(`/metrics`, rest.GetMetricsHandler())
 
-	h := srv.server.WithRecover(mx)
+	reqHandler := srv.WithRecover(mx)
 	if config.RequestsLogsEnabled.Value() {
-		h = srv.server.WithLogs(h)
+		reqHandler = srv.WithLogs(reqHandler)
 	}
 	if config.CorsAllowed.Value() {
-		h = srv.server.WithCORS(h, rest.CORS{
+		reqHandler = srv.WithCORS(reqHandler, rest.CORS{
 			Origins: []string{"*"},
 			Methods: []string{
 				http.MethodGet, http.MethodHead,
@@ -91,23 +85,31 @@ func NewServer(params ServerParams) *Server {
 		})
 	}
 
-	srv.server.SetHandler(h)
-	srv.server.SetAPIClassifier(rest.NewPathAPIClassifier())
+	srv.structLogger = srvutils.MakeStructLogger(srv)
+	srv.reflectLogger = srvutils.MakeReflectLogger(srv)
 
+	srv.Server = *rest.NewServer(
+		rest.ServerParams{
+			Address: fmt.Sprintf(":%d", config.ServerPort.Value()),
+			Handler: reqHandler,
+
+			StructLogger:  srv.structLogger,
+			ReflectLogger: srv.reflectLogger,
+			RequestLogger: srvutils.MakeRequestLogger(srv),
+
+			APIClassifier: rest.NewPathAPIClassifier(),
+		},
+	)
 	srv.structLogger.Info("initialized")
 
 	return srv
 }
 
 func (srv *Server) Run() error {
-	err := srv.server.Run()
-	if err == nil {
-		srv.structLogger.Info("start")
-	}
+	err := srv.Server.Run()
 	return err
 }
 
 func (srv *Server) Shutdown() error {
-	srv.structLogger.Info("shutdown")
-	return srv.server.Shutdown()
+	return srv.Server.Shutdown()
 }
