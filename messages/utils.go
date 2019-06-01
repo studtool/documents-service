@@ -41,10 +41,6 @@ func (c *MqClient) runConsumer(queueName string, handler messageHandler) error {
 	return nil
 }
 
-func (c *MqClient) marshalMessageBody(v easyjson.Marshaler) ([]byte, error) {
-	return easyjson.Marshal(v)
-}
-
 func (c *MqClient) unmarshalMessageBody(data []byte, v easyjson.Unmarshaler) error {
 	return easyjson.Unmarshal(data, v)
 }

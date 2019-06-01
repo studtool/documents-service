@@ -62,32 +62,26 @@ func (srv *Server) parsePageIndex(r *http.Request) int32 { //TODO remove logic
 	indexStr := r.URL.Query().Get(pageIndexParamName)
 	if indexStr == consts.EmptyString {
 		return defaultPageIndex
-	} else {
-		if p, err := strconv.ParseInt(indexStr, 10, 32); err == nil {
-			if p >= 0 {
-				return int32(p)
-			} else {
-				return defaultPageIndex
-			}
-		} else {
-			return defaultPageIndex
-		}
 	}
+	if p, err := strconv.ParseInt(indexStr, 10, 32); err == nil {
+		if p >= 0 {
+			return int32(p)
+		}
+		return defaultPageIndex
+	}
+	return defaultPageIndex
 }
 
 func (srv *Server) parsePageSize(r *http.Request) int32 { //TODO remove logic
 	indexStr := r.URL.Query().Get(pageSizeParamName)
 	if indexStr == consts.EmptyString {
 		return defaultPageSize
-	} else {
-		if p, err := strconv.ParseInt(indexStr, 10, 32); err == nil {
-			if p >= 0 {
-				return int32(p)
-			} else {
-				return defaultPageSize
-			}
-		} else {
-			return defaultPageSize
-		}
 	}
+	if p, err := strconv.ParseInt(indexStr, 10, 32); err == nil {
+		if p >= 0 {
+			return int32(p)
+		}
+		return defaultPageSize
+	}
+	return defaultPageSize
 }

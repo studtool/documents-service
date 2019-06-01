@@ -3,6 +3,7 @@ package main
 import (
 	"os"
 	"os/signal"
+	"syscall"
 
 	"go.uber.org/dig"
 
@@ -21,6 +22,7 @@ import (
 	"github.com/studtool/documents-service/repositories/mysql"
 )
 
+// nolint:gocyclo
 func main() {
 	c := dig.New()
 	logger := logs.NewReflectLogger()
@@ -114,9 +116,9 @@ func main() {
 		}))
 	}
 
-	ch := make(chan os.Signal)
-	signal.Notify(ch, os.Kill)
-	signal.Notify(ch, os.Interrupt)
+	ch := make(chan os.Signal, 1)
+	signal.Notify(ch, syscall.SIGINT)
+	signal.Notify(ch, syscall.SIGTERM)
 
 	assertions.AssertOk(c.Provide(api.NewServer))
 	assertions.AssertOk(c.Invoke(func(srv *api.Server) {

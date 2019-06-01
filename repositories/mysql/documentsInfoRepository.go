@@ -45,7 +45,10 @@ func (r *DocumentsInfoRepository) AddDocumentInfo(info *models.DocumentInfo) *er
 		INSERT INTO document(id,title,owner_id,subject) VALUES(?,?,?,?);
 	`
 
-	_, err := r.db().ExecContext(r.iCtx(), query,
+	ctx, cf := r.iCtx()
+	defer cf()
+
+	_, err := r.db().ExecContext(ctx, query,
 		info.DocumentID, info.Title, info.OwnerID, info.Subject,
 	)
 	if err != nil {
@@ -66,16 +69,18 @@ func (r *DocumentsInfoRepository) GetDocumentInfoByID(info *models.DocumentInfo)
 			d.id = ?;
 	`
 
-	row := r.db().QueryRowContext(r.sCtx(), query, info.DocumentID)
+	ctx, cf := r.sCtx()
+	defer cf()
+
+	row := r.db().QueryRowContext(ctx, query, info.DocumentID)
 	err := row.Scan(
 		&info.Title, &info.OwnerID, &info.Subject,
 	)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return r.docNotFoundErr
-		} else {
-			return r.wrapErr(err)
 		}
+		return r.wrapErr(err)
 	}
 
 	return nil
@@ -131,16 +136,17 @@ func (r *DocumentsInfoRepository) CheckDocumentExistsByIDAndOwnerID(documentID t
 			WHERE d.id = ? AND d.owner_id = ?
 		);
 	`
+	ctx, cf := r.sCtx()
+	defer cf()
 
-	row := r.db().QueryRowContext(r.sCtx(), query, documentID, ownerID)
+	row := r.db().QueryRowContext(ctx, query, documentID, ownerID)
 
 	var exists bool
 	if err := row.Scan(&exists); err != nil {
 		if err == sql.ErrNoRows {
 			return r.docNotFoundErr
-		} else {
-			return r.wrapErr(err)
 		}
+		return r.wrapErr(err)
 	}
 
 	return nil
@@ -157,7 +163,10 @@ func (r *DocumentsInfoRepository) db() *sql.DB {
 func (r *DocumentsInfoRepository) getDocumentsInfo(
 	query string, args ...interface{}) (models.DocumentsInfo, *errs.Error) {
 
-	rows, err := r.db().Query(query, args...)
+	ctx, cf := r.msCtx()
+	defer cf()
+
+	rows, err := r.db().QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, r.wrapErr(err)
 	}
@@ -188,21 +197,20 @@ func (r *DocumentsInfoRepository) closeRows(rows *sql.Rows) {
 	}
 }
 
-func (r *DocumentsInfoRepository) iCtx() context.Context {
+func (r *DocumentsInfoRepository) iCtx() (context.Context, context.CancelFunc) {
 	return r.ctx(500 * time.Millisecond)
 }
 
-func (r *DocumentsInfoRepository) sCtx() context.Context {
+func (r *DocumentsInfoRepository) sCtx() (context.Context, context.CancelFunc) {
 	return r.ctx(200 * time.Millisecond)
 }
 
-func (r *DocumentsInfoRepository) msCtx() context.Context {
+func (r *DocumentsInfoRepository) msCtx() (context.Context, context.CancelFunc) {
 	return r.ctx(time.Second)
 }
 
-func (r *DocumentsInfoRepository) ctx(timeout time.Duration) context.Context {
-	ctx, _ := context.WithTimeout(context.TODO(), timeout)
-	return ctx
+func (r *DocumentsInfoRepository) ctx(timeout time.Duration) (context.Context, context.CancelFunc) {
+	return context.WithTimeout(context.TODO(), timeout)
 }
 
 func (r *DocumentsInfoRepository) wrapErr(err error) *errs.Error {

@@ -1,11 +1,13 @@
 package api
 
 import (
+	"net/http"
+
+	"go.uber.org/dig"
+
 	"github.com/go-http-utils/headers"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
-	"go.uber.org/dig"
-	"net/http"
 
 	"github.com/studtool/common/consts"
 	"github.com/studtool/common/logs"
@@ -13,7 +15,6 @@ import (
 
 	"github.com/studtool/documents-service/config"
 	"github.com/studtool/documents-service/logic"
-	"github.com/studtool/documents-service/repositories"
 	"github.com/studtool/documents-service/utils"
 )
 
@@ -25,8 +26,6 @@ type Server struct {
 
 	documentsInfoService    logic.DocumentsInfoService
 	documentsContentService logic.DocumentsContentService
-
-	permissionsRepository repositories.PermissionsRepository
 }
 
 type ServerParams struct {

@@ -31,7 +31,9 @@ func NewDocumentsContentRepository() *DocumentsContentRepository {
 	return r
 }
 
-func (r *DocumentsContentRepository) GetDocumentContent(documentID types.ID, content *models.DocumentContent) *errs.Error {
+func (r *DocumentsContentRepository) GetDocumentContent(
+	documentID types.ID, content *models.DocumentContent) *errs.Error {
+
 	r.rwMutex.RLock()
 	defer r.rwMutex.RUnlock()
 
@@ -46,7 +48,9 @@ func (r *DocumentsContentRepository) GetDocumentContent(documentID types.ID, con
 	return nil
 }
 
-func (r *DocumentsContentRepository) UpdateDocumentContent(documentID types.ID, content *models.DocumentContent) *errs.Error {
+func (r *DocumentsContentRepository) UpdateDocumentContent(
+	documentID types.ID, content *models.DocumentContent) *errs.Error {
+
 	rContent := make(models.DocumentContent, len(*content))
 	copy(rContent, *content)
 

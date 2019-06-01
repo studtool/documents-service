@@ -5,13 +5,10 @@ QUEUES_ENABLED ?= true
 
 LD_FLAGS := "-X config.repositoriesEnabled=$(REPOSITORIES_ENABLED) -X config.queuesEnabled=$(QUEUES_ENABLED)"
 
-
-
 all: dep fmt gen build
 
 fmt:
 	go fmt ./...
-
 
 gen:
 	go generate ./...
@@ -30,7 +27,6 @@ gen:
 	mockgen -source=logic/documentsContentService.go \
 		-destination=logic/mock/documentsContentService.go
 
-
 dep:
 	go get -u && go mod tidy && go mod vendor && go mod verify
 
@@ -38,18 +34,17 @@ dep:
 build: mkdir
 	go build -mod vendor -ldflags $(LD_FLAGS) -o $(BIN_PATH) .
 
-
 image:
 	./image.sh build
-
 
 test:
 	go test -mod vendor ./...
 
+lint:
+	./linter.sh run
 
 clean:
 	rm -rf ./bin
-
 
 mkdir:
 	mkdir -p ./bin

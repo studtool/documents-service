@@ -9,6 +9,9 @@ install: true
 
 jobs:
   include:
+    - stage: lint
+        - make lint
+
     - stage: build
       script:
         - make build
