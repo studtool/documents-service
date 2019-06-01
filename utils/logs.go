@@ -14,8 +14,9 @@ func MakeRawLogger(_ interface{}) logs.Logger {
 func MakeStructLogger(v interface{}) logs.Logger {
 	return logs.NewStructLogger(
 		logs.StructLoggerParams{
-			Component: config.Component,
-			Structure: rft.StructName(v),
+			ComponentName:     config.ComponentName,
+			ComponentVersion:  config.ComponentVersion,
+			StructWithPkgName: rft.StructName(v),
 		},
 	)
 }

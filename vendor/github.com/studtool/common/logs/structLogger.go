@@ -2,8 +2,7 @@ package logs
 
 import (
 	"github.com/sirupsen/logrus"
-
-	"github.com/studtool/common/utils"
+	"github.com/studtool/common/utils/process"
 )
 
 type StructLogger struct {
@@ -12,8 +11,9 @@ type StructLogger struct {
 }
 
 type StructLoggerParams struct {
-	Component string
-	Structure string
+	ComponentName     string
+	ComponentVersion  string
+	StructWithPkgName string
 }
 
 func NewStructLogger(params StructLoggerParams) Logger {
@@ -24,10 +24,11 @@ func NewStructLogger(params StructLoggerParams) Logger {
 			return log
 		}(),
 		fields: logrus.Fields{
-			"pid":       utils.GetPid(),
-			"host":      utils.GetHost(),
-			"component": params.Component,
-			"struct":    params.Structure,
+			"pid":       process.GetPid(),
+			"host":      process.GetHost(),
+			"component": params.ComponentName,
+			"version":   params.ComponentVersion,
+			"struct":    params.StructWithPkgName,
 		},
 	}
 }

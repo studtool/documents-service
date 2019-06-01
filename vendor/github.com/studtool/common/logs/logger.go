@@ -12,7 +12,3 @@ type Logger interface {
 	Fatal(args ...interface{})
 	Fatalf(format string, args ...interface{})
 }
-
-func NewLogger() Logger {
-	return NewReflectLogger()
-}

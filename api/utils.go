@@ -31,7 +31,7 @@ const (
 )
 
 func (srv *Server) parseHeaderUserID(r *http.Request) types.ID {
-	return types.ID(srv.server.ParseUserID(r))
+	return types.ID(srv.server.ParseHeaderUserID(r))
 }
 
 func (srv *Server) parsePathDocumentID(r *http.Request) types.ID {

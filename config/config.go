@@ -10,7 +10,10 @@ import (
 
 var (
 	// TODO compile-time injection
-	Component = "documents-service"
+	ComponentName = "documents-service"
+
+	// TODO compile-time injection
+	ComponentVersion = "v0.0.1"
 
 	// Modified by the compiler
 	repositoriesEnabled = "true"

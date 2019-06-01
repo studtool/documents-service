@@ -2,11 +2,10 @@ package srvutils
 
 import (
 	"github.com/studtool/common/types"
-	"github.com/studtool/common/utils"
 )
 
 func MakeID() types.ID {
-	id, err := utils.MakeID()
+	id, err := types.MakeID()
 	if err != nil {
 		panic(err)
 	}

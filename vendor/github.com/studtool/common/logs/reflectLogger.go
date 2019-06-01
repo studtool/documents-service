@@ -1,12 +1,11 @@
 package logs
 
 import (
-	"fmt"
-	"runtime"
+	"runtime/debug"
 
 	"github.com/sirupsen/logrus"
 
-	"github.com/studtool/common/utils"
+	"github.com/studtool/common/utils/process"
 )
 
 type ReflectLogger struct {
@@ -18,8 +17,8 @@ type ReflectLogger struct {
 
 func NewReflectLogger() Logger {
 	return &ReflectLogger{
-		pid:  utils.GetPid(),
-		host: utils.GetHost(),
+		pid:  process.GetPid(),
+		host: process.GetHost(),
 
 		logger: func() *logrus.Logger {
 			log := logrus.StandardLogger()
@@ -70,26 +69,9 @@ func (log *ReflectLogger) Fatalf(format string, args ...interface{}) {
 }
 
 func (log *ReflectLogger) getCallerInfo() logrus.Fields {
-	fpcs := make([]uintptr, 1)
-
-	const callerStackDepth = 3
-	n := runtime.Callers(callerStackDepth, fpcs)
-	if n == 0 {
-		return nil
-	}
-
-	caller := runtime.FuncForPC(fpcs[0] - 1)
-	if caller == nil {
-		return nil
-	}
-
-	name := caller.Name()
-	file, line := caller.FileLine(fpcs[0] - 1)
-
 	return logrus.Fields{
-		"host": log.host,
-		"pid":  log.pid,
-		"func": name,
-		"file": fmt.Sprintf("%s:%d", file, line),
+		"host":  log.host,
+		"pid":   log.pid,
+		"stack": debug.Stack(),
 	}
 }

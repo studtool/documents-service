@@ -1,13 +1,11 @@
 package api
 
 import (
-	"net/http"
-	"strings"
-
 	"github.com/go-http-utils/headers"
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
 	"go.uber.org/dig"
+	"net/http"
 
 	"github.com/studtool/common/consts"
 	"github.com/studtool/common/logs"
@@ -41,7 +39,7 @@ type ServerParams struct {
 func NewServer(params ServerParams) *Server {
 	srv := &Server{
 		server: rest.NewServer(
-			rest.ServerConfig{
+			rest.ServerParams{
 				Host: consts.EmptyString,
 				Port: config.ServerPort.Value(),
 			},
@@ -95,7 +93,7 @@ func NewServer(params ServerParams) *Server {
 	}
 
 	srv.server.SetHandler(h)
-	srv.server.SetAPIClassifier(srv.makeApiClassifier())
+	srv.server.SetAPIClassifier(rest.NewPathAPIClassifier())
 
 	srv.structLogger.Info("initialized")
 
@@ -113,27 +111,4 @@ func (srv *Server) Run() error {
 func (srv *Server) Shutdown() error {
 	srv.structLogger.Info("shutdown")
 	return srv.server.Shutdown()
-}
-
-func (srv *Server) makeApiClassifier() rest.APIClassifier {
-	apiTypeIndex := len("/api/")
-
-	return rest.APIClassifier(func(path string) string {
-		path = path[apiTypeIndex:]
-
-		if strings.HasPrefix(path, rest.APITypePublic) {
-			return rest.APITypePublic
-		}
-		if strings.HasPrefix(path, rest.APITypeProtected) {
-			return rest.APITypeProtected
-		}
-		if strings.HasPrefix(path, rest.APITypePublic) {
-			return rest.APITypePrivate
-		}
-		if strings.HasPrefix(path, rest.APITypeInternal) {
-			return rest.APITypeInternal
-		}
-
-		return consts.EmptyString
-	})
 }

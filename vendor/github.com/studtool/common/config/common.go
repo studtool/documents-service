@@ -6,10 +6,6 @@ import (
 	"github.com/studtool/common/logs"
 )
 
-const (
-	Component = "common"
-)
-
 var (
 	//nolint:gochecknoglobals
 	logger logs.Logger

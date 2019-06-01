@@ -10,7 +10,6 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
-	"github.com/studtool/common/config"
 	"github.com/studtool/common/logs"
 )
 
@@ -28,22 +27,32 @@ type Server struct {
 	apiClassifier APIClassifier
 }
 
-func NewServer(c ServerConfig) *Server {
+type ServerParams struct {
+	Host string
+	Port int
+
+	ComponentName    string
+	ComponentVersion string
+}
+
+func NewServer(params ServerParams) *Server {
 	return &Server{
 		server: &http.Server{
-			Addr: fmt.Sprintf("%s:%d", c.Host, c.Port),
+			Addr: fmt.Sprintf(
+				"%s:%d", params.Host, params.Port,
+			),
 		},
 
 		structLogger: logs.NewStructLogger(
 			logs.StructLoggerParams{
-				Component: config.Component,
-				Structure: "rest.Server",
+				ComponentName:     params.ComponentName,
+				StructWithPkgName: "rest.Server",
 			},
 		),
 
 		requestLogger: logs.NewRequestLogger(
 			logs.RequestLoggerParams{
-				Component: config.Component,
+				Component: params.ComponentName,
 			},
 		),
 	}
@@ -56,9 +65,6 @@ func (srv *Server) MetricsHandler() http.Handler {
 func (srv *Server) SetHandler(h http.Handler) {
 	srv.server.Handler = h
 }
-
-// Optimization to seek public/protected/private/internal faster
-type APIClassifier func(path string) string
 
 func (srv *Server) SetAPIClassifier(c APIClassifier) {
 	srv.apiClassifier = c

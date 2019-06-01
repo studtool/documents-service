@@ -38,12 +38,14 @@ func (srv *Server) WithLogs(h http.Handler) http.Handler {
 			}
 
 			reqParams := logs.RequestParams{
-				Method: r.Method,
-				Path:   r.RequestURI,
-				Status: wr.status,
-				UserID: srv.ParseUserID(r),
-				Type:   srv.apiClassifier(r.RequestURI),
-				Time:   rt,
+				Method:    r.Method,
+				Path:      r.RequestURI,
+				Status:    wr.status,
+				UserID:    srv.ParseHeaderUserID(r),
+				Type:      srv.apiClassifier.GetType(r),
+				IP:        srv.ParseHeaderXRealIP(r),
+				UserAgent: srv.ParseHeaderUserAgent(r),
+				Time:      rt,
 			}
 
 			logFunc(&reqParams)
@@ -69,7 +71,7 @@ func (srv *Server) WithRecover(h http.Handler) http.Handler {
 func (srv *Server) WithAuth(h http.Handler) http.Handler {
 	return http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
-			if srv.ParseUserID(r) == consts.EmptyString {
+			if srv.ParseHeaderUserID(r) == consts.EmptyString {
 				srv.WriteUnauthorized(w)
 				return
 			}
