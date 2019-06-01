@@ -1,6 +1,7 @@
 package metrics
 
 import (
+	"sync/atomic"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -8,6 +9,7 @@ import (
 )
 
 type Counter struct {
+	value  uint64
 	gauge  prometheus.Gauge
 	ticker *time.Ticker
 }
@@ -37,9 +39,11 @@ func (c *Counter) Run() {
 }
 
 func (c *Counter) Inc() {
-	c.gauge.Inc()
+	v := atomic.LoadUint64(&c.value)
+	v++
+	atomic.StoreUint64(&c.value, v)
 }
 
 func (c *Counter) clear() {
-	c.gauge.Set(0)
+	c.gauge.Set(float64(atomic.LoadUint64(&c.value)))
 }

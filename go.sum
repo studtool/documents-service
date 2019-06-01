@@ -74,8 +74,8 @@ github.com/stretchr/objx v0.1.1/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.3.0 h1:TivCn/peBQ7UY8ooIcPgZFpTNSz0Q2U6UrFlUfqbe0Q=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
-github.com/studtool/common v0.0.0-20190601221300-bf789fc45976 h1:5P/7jTXyStmr2fZYMq30ui2vNjDQWYUgcKvyGdml6q4=
-github.com/studtool/common v0.0.0-20190601221300-bf789fc45976/go.mod h1:HFCxPmPVjbkdyDo4a5axZyfybq4U5/2BJ3Xe6tukKCA=
+github.com/studtool/common v0.0.0-20190601222622-6c27654cfb13 h1:OWHeLkreY1+l4iPSbEdhLSRnl5Xa/Za5qND4IQ4RiN8=
+github.com/studtool/common v0.0.0-20190601222622-6c27654cfb13/go.mod h1:HFCxPmPVjbkdyDo4a5axZyfybq4U5/2BJ3Xe6tukKCA=
 github.com/studtool/logrustash v0.0.0-20180711202047-4c9f544a3a0b h1:0WceVjveXOvQOepH0Mpo+CvGNAjJe17tRyo+0TGMtBM=
 github.com/studtool/logrustash v0.0.0-20180711202047-4c9f544a3a0b/go.mod h1:t6PPzXxTm7X1fL7MNLXHYMi0y6gRoUAlN3L7BjRu9SM=
 github.com/tinylib/msgp v1.1.0 h1:9fQd+ICuRIu/ue4vxJZu6/LzxN0HwMds2nq/0cFvxHU=
