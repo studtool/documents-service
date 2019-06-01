@@ -20,12 +20,14 @@ type RequestLogger struct {
 }
 
 type RequestLoggerParams struct {
+	Exporter *Exporter
+
 	ComponentName    string
 	ComponentVersion string
 }
 
 func NewRequestLogger(params RequestLoggerParams) Logger {
-	return &RequestLogger{
+	logger := &RequestLogger{
 		host: process.GetHost(),
 		pid:  process.GetPid(),
 
@@ -38,6 +40,12 @@ func NewRequestLogger(params RequestLoggerParams) Logger {
 			return log
 		}(),
 	}
+
+	if params.Exporter != nil {
+		logger.logger.AddHook(params.Exporter.getHook())
+	}
+
+	return logger
 }
 
 type RequestParams struct {

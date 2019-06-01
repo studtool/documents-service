@@ -29,6 +29,10 @@ var (
 	// nolint:golint,gochecknoglobals
 	queuesEnabled = "true"
 
+	// Modified by the compiler
+	// nolint:golint,gochecknoglobals
+	logsExportEnabled = "true"
+
 	_ = func() *config.FlagVar {
 		f := config.NewFlagDefault("STUDTOOL_DOCUMENTS_SERVICE_SHOULD_LOG_ENV_VARS", false)
 		if f.Value() {
@@ -54,6 +58,12 @@ var (
 
 	// nolint:golint,gochecknoglobals
 	QueuesEnabled = parseBool(queuesEnabled)
+
+	// nolint:golint,gochecknoglobals
+	LogsExportEnabled = parseBool(logsExportEnabled)
+
+	// nolint:golint,gochecknoglobals
+	LogsStorageAddress = config.NewStringDefault("STUDTOOL_LOGS_STORAGE_ADDRESS", "127.0.0.1:5044")
 
 	// nolint:golint,gochecknoglobals
 	StorageHost = config.NewStringDefault("STUDTOOL_DOCUMENTS_INFO_STORAGE_HOST", "127.0.0.1")

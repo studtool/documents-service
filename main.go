@@ -25,7 +25,30 @@ import (
 // nolint:gocyclo
 func main() {
 	c := dig.New()
-	logger := logs.NewReflectLogger()
+	logger := logs.NewRawLogger()
+
+	if config.LogsExportEnabled {
+		assertions.AssertOk(c.Provide(func() *logs.Exporter {
+			return logs.NewLogsExporter(logs.ExporterParams{
+				StorageAddress:   config.LogsStorageAddress.Value(),
+				ComponentName:    config.ComponentName,
+				ComponentVersion: config.ComponentVersion,
+			})
+		}))
+
+		assertions.AssertOk(c.Invoke(func(e *logs.Exporter) {
+			if err := e.OpenConnection(); err != nil {
+				logger.Fatal(err)
+			}
+		}))
+		defer func() {
+			assertions.AssertOk(c.Invoke(func(e *logs.Exporter) {
+				if err := e.CloseConnection(); err != nil {
+					logger.Fatal(err)
+				}
+			}))
+		}()
+	}
 
 	if config.RepositoriesEnabled {
 		assertions.AssertOk(c.Provide(mysql.NewConnection))

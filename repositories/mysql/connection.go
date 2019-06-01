@@ -4,6 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 
+	"go.uber.org/dig"
+
 	// nolint:golint
 	_ "github.com/go-sql-driver/mysql"
 
@@ -22,7 +24,13 @@ type Connection struct {
 	connStr string
 }
 
-func NewConnection() *Connection {
+type ConnectionParams struct {
+	dig.In
+
+	LogsExporter *logs.Exporter
+}
+
+func NewConnection(params ConnectionParams) *Connection {
 	conn := &Connection{
 		connStr: fmt.Sprintf(
 			"%s:%s@(%s:%s)/%s",
@@ -32,8 +40,13 @@ func NewConnection() *Connection {
 		),
 	}
 
-	conn.structLogger = srvutils.MakeStructLogger(conn)
-	conn.reflectLogger = srvutils.MakeReflectLogger(conn)
+	p := srvutils.LoggerParams{
+		Value:    conn,
+		Exporter: params.LogsExporter,
+	}
+
+	conn.structLogger = srvutils.MakeStructLogger(p)
+	conn.reflectLogger = srvutils.MakeReflectLogger(p)
 
 	conn.structLogger.Info("initialized")
 

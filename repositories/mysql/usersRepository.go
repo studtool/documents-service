@@ -3,6 +3,8 @@ package mysql
 import (
 	"database/sql"
 
+	"go.uber.org/dig"
+
 	"github.com/studtool/common/errs"
 	"github.com/studtool/common/logs"
 	"github.com/studtool/common/types"
@@ -20,15 +22,28 @@ type UsersRepository struct {
 	userNotFoundErr *errs.Error
 }
 
-func NewUsersRepository(conn *Connection) *UsersRepository {
+type UsersRepositoryParams struct {
+	dig.In
+
+	Connection *Connection
+
+	LogsExporter *logs.Exporter
+}
+
+func NewUsersRepository(params UsersRepositoryParams) *UsersRepository {
 	r := &UsersRepository{
-		conn: conn,
+		conn: params.Connection,
 
 		userNotFoundErr: errs.NewNotFoundError("user not found"),
 	}
 
-	r.structLogger = srvutils.MakeStructLogger(r)
-	r.reflectLogger = srvutils.MakeReflectLogger(r)
+	p := srvutils.LoggerParams{
+		Value:    r,
+		Exporter: params.LogsExporter,
+	}
+
+	r.structLogger = srvutils.MakeStructLogger(p)
+	r.reflectLogger = srvutils.MakeReflectLogger(p)
 
 	r.structLogger.Info("initialized")
 

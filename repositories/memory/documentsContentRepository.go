@@ -25,7 +25,12 @@ func NewDocumentsContentRepository() *DocumentsContentRepository {
 		docNotFoundErr: errs.NewNotFoundError("document not found"),
 	}
 
-	r.structLogger = srvutils.MakeStructLogger(r)
+	p := srvutils.LoggerParams{
+		Value:    r,
+		Exporter: nil, //TODO
+	}
+
+	r.structLogger = srvutils.MakeStructLogger(p)
 	r.structLogger.Info("initialized")
 
 	return r

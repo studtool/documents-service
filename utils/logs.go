@@ -11,23 +11,34 @@ func MakeRawLogger(_ interface{}) logs.Logger {
 	return logs.NewRawLogger()
 }
 
-func MakeStructLogger(v interface{}) logs.Logger {
+type LoggerParams struct {
+	Value    interface{}
+	Exporter *logs.Exporter
+}
+
+func MakeStructLogger(params LoggerParams) logs.Logger {
 	return logs.NewStructLogger(
 		logs.StructLoggerParams{
+			Exporter:          params.Exporter,
 			ComponentName:     config.ComponentName,
 			ComponentVersion:  config.ComponentVersion,
-			StructWithPkgName: rft.StructName(v),
+			StructWithPkgName: rft.StructName(params.Value),
 		},
 	)
 }
 
-func MakeReflectLogger(_ interface{}) logs.Logger {
-	return logs.NewReflectLogger()
+func MakeReflectLogger(params LoggerParams) logs.Logger {
+	return logs.NewReflectLogger(
+		logs.ReflectLoggerParams{
+			Exporter: params.Exporter,
+		},
+	)
 }
 
-func MakeRequestLogger(_ interface{}) logs.Logger {
+func MakeRequestLogger(params LoggerParams) logs.Logger {
 	return logs.NewRequestLogger(
 		logs.RequestLoggerParams{
+			Exporter:         params.Exporter,
 			ComponentName:    config.ComponentName,
 			ComponentVersion: config.ComponentVersion,
 		},

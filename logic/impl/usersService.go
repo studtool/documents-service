@@ -20,7 +20,10 @@ type UsersService struct {
 
 type UsersServiceParams struct {
 	dig.In
+
 	UsersRepository repositories.UsersRepository
+
+	LogsExporter *logs.Exporter
 }
 
 func NewUsersService(params UsersServiceParams) *UsersService {
@@ -28,8 +31,13 @@ func NewUsersService(params UsersServiceParams) *UsersService {
 		usersRepository: params.UsersRepository,
 	}
 
-	s.structLogger = srvutils.MakeStructLogger(s)
-	s.reflectLogger = srvutils.MakeReflectLogger(s)
+	p := srvutils.LoggerParams{
+		Value:    s,
+		Exporter: params.LogsExporter,
+	}
+
+	s.structLogger = srvutils.MakeStructLogger(p)
+	s.reflectLogger = srvutils.MakeReflectLogger(p)
 
 	s.structLogger.Info("initialized")
 

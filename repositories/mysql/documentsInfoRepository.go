@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"time"
 
+	"go.uber.org/dig"
+
 	"github.com/studtool/common/errs"
 	"github.com/studtool/common/logs"
 	"github.com/studtool/common/types"
@@ -24,16 +26,29 @@ type DocumentsInfoRepository struct {
 	docsNotFoundErr *errs.Error
 }
 
-func NewDocumentsInfoRepository(conn *Connection) *DocumentsInfoRepository {
+type DocumentsInfoRepositoryParams struct {
+	dig.In
+
+	Connection *Connection
+
+	LogsExporter *logs.Exporter
+}
+
+func NewDocumentsInfoRepository(params DocumentsInfoRepositoryParams) *DocumentsInfoRepository {
 	r := &DocumentsInfoRepository{
-		conn: conn,
+		conn: params.Connection,
 
 		docNotFoundErr:  errs.NewNotFoundError("document not found"),
 		docsNotFoundErr: errs.NewNotFoundError("documents not found"),
 	}
 
-	r.structLogger = srvutils.MakeStructLogger(r)
-	r.reflectLogger = srvutils.MakeReflectLogger(r)
+	p := srvutils.LoggerParams{
+		Value:    r,
+		Exporter: params.LogsExporter,
+	}
+
+	r.structLogger = srvutils.MakeStructLogger(p)
+	r.reflectLogger = srvutils.MakeReflectLogger(p)
 
 	r.structLogger.Info("initialized")
 

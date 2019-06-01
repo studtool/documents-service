@@ -15,8 +15,12 @@ type ReflectLogger struct {
 	logger *logrus.Logger
 }
 
-func NewReflectLogger() Logger {
-	return &ReflectLogger{
+type ReflectLoggerParams struct {
+	Exporter *Exporter
+}
+
+func NewReflectLogger(params ReflectLoggerParams) Logger {
+	logger := &ReflectLogger{
 		pid:  process.GetPid(),
 		host: process.GetHost(),
 
@@ -26,6 +30,12 @@ func NewReflectLogger() Logger {
 			return log
 		}(),
 	}
+
+	if params.Exporter != nil {
+		logger.logger.AddHook(params.Exporter.getHook())
+	}
+
+	return logger
 }
 
 func (log *ReflectLogger) Debug(args ...interface{}) {

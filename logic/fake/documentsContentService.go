@@ -15,7 +15,12 @@ type DocumentsContentService struct {
 func NewDocumentsContentService() *DocumentsContentService {
 	s := &DocumentsContentService{}
 
-	s.structLogger = srvutils.MakeStructLogger(s)
+	p := srvutils.LoggerParams{
+		Value:    s,
+		Exporter: nil, //TODO
+	}
+
+	s.structLogger = srvutils.MakeStructLogger(p)
 	s.structLogger.Warning("initialized")
 
 	return s

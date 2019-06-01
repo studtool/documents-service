@@ -28,6 +28,8 @@ type DocumentsContentServiceParams struct {
 
 	DocumentsInfoRepository    repositories.DocumentsInfoRepository
 	DocumentsContentRepository repositories.DocumentsContentRepository
+
+	LogsExporter *logs.Exporter
 }
 
 func NewDocumentsContentService(params DocumentsContentServiceParams) *DocumentsContentService {
@@ -38,8 +40,13 @@ func NewDocumentsContentService(params DocumentsContentServiceParams) *Documents
 		documentAccessDeniedErr:    errs.NewPermissionDeniedError("document access denied"),
 	}
 
-	r.structLogger = srvutils.MakeStructLogger(r)
-	r.reflectLogger = srvutils.MakeReflectLogger(r)
+	p := srvutils.LoggerParams{
+		Value:    r,
+		Exporter: params.LogsExporter,
+	}
+
+	r.structLogger = srvutils.MakeStructLogger(p)
+	r.reflectLogger = srvutils.MakeReflectLogger(p)
 
 	r.structLogger.Info("initialized")
 

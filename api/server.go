@@ -33,6 +33,8 @@ type ServerParams struct {
 
 	DocumentsInfoService    logic.DocumentsInfoService
 	DocumentsContentService logic.DocumentsContentService
+
+	LogsExporter *logs.Exporter
 }
 
 func NewServer(params ServerParams) *Server {
@@ -40,9 +42,6 @@ func NewServer(params ServerParams) *Server {
 		documentsInfoService:    params.DocumentsInfoService,
 		documentsContentService: params.DocumentsContentService,
 	}
-
-	srv.structLogger = srvutils.MakeStructLogger(srv)
-	srv.reflectLogger = srvutils.MakeReflectLogger(srv)
 
 	v := rest.ParseAPIVersion(config.ComponentVersion)
 	srvPath := rest.MakeAPIPath(v, rest.APITypeProtected, "/documents")
@@ -89,8 +88,14 @@ func NewServer(params ServerParams) *Server {
 		})
 	}
 
-	srv.structLogger = srvutils.MakeStructLogger(srv)
-	srv.reflectLogger = srvutils.MakeReflectLogger(srv)
+	p := srvutils.LoggerParams{
+		Value:    srv,
+		Exporter: params.LogsExporter,
+	}
+
+	srv.structLogger = srvutils.MakeStructLogger(p)
+	srv.reflectLogger = srvutils.MakeReflectLogger(p)
+	requestLogger := srvutils.MakeRequestLogger(p)
 
 	srv.Server = *rest.NewServer(
 		rest.ServerParams{
@@ -99,7 +104,7 @@ func NewServer(params ServerParams) *Server {
 
 			StructLogger:  srv.structLogger,
 			ReflectLogger: srv.reflectLogger,
-			RequestLogger: srvutils.MakeRequestLogger(srv),
+			RequestLogger: requestLogger,
 
 			APIClassifier: rest.NewPathAPIClassifier(),
 		},

@@ -28,6 +28,8 @@ type DocumentsInfoServiceParams struct {
 
 	UsersRepository         repositories.UsersRepository
 	DocumentsInfoRepository repositories.DocumentsInfoRepository
+
+	LogsExporter *logs.Exporter
 }
 
 func NewDocumentsInfoService(params DocumentsInfoServiceParams) *DocumentsInfoService {
@@ -39,8 +41,13 @@ func NewDocumentsInfoService(params DocumentsInfoServiceParams) *DocumentsInfoSe
 		writePermissionErr: errs.NewPermissionDeniedError("permission to write document denied"),
 	}
 
-	s.structLogger = srvutils.MakeStructLogger(s)
-	s.reflectLogger = srvutils.MakeReflectLogger(s)
+	p := srvutils.LoggerParams{
+		Value:    s,
+		Exporter: params.LogsExporter,
+	}
+
+	s.structLogger = srvutils.MakeStructLogger(p)
+	s.reflectLogger = srvutils.MakeReflectLogger(p)
 
 	s.structLogger.Info("initialized")
 

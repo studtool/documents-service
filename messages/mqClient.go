@@ -34,6 +34,8 @@ type MqClientParams struct {
 	dig.In
 
 	UsersService logic.UsersService
+
+	LogsExporter *logs.Exporter
 }
 
 func NewMqClient(params MqClientParams) *MqClient {
@@ -45,8 +47,13 @@ func NewMqClient(params MqClientParams) *MqClient {
 		usersService: params.UsersService,
 	}
 
-	c.structLogger = srvutils.MakeStructLogger(c)
-	c.reflectLogger = srvutils.MakeReflectLogger(c)
+	p := srvutils.LoggerParams{
+		Value:    c,
+		Exporter: params.LogsExporter,
+	}
+
+	c.structLogger = srvutils.MakeStructLogger(p)
+	c.reflectLogger = srvutils.MakeReflectLogger(p)
 
 	c.structLogger.Info("initialized")
 

@@ -11,13 +11,15 @@ type StructLogger struct {
 }
 
 type StructLoggerParams struct {
+	Exporter *Exporter
+
 	ComponentName     string
 	ComponentVersion  string
 	StructWithPkgName string
 }
 
 func NewStructLogger(params StructLoggerParams) Logger {
-	return &StructLogger{
+	logger := &StructLogger{
 		logger: func() *logrus.Logger {
 			log := logrus.StandardLogger()
 			log.SetFormatter(&logrus.JSONFormatter{})
@@ -31,6 +33,12 @@ func NewStructLogger(params StructLoggerParams) Logger {
 			"struct":    params.StructWithPkgName,
 		},
 	}
+
+	if params.Exporter != nil {
+		logger.logger.AddHook(params.Exporter.getHook())
+	}
+
+	return logger
 }
 
 func (log *StructLogger) Debug(args ...interface{}) {

@@ -3,7 +3,9 @@ BIN_PATH ?= ./bin/service
 REPOSITORIES_ENABLED ?= true
 QUEUES_ENABLED ?= true
 
-LD_FLAGS := "-X config.repositoriesEnabled=$(REPOSITORIES_ENABLED) -X config.queuesEnabled=$(QUEUES_ENABLED)"
+LD_FLAGS := -X config.logsExportEnabled=true \
+			-X config.repositoriesEnabled=true \
+            -X config.queuesEnabled=true
 
 all: dep fmt gen build
 
@@ -32,7 +34,7 @@ dep:
 
 
 build: mkdir
-	go build -mod vendor -ldflags $(LD_FLAGS) -o $(BIN_PATH) .
+	go build -mod vendor -ldflags "$(LD_FLAGS)" -o "$(BIN_PATH)" .
 
 image:
 	./image.sh build
