@@ -5,7 +5,7 @@ QUEUES_ENABLED ?= true
 
 LD_FLAGS := -X config.logsExportEnabled=true \
 			-X config.repositoriesEnabled=true \
-            -X config.queuesEnabled=true
+			-X config.queuesEnabled=true
 
 all: dep fmt gen build
 
