@@ -1,6 +1,7 @@
 package logs
 
 import (
+	"github.com/studtool/common/utils/conv"
 	"runtime/debug"
 
 	"github.com/sirupsen/logrus"
@@ -82,6 +83,6 @@ func (log *ReflectLogger) getCallerInfo() logrus.Fields {
 	return logrus.Fields{
 		"host":  log.host,
 		"pid":   log.pid,
-		"stack": debug.Stack(),
+		"stack": conv.BytesToString(debug.Stack()),
 	}
 }
