@@ -10,21 +10,16 @@ install: true
 jobs:
   include:
     - stage: lint
+      before_script:
+        - ./linter.sh install
       script:
         - make lint
-
     - stage: build
       script:
         - make build
-      after_script:
-        - make clean
-
     - stage: test
       script:
         - make test
-      after_script:
-        - make clean
-
     - stage: build image
       script:
         - ./image.sh build
