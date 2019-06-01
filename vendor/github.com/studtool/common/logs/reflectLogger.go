@@ -1,11 +1,11 @@
 package logs
 
 import (
-	"github.com/studtool/common/utils/conv"
 	"runtime/debug"
 
 	"github.com/sirupsen/logrus"
 
+	"github.com/studtool/common/utils/conv"
 	"github.com/studtool/common/utils/process"
 )
 

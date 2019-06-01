@@ -57,6 +57,15 @@ func (srv *Server) WithLogs(h http.Handler) http.Handler {
 	)
 }
 
+func (srv *Server) WithMetrics(h http.Handler) http.Handler {
+	return http.HandlerFunc(
+		func(w http.ResponseWriter, r *http.Request) {
+			srv.metrics.rpsCounter.Inc()
+			h.ServeHTTP(w, r)
+		},
+	)
+}
+
 func (srv *Server) WithRecover(h http.Handler) http.Handler {
 	return http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {

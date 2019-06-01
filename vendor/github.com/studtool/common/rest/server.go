@@ -3,8 +3,10 @@ package rest
 import (
 	"context"
 	"net/http"
+	"time"
 
 	"github.com/studtool/common/logs"
+	"github.com/studtool/common/metrics"
 )
 
 type Server struct {
@@ -15,6 +17,12 @@ type Server struct {
 	requestLogger logs.Logger
 
 	apiClassifier APIClassifier
+
+	metrics serverMetrics
+}
+
+type serverMetrics struct {
+	rpsCounter *metrics.Counter
 }
 
 type ServerParams struct {
@@ -40,6 +48,13 @@ func NewServer(params ServerParams) *Server {
 		requestLogger: params.RequestLogger,
 
 		apiClassifier: params.APIClassifier,
+
+		metrics: serverMetrics{
+			rpsCounter: metrics.NewCounter(metrics.CounterParams{
+				Name:          "http_requests_per_second",
+				ClearInterval: time.Second,
+			}),
+		},
 	}
 }
 
@@ -50,6 +65,9 @@ func (srv *Server) Run() error {
 			srv.structLogger.Fatal(err)
 		}
 	}()
+
+	srv.metrics.rpsCounter.Run()
+
 	return nil
 }
 
