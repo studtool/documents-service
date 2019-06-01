@@ -1,5 +1,7 @@
 # github.com/beorn7/perks v1.0.0
 github.com/beorn7/perks/quantile
+# github.com/firstrow/goautosocket v0.0.0-20161106110228-ac6bb839dc77
+github.com/firstrow/goautosocket
 # github.com/go-http-utils/headers v0.0.0-20181008091004-fed159eddc2a
 github.com/go-http-utils/headers
 # github.com/go-sql-driver/mysql v1.4.1
@@ -42,7 +44,7 @@ github.com/prometheus/procfs/internal/fs
 github.com/sirupsen/logrus
 # github.com/streadway/amqp v0.0.0-20190404075320-75d898a42a94
 github.com/streadway/amqp
-# github.com/studtool/common v0.0.0-20190601183610-5777bc1d1eb5
+# github.com/studtool/common v0.0.0-20190601204030-b85a2b83cbce
 github.com/studtool/common/logs
 github.com/studtool/common/utils/assertions
 github.com/studtool/common/consts
