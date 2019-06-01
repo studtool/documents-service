@@ -44,20 +44,24 @@ func NewServer(params ServerParams) *Server {
 	srv.structLogger = srvutils.MakeStructLogger(srv)
 	srv.reflectLogger = srvutils.MakeReflectLogger(srv)
 
+	v := rest.ParseAPIVersion(config.ComponentVersion)
+	srvPath := rest.MakeAPIPath(v, rest.APITypeProtected, "/documents")
+
 	mx := mux.NewRouter()
-	mx.Handle(`/api/protected/documents`, handlers.MethodHandler{
+
+	mx.Handle(srvPath, handlers.MethodHandler{
 		http.MethodPost:   srv.WithAuth(http.HandlerFunc(srv.addDocument)),
 		http.MethodGet:    srv.WithAuth(http.HandlerFunc(srv.getDocumentsInfo)),
 		http.MethodDelete: srv.WithAuth(http.HandlerFunc(srv.deleteDocuments)),
 	})
-	mx.Handle(`/api/protected/documents/{document_id}`, handlers.MethodHandler{
+	mx.Handle(srvPath+"/{document_id}", handlers.MethodHandler{
 		http.MethodDelete: srv.WithAuth(http.HandlerFunc(srv.deleteDocument)),
 	})
-	mx.Handle(`/api/protected/documents/{document_id}/info`, handlers.MethodHandler{
+	mx.Handle(srvPath+"/{document_id}/info", handlers.MethodHandler{
 		http.MethodGet:   srv.WithAuth(http.HandlerFunc(srv.getDocumentInfo)),
 		http.MethodPatch: srv.WithAuth(http.HandlerFunc(srv.updateDocumentInfo)),
 	})
-	mx.Handle(`/api/protected/documents/{document_id}/content`, handlers.MethodHandler{
+	mx.Handle(srvPath+"/{document_id}/content", handlers.MethodHandler{
 		http.MethodGet:   srv.WithAuth(http.HandlerFunc(srv.getDocumentContent)),
 		http.MethodPatch: srv.WithAuth(http.HandlerFunc(srv.updateDocumentContent)),
 	})
@@ -103,13 +107,4 @@ func NewServer(params ServerParams) *Server {
 	srv.structLogger.Info("initialized")
 
 	return srv
-}
-
-func (srv *Server) Run() error {
-	err := srv.Server.Run()
-	return err
-}
-
-func (srv *Server) Shutdown() error {
-	return srv.Server.Shutdown()
 }
