@@ -30,7 +30,6 @@ github.com/philhofer/fwd
 # github.com/prometheus/client_golang v0.9.3
 github.com/prometheus/client_golang/prometheus/promhttp
 github.com/prometheus/client_golang/prometheus
-github.com/prometheus/client_golang/prometheus/promauto
 github.com/prometheus/client_golang/prometheus/internal
 # github.com/prometheus/client_model v0.0.0-20190129233127-fd36f4220a90
 github.com/prometheus/client_model/go
@@ -45,7 +44,7 @@ github.com/prometheus/procfs/internal/fs
 github.com/sirupsen/logrus
 # github.com/streadway/amqp v0.0.0-20190404075320-75d898a42a94
 github.com/streadway/amqp
-# github.com/studtool/common v0.0.0-20190602100701-e1d52299faad
+# github.com/studtool/common v0.0.0-20190602104249-0266ae97a65f
 github.com/studtool/common/logs
 github.com/studtool/common/utils/assertions
 github.com/studtool/common/consts
@@ -58,7 +57,6 @@ github.com/studtool/common/utils
 github.com/studtool/common/rft
 github.com/studtool/common/utils/conv
 github.com/studtool/common/utils/process
-github.com/studtool/common/metrics
 # github.com/studtool/logrustash v0.0.0-20180711202047-4c9f544a3a0b
 github.com/studtool/logrustash
 # github.com/tinylib/msgp v1.1.0

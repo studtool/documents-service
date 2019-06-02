@@ -68,7 +68,7 @@ func NewServer(params ServerParams) *Server {
 	mx.Handle(`/metrics`, rest.GetMetricsHandler())
 
 	reqHandler := srv.WithMetrics(mx)
-	reqHandler = srv.WithRecover(mx)
+	reqHandler = srv.WithRecover(reqHandler)
 	if config.RequestsLogsEnabled.Value() {
 		reqHandler = srv.WithLogs(reqHandler)
 	}
