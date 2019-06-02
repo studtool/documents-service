@@ -6,29 +6,22 @@ if [[ $(id -u) = 0 ]]; then
 fi
 
 command="$1"
+image_tag="$2"
 
 args=""
-for (( i=2; i<=$#; i++ )) do
+for (( i=3; i<=$#; i++ )) do
     args+="${!i} "
 done
 
-repository=$(cut "-d " "-f2" ./go.mod | head -n 1)
-
-app=$(echo ${repository} | cut "-d/" "-f2")
-service=$(echo ${repository} | cut "-d/" "-f3")
-version=$(sed '3q;d' ./go.mod | cut "-d " "-f2")
-
-image="${app}/${service}:${version}"
-
 if [[ "${command}" = "build" ]]; then
-    shcmd="docker build -t ${image} ."
+    shcmd="docker build -t ${image_tag} ."
 elif [[ "${command}" = "run" ]]; then
-    shcmd="docker run ${args} ${image}"
+    shcmd="docker run ${args} ${image_tag}"
 elif [[ "$command" = "push" ]]; then
     echo "${DOCKER_PASSWORD}" | docker login -u "${DOCKER_USERNAME}" --password-stdin \
-        && shcmd="docker push ${image}"
+        && shcmd="docker push ${image_tag}"
 elif [[ "${command}" = "remove" ]]; then
-    shcmd="docker rmi ${image}"
+    shcmd="docker rmi ${image_tag}"
 else
   echo "command expected 'build/push/remove'"
   exit -1

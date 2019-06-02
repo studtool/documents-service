@@ -1,11 +1,24 @@
 BIN_PATH ?= ./bin/service
 
+LOGS_EXPORT_ENABLED ?= true
 REPOSITORIES_ENABLED ?= true
 QUEUES_ENABLED ?= true
 
-LD_FLAGS := -X config.logsExportEnabled=true \
-			-X config.repositoriesEnabled=true \
-			-X config.queuesEnabled=true
+ORIGIN := github.com
+APP_NAME := studtool
+
+SERVICE_NAME := documents-service
+SERVICE_VERSION := v0.0.1
+
+APP_PACKAGE := $(ORIGIN)/$(APP_NAME)/$(SERVICE_NAME)
+
+LD_FLAGS := -X $(APP_PACKAGE)/config.ComponentName=$(SERVICE_NAME) \
+			-X $(APP_PACKAGE)/config.ComponentVersion=$(SERVICE_VERSION) \
+			-X $(APP_PACKAGE)/config.logsExportEnabled=$(LOGS_EXPORT_ENABLED) \
+			-X $(APP_PACKAGE)/config.repositoriesEnabled=$(REPOSITORIES_ENABLED) \
+			-X $(APP_PACKAGE)/config.queuesEnabled=$(QUEUES_ENABLED)
+
+IMAGE_TAG := $(APP_NAME)/$(SERVICE_NAME):$(SERVICE_VERSION)
 
 all: dep fmt gen build
 
@@ -34,10 +47,13 @@ dep:
 
 
 build: mkdir
-	go build -mod vendor -ldflags "$(LD_FLAGS)" -o "$(BIN_PATH)" .
+	go build -mod vendor -ldflags '$(LD_FLAGS)' -o '$(BIN_PATH)' .
 
-image:
-	./image.sh build
+build_image:
+	./image.sh build '$(IMAGE_TAG)'
+
+push_image:
+	./image.sh push '$(IMAGE_TAG)'
 
 test:
 	go test -mod vendor ./...
