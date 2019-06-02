@@ -19,8 +19,8 @@ jobs:
         - make test
     - stage: build image
       script:
-        - ./image.sh build
+        - make build_image
       after_success:
         - if [[ "${TRAVIS_BRANCH}" = "master" ]] && [[ "${TRAVIS_PULL_REQUEST}" = "false" ]]; then
-          ./image.sh push;
+          make push_image;
           fi

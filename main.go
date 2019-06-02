@@ -48,6 +48,10 @@ func main() {
 				}
 			}))
 		}()
+	} else {
+		assertions.AssertOk(c.Provide(func() *logs.Exporter {
+			return nil //TODO
+		}))
 	}
 
 	if config.RepositoriesEnabled {
@@ -86,7 +90,11 @@ func main() {
 			rfake.NewDocumentsInfoRepository,
 			dig.As(new(repositories.DocumentsInfoRepository)),
 		))
-		//TODO fake documents content repository
+		assertions.AssertOk(c.Provide( //TODO
+			func() repositories.DocumentsContentRepository {
+				return nil
+			},
+		))
 	}
 
 	if config.ServicesEnabled {
@@ -136,6 +144,10 @@ func main() {
 			if err := c.Run(); err != nil {
 				logger.Fatal(err)
 			}
+		}))
+	} else {
+		assertions.AssertOk(c.Provide(func() *messages.MqClient {
+			return nil //TODO
 		}))
 	}
 

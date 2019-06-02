@@ -268,7 +268,13 @@ func NewPathAPIClassifier() *PathAPIClassifier {
 }
 
 func (c *PathAPIClassifier) GetType(r *http.Request) string {
-	path := r.RequestURI[len("/api/v"):]
+	const apiPrefix = "/api/v"
+	const apiPrefixLen = len(apiPrefix)
+
+	if len(r.RequestURI) <= apiPrefixLen {
+		return APITypeNone
+	}
+	path := r.RequestURI[apiPrefixLen:]
 
 	idx := 0
 	for ; idx < len(path); idx++ {

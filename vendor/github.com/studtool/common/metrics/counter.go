@@ -26,6 +26,7 @@ func NewCounter(params CounterParams) *Counter {
 			Name: params.Name,
 			Help: params.Help,
 		}),
+		value:  0,
 		ticker: time.NewTicker(params.ClearInterval),
 	}
 }
